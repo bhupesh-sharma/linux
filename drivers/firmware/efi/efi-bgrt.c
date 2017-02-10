@@ -62,12 +62,14 @@ void __init efi_bgrt_init(struct acpi_table_header *table)
 		goto out;
 	}
 
+	pr_notice("BHUPESH .. Inside %s.. 1\n", __func__);
 	image = early_memremap(bgrt->image_address, sizeof(bmp_header));
 	if (!image) {
 		pr_notice("Ignoring BGRT: failed to map image header memory\n");
 		goto out;
 	}
 
+	pr_notice("BHUPESH .. Inside %s.. 2\n", __func__);
 	memcpy(&bmp_header, image, sizeof(bmp_header));
 	early_memunmap(image, sizeof(bmp_header));
 	if (bmp_header.id != 0x4d42) {
@@ -76,6 +78,7 @@ void __init efi_bgrt_init(struct acpi_table_header *table)
 		goto out;
 	}
 	bgrt_image_size = bmp_header.size;
+	pr_notice("BHUPESH .. Inside %s.. 3\n", __func__);
 	efi_mem_reserve(bgrt->image_address, bgrt_image_size);
 
 	return;

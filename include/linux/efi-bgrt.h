@@ -11,6 +11,8 @@ void efi_bgrt_init(struct acpi_table_header *table);
 extern size_t bgrt_image_size;
 extern struct acpi_table_bgrt bgrt_tab;
 
+int __init acpi_parse_bgrt(struct acpi_table_header *table);
+
 #else /* !CONFIG_ACPI_BGRT */
 
 static inline void efi_bgrt_init(struct acpi_table_header *table) {}
