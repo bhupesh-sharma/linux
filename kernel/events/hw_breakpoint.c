@@ -46,6 +46,8 @@
 #include <linux/smp.h>
 
 #include <linux/hw_breakpoint.h>
+
+#define printk(fmt, ...) (0)
 /*
  * Constraints data
  */
@@ -315,6 +317,7 @@ int reserve_bp_slot(struct perf_event *bp)
 {
 	int ret;
 
+	printk("BHUPESH inside reserve_bp_slot, %s\n", __func__);
 	mutex_lock(&nr_bp_mutex);
 
 	ret = __reserve_bp_slot(bp);
@@ -329,6 +332,7 @@ static void __release_bp_slot(struct perf_event *bp)
 	enum bp_type_idx type;
 	int weight;
 
+	printk("BHUPESH inside __reserve_bp_slot, %s\n", __func__);
 	type = find_slot_idx(bp);
 	weight = hw_breakpoint_weight(bp);
 	toggle_bp_slot(bp, false, type, weight);
@@ -371,6 +375,7 @@ static int validate_hw_breakpoint(struct perf_event *bp)
 {
 	int ret;
 
+	printk("BHUPESH inside validate hw bkpt, %s\n", __func__);
 	ret = arch_validate_hwbkpt_settings(bp);
 	if (ret)
 		return ret;
@@ -393,6 +398,7 @@ int register_perf_hw_breakpoint(struct perf_event *bp)
 {
 	int ret;
 
+	printk("BHUPESH inside register hw bkpt, %s\n", __func__);
 	ret = reserve_bp_slot(bp);
 	if (ret)
 		return ret;
@@ -559,6 +565,7 @@ static int hw_breakpoint_event_init(struct perf_event *bp)
 {
 	int err;
 
+	printk("BHUPESH inside hw bkpt event %s\n", __func__);
 	if (bp->attr.type != PERF_TYPE_BREAKPOINT)
 		return -ENOENT;
 
@@ -621,6 +628,7 @@ int __init init_hw_breakpoint(void)
 	int cpu, err_cpu;
 	int i;
 
+	printk("BHUPESH inside init hw bkpt 1, %s\n", __func__);
 	for (i = 0; i < TYPE_MAX; i++)
 		nr_slots[i] = hw_breakpoint_slots(i);
 
@@ -630,15 +638,19 @@ int __init init_hw_breakpoint(void)
 
 			info->tsk_pinned = kcalloc(nr_slots[i], sizeof(int),
 							GFP_KERNEL);
-			if (!info->tsk_pinned)
+			if (!info->tsk_pinned) {
+				printk("BHUPESH inside init hw bkpt 1a, %s\n", __func__);
 				goto err_alloc;
+			}
 		}
 	}
 
+	printk("BHUPESH inside init hw bkpt 2, %s\n", __func__);
 	constraints_initialized = 1;
 
 	perf_pmu_register(&perf_breakpoint, "breakpoint", PERF_TYPE_BREAKPOINT);
 
+	printk("BHUPESH inside init hw bkpt 3, %s\n", __func__);
 	return register_die_notifier(&hw_breakpoint_exceptions_nb);
 
  err_alloc:

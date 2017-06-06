@@ -66,6 +66,7 @@
 
 #include <linux/kprobes.h>
 #include <linux/kdebug.h>
+#include <asm/plpar_wrappers.h>
 
 /* Transactional Memory debug */
 #ifdef TM_DEBUG_SW
@@ -801,6 +802,56 @@ static inline int set_dawr(struct arch_hw_breakpoint *brk)
 	mtspr(SPRN_DAWR, dawr);
 	mtspr(SPRN_DAWRX, dawrx);
 	return 0;
+}
+
+/**
+ * write_ciabr() - write the CIABR SPR
+ * @ciabr:	The value to write.
+ *
+ * This function writes a value to the CIARB register either directly
+ * through mtspr instruction if the kernel is in HV privilege mode or
+ * call a hypervisor function to achieve the same in case the kernel
+ * is in supervisor privilege mode.
+ */
+static void write_ciabr(unsigned long ciabr)
+{
+	printk("BHUPESH write_ciabr 1, inside %s\n", __func__);
+	if (cpu_has_feature(CPU_FTR_HVMODE)) {
+		printk("BHUPESH write_ciabr 1a, inside %s, ciabr=0x%lx\n", __func__, ciabr);
+		mtspr(SPRN_CIABR, ciabr);
+		return;
+	}
+	printk("BHUPESH write_ciabr 1b, inside %s, ciabr=0x%lx\n", __func__, ciabr);
+	plapr_set_ciabr(ciabr);
+}
+
+/**
+ * set_ciabr() - set the CIABR
+ * @addr:	The value to set.
+ *
+ * This function sets the correct privilege value into the the HW
+ * breakpoint address before writing it up in the CIABR register.
+ */
+static void set_ciabr(unsigned long addr)
+{
+	printk("BHUPESH write_ciabr 2, inside %s\n", __func__);
+	addr &= ~CIABR_PRIV;
+
+	if (cpu_has_feature(CPU_FTR_HVMODE)) {
+		printk("BHUPESH write_ciabr 2a, inside %s, addr=0x%lx\n", __func__, addr);
+		addr |= CIABR_PRIV_HYPER;
+	} else {
+		printk("BHUPESH write_ciabr 2b, inside %s, addr=0x%lx\n", __func__, addr);
+		addr |= CIABR_PRIV_SUPER;
+	}
+	write_ciabr(addr);
+}
+
+void __set_breakpoint_ciabr(struct arch_hw_breakpoint *brk)
+{
+	memcpy(this_cpu_ptr(&current_brk), brk, sizeof(*brk));
+
+	set_ciabr(brk->address);
 }
 
 void __set_breakpoint(struct arch_hw_breakpoint *brk)

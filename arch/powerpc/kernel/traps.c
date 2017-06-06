@@ -67,6 +67,7 @@
 #include <sysdev/fsl_pci.h>
 #include <asm/kprobes.h>
 
+#define printk(fmt, ...) (0)
 #if defined(CONFIG_DEBUGGER) || defined(CONFIG_KEXEC_CORE)
 int (*__debugger)(struct pt_regs *regs) __read_mostly;
 int (*__debugger_ipi)(struct pt_regs *regs) __read_mostly;
@@ -823,6 +824,7 @@ void instruction_breakpoint_exception(struct pt_regs *regs)
 {
 	enum ctx_state prev_state = exception_enter();
 
+	//printk("BHUPESH instruction_breakpoint_exception, inside %s\n", __func__);
 	if (notify_die(DIE_IABR_MATCH, "iabr_match", regs, 5,
 					5, SIGTRAP) == NOTIFY_STOP)
 		goto bail;
@@ -843,6 +845,7 @@ void single_step_exception(struct pt_regs *regs)
 {
 	enum ctx_state prev_state = exception_enter();
 
+	printk("BHUPESH single_step_exception, inside %s\n", __func__);
 	clear_single_step(regs);
 
 	if (kprobe_post_handler(regs))
@@ -1186,6 +1189,7 @@ void program_check_exception(struct pt_regs *regs)
 	enum ctx_state prev_state = exception_enter();
 	unsigned int reason = get_reason(regs);
 
+	//printk("BHUPESH program_check_exception, inside %s\n", __func__);
 	/* We can now get here via a FP Unavailable exception if the core
 	 * has no FPU, in that case the reason flags will be 0 */
 

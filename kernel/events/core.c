@@ -55,6 +55,8 @@
 
 #include <asm/irq_regs.h>
 
+#define printk(fmt, ...) (0)
+
 typedef int (*remote_function_f)(void *);
 
 struct remote_function_call {
@@ -9000,17 +9002,20 @@ int perf_pmu_register(struct pmu *pmu, const char *name, int type)
 {
 	int cpu, ret;
 
+	printk("BHUPESH perf_pmu_register 1 inside %s\n", __func__);
 	mutex_lock(&pmus_lock);
 	ret = -ENOMEM;
 	pmu->pmu_disable_count = alloc_percpu(int);
 	if (!pmu->pmu_disable_count)
 		goto unlock;
 
+	printk("BHUPESH perf_pmu_register 2 inside %s\n", __func__);
 	pmu->type = -1;
 	if (!name)
 		goto skip_type;
 	pmu->name = name;
 
+	printk("BHUPESH perf_pmu_register 3 inside %s\n", __func__);
 	if (type < 0) {
 		type = idr_alloc(&pmu_idr, pmu, PERF_TYPE_MAX, 0, GFP_KERNEL);
 		if (type < 0) {
@@ -9020,6 +9025,7 @@ int perf_pmu_register(struct pmu *pmu, const char *name, int type)
 	}
 	pmu->type = type;
 
+	printk("BHUPESH perf_pmu_register 4 inside %s\n", __func__);
 	if (pmu_bus_running) {
 		ret = pmu_dev_alloc(pmu);
 		if (ret)
@@ -9042,15 +9048,18 @@ skip_type:
 		hw_context_taken = 1;
 	}
 
+	printk("BHUPESH perf_pmu_register 5 inside %s\n", __func__);
 	pmu->pmu_cpu_context = find_pmu_context(pmu->task_ctx_nr);
 	if (pmu->pmu_cpu_context)
 		goto got_cpu_context;
 
+	printk("BHUPESH perf_pmu_register 6 inside %s\n", __func__);
 	ret = -ENOMEM;
 	pmu->pmu_cpu_context = alloc_percpu(struct perf_cpu_context);
 	if (!pmu->pmu_cpu_context)
 		goto free_dev;
 
+	printk("BHUPESH perf_pmu_register 7 inside %s\n", __func__);
 	for_each_possible_cpu(cpu) {
 		struct perf_cpu_context *cpuctx;
 
@@ -9063,6 +9072,7 @@ skip_type:
 		__perf_mux_hrtimer_init(cpuctx, cpu);
 	}
 
+	printk("BHUPESH perf_pmu_register 8 inside %s\n", __func__);
 got_cpu_context:
 	if (!pmu->start_txn) {
 		if (pmu->pmu_enable) {
@@ -9081,6 +9091,7 @@ got_cpu_context:
 		}
 	}
 
+	printk("BHUPESH perf_pmu_register 9 inside %s\n", __func__);
 	if (!pmu->pmu_enable) {
 		pmu->pmu_enable  = perf_pmu_nop_void;
 		pmu->pmu_disable = perf_pmu_nop_void;
@@ -9089,15 +9100,18 @@ got_cpu_context:
 	if (!pmu->event_idx)
 		pmu->event_idx = perf_event_idx_default;
 
+	printk("BHUPESH perf_pmu_register 10 inside %s\n", __func__);
 	list_add_rcu(&pmu->entry, &pmus);
 	atomic_set(&pmu->exclusive_cnt, 0);
 	ret = 0;
 unlock:
+	printk("BHUPESH perf_pmu_register 11 inside %s\n", __func__);
 	mutex_unlock(&pmus_lock);
 
 	return ret;
 
 free_dev:
+	printk("BHUPESH perf_pmu_register 12 inside %s\n", __func__);
 	device_del(pmu->dev);
 	put_device(pmu->dev);
 
@@ -9145,9 +9159,13 @@ static int perf_try_init_event(struct pmu *pmu, struct perf_event *event)
 	struct perf_event_context *ctx = NULL;
 	int ret;
 
-	if (!try_module_get(pmu->module))
+	printk("BHUPESH perf_try_init_event 1, inside %s\n", __func__);
+	if (!try_module_get(pmu->module)) {
+		printk("BHUPESH perf_try_init_event 1a, inside %s\n", __func__);
 		return -ENODEV;
+	}
 
+	printk("BHUPESH perf_try_init_event 2, inside %s\n", __func__);
 	if (event->group_leader != event) {
 		/*
 		 * This ctx->mutex can nest when we're called through
@@ -9155,17 +9173,23 @@ static int perf_try_init_event(struct pmu *pmu, struct perf_event *event)
 		 */
 		ctx = perf_event_ctx_lock_nested(event->group_leader,
 						 SINGLE_DEPTH_NESTING);
+		printk("BHUPESH perf_try_init_event 2a, inside %s\n", __func__);
 		BUG_ON(!ctx);
 	}
 
 	event->pmu = pmu;
+	printk("BHUPESH perf_try_init_event 3, inside %s\n", __func__);
 	ret = pmu->event_init(event);
 
+	printk("BHUPESH perf_try_init_event 4, inside %s\n", __func__);
 	if (ctx)
 		perf_event_ctx_unlock(event->group_leader, ctx);
 
-	if (ret)
+	printk("BHUPESH perf_try_init_event 5, inside %s\n", __func__);
+	if (ret) {
+		printk("BHUPESH perf_try_init_event 5a, inside %s\n", __func__);
 		module_put(pmu->module);
+	}
 
 	return ret;
 }
@@ -9178,35 +9202,47 @@ static struct pmu *perf_init_event(struct perf_event *event)
 
 	idx = srcu_read_lock(&pmus_srcu);
 
+	printk("BHUPESH perf_init_event 1, inside %s\n", __func__);
 	/* Try parent's PMU first: */
 	if (event->parent && event->parent->pmu) {
 		pmu = event->parent->pmu;
 		ret = perf_try_init_event(pmu, event);
-		if (!ret)
+		if (!ret) {
+			printk("BHUPESH perf_init_event 1a, inside %s\n", __func__);
 			goto unlock;
+		}
 	}
 
+	printk("BHUPESH perf_init_event 2, inside %s\n", __func__);
 	rcu_read_lock();
 	pmu = idr_find(&pmu_idr, event->attr.type);
 	rcu_read_unlock();
 	if (pmu) {
 		ret = perf_try_init_event(pmu, event);
-		if (ret)
+		if (ret) {
 			pmu = ERR_PTR(ret);
+			printk("BHUPESH perf_init_event 2a, inside %s\n", __func__);
+		}
 		goto unlock;
 	}
 
+	printk("BHUPESH perf_init_event 3, inside %s\n", __func__);
 	list_for_each_entry_rcu(pmu, &pmus, entry) {
 		ret = perf_try_init_event(pmu, event);
-		if (!ret)
+		printk("BHUPESH perf_init_event 3a, ret=%d, inside %s\n", ret, __func__);
+		if (!ret) {
+			printk("BHUPESH perf_init_event 3b, inside %s\n", __func__);
 			goto unlock;
+		}
 
 		if (ret != -ENOENT) {
 			pmu = ERR_PTR(ret);
+			printk("BHUPESH perf_init_event 3c, inside %s\n", __func__);
 			goto unlock;
 		}
 	}
 	pmu = ERR_PTR(-ENOENT);
+	printk("BHUPESH perf_init_event 4, inside %s\n", __func__);
 unlock:
 	srcu_read_unlock(&pmus_srcu, idx);
 

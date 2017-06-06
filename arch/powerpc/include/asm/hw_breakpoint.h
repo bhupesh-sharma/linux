@@ -30,6 +30,13 @@ struct arch_hw_breakpoint {
 	u16		len; /* length of the target data symbol */
 };
 
+/* CIABR register
+ */
+#define HW_BRK_TYPE_CIABR_DIS_MATCH	0x00
+#define HW_BRK_TYPE_CIABR_MATCH_PROBLEM	0x01
+#define HW_BRK_TYPE_CIABR_MATCH_PRIV	0x02
+#define HW_BRK_TYPE_CIABR_MATCH_HYP	0x03
+#
 /* Note: Don't change the the first 6 bits below as they are in the same order
  * as the dabr and dabrx.
  */

@@ -21,6 +21,8 @@
 #include <asm/ptrace.h>
 #include <asm/code-patching.h>
 
+#define printk(fmt, ...) (0)
+
 #define BHRB_MAX_ENTRIES	32
 #define BHRB_TARGET		0x0000000000000002
 #define BHRB_PREDICTION		0x0000000000000001
@@ -1443,9 +1445,11 @@ static int power_pmu_add(struct perf_event *event, int ef_flags)
 	int n0;
 	int ret = -EAGAIN;
 
+	printk("BHUPESH power_pmu_add 1, inside %s\n", __func__);
 	local_irq_save(flags);
 	perf_pmu_disable(event->pmu);
 
+	printk("BHUPESH power_pmu_add 2, inside %s\n", __func__);
 	/*
 	 * Add the event to the list (if there is room)
 	 * and check whether the total set is still feasible.
@@ -1458,6 +1462,7 @@ static int power_pmu_add(struct perf_event *event, int ef_flags)
 	cpuhw->events[n0] = event->hw.config;
 	cpuhw->flags[n0] = event->hw.event_base;
 
+	printk("BHUPESH power_pmu_add 3, inside %s\n", __func__);
 	/*
 	 * This event may have been disabled/stopped in record_and_restart()
 	 * because we exceeded the ->event_limit. If re-starting the event,
@@ -1469,6 +1474,7 @@ static int power_pmu_add(struct perf_event *event, int ef_flags)
 	else
 		event->hw.state = 0;
 
+	printk("BHUPESH power_pmu_add 4, inside %s\n", __func__);
 	/*
 	 * If group events scheduling transaction was started,
 	 * skip the schedulability test here, it will be performed
@@ -1483,6 +1489,7 @@ static int power_pmu_add(struct perf_event *event, int ef_flags)
 		goto out;
 	event->hw.config = cpuhw->events[n0];
 
+	printk("BHUPESH power_pmu_add 5, inside %s\n", __func__);
 nocheck:
 	ebb_event_add(event);
 
@@ -1490,6 +1497,7 @@ nocheck:
 	++cpuhw->n_added;
 
 	ret = 0;
+	printk("BHUPESH power_pmu_add 6, inside %s\n", __func__);
  out:
 	if (has_branch_stack(event)) {
 		power_pmu_bhrb_enable(event);
@@ -1506,6 +1514,7 @@ nocheck:
 
 	perf_pmu_enable(event->pmu);
 	local_irq_restore(flags);
+	printk("BHUPESH power_pmu_add 7, inside %s\n", __func__);
 	return ret;
 }
 
@@ -1812,15 +1821,18 @@ static int power_pmu_event_init(struct perf_event *event)
 	int err;
 	struct cpu_hw_events *cpuhw;
 
+	printk("BHUPESH power_pmu_event_init 1, inside %s\n", __func__);
 	if (!ppmu)
 		return -ENOENT;
 
+	printk("BHUPESH power_pmu_event_init 2, inside %s\n", __func__);
 	if (has_branch_stack(event)) {
 	        /* PMU has BHRB enabled */
 		if (!(ppmu->flags & PPMU_ARCH_207S))
 			return -EOPNOTSUPP;
 	}
 
+	printk("BHUPESH power_pmu_event_init 3, inside %s\n", __func__);
 	switch (event->attr.type) {
 	case PERF_TYPE_HARDWARE:
 		ev = event->attr.config;
@@ -1834,6 +1846,7 @@ static int power_pmu_event_init(struct perf_event *event)
 			return err;
 		break;
 	case PERF_TYPE_RAW:
+	//case PERF_TYPE_BREAKPOINT:
 		ev = event->attr.config;
 		break;
 	default:
@@ -1843,6 +1856,7 @@ static int power_pmu_event_init(struct perf_event *event)
 	event->hw.config_base = ev;
 	event->hw.idx = 0;
 
+	printk("BHUPESH power_pmu_event_init 4, inside %s\n", __func__);
 	/*
 	 * If we are not running on a hypervisor, force the
 	 * exclude_hv bit to 0 so that we don't care what
@@ -1858,6 +1872,7 @@ static int power_pmu_event_init(struct perf_event *event)
 	 * XXX we should check if the task is an idle task.
 	 */
 	flags = 0;
+	printk("BHUPESH power_pmu_event_init 5, inside %s\n", __func__);
 	if (event->attach_state & PERF_ATTACH_TASK)
 		flags |= PPMU_ONLY_COUNT_RUN;
 
@@ -1865,6 +1880,7 @@ static int power_pmu_event_init(struct perf_event *event)
 	 * If this machine has limited events, check whether this
 	 * event_id could go on a limited event.
 	 */
+	printk("BHUPESH power_pmu_event_init 6, inside %s\n", __func__);
 	if (ppmu->flags & PPMU_LIMITED_PMC5_6) {
 		if (can_go_on_limited_pmc(event, ev, flags)) {
 			flags |= PPMU_LIMITED_PMC_OK;
@@ -1880,11 +1896,13 @@ static int power_pmu_event_init(struct perf_event *event)
 		}
 	}
 
+	printk("BHUPESH power_pmu_event_init 7, inside %s\n", __func__);
 	/* Extra checks for EBB */
 	err = ebb_event_check(event);
 	if (err)
 		return err;
 
+	printk("BHUPESH power_pmu_event_init 8, inside %s\n", __func__);
 	/*
 	 * If this is in a group, check if it can go on with all the
 	 * other hardware events in the group.  We assume the event
@@ -1897,12 +1915,14 @@ static int power_pmu_event_init(struct perf_event *event)
 		if (n < 0)
 			return -EINVAL;
 	}
+	printk("BHUPESH power_pmu_event_init 9, inside %s\n", __func__);
 	events[n] = ev;
 	ctrs[n] = event;
 	cflags[n] = flags;
 	if (check_excludes(ctrs, cflags, n, 1))
 		return -EINVAL;
 
+	printk("BHUPESH power_pmu_event_init 10, inside %s\n", __func__);
 	cpuhw = &get_cpu_var(cpu_hw_events);
 	err = power_check_constraints(cpuhw, events, cflags, n + 1);
 
@@ -1916,6 +1936,7 @@ static int power_pmu_event_init(struct perf_event *event)
 		}
 	}
 
+	printk("BHUPESH power_pmu_event_init 11, inside %s\n", __func__);
 	put_cpu_var(cpu_hw_events);
 	if (err)
 		return -EINVAL;
@@ -1925,6 +1946,7 @@ static int power_pmu_event_init(struct perf_event *event)
 	event->hw.last_period = event->hw.sample_period;
 	local64_set(&event->hw.period_left, event->hw.last_period);
 
+	printk("BHUPESH power_pmu_event_init 12, inside %s\n", __func__);
 	/*
 	 * For EBB events we just context switch the PMC value, we don't do any
 	 * of the sample_period logic. We use hw.prev_count for this.
@@ -1932,6 +1954,7 @@ static int power_pmu_event_init(struct perf_event *event)
 	if (is_ebb_event(event))
 		local64_set(&event->hw.prev_count, 0);
 
+	printk("BHUPESH power_pmu_event_init 13, inside %s\n", __func__);
 	/*
 	 * See if we need to reserve the PMU.
 	 * If no events are currently in use, then we have to take a
@@ -1950,6 +1973,7 @@ static int power_pmu_event_init(struct perf_event *event)
 	}
 	event->destroy = hw_perf_event_destroy;
 
+	printk("BHUPESH power_pmu_event_init 14, err=%d, inside %s\n", err, __func__);
 	return err;
 }
 
@@ -2131,6 +2155,7 @@ static void perf_event_interrupt(struct pt_regs *regs)
 	int found, active;
 	int nmi;
 
+	printk("BHUPESH inside interrupt %s\n", __func__);
 	if (cpuhw->n_limited)
 		freeze_limited_counters(cpuhw, mfspr(SPRN_PMC5),
 					mfspr(SPRN_PMC6));

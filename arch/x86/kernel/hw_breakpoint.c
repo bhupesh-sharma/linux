@@ -109,6 +109,7 @@ int arch_install_hw_breakpoint(struct perf_event *bp)
 	unsigned long *dr7;
 	int i;
 
+	printk("BHUPESH arch_install_hw_breakpoint, %s\n", __func__);
 	for (i = 0; i < HBP_NUM; i++) {
 		struct perf_event **slot = this_cpu_ptr(&bp_per_reg[i]);
 
@@ -178,6 +179,7 @@ int arch_check_bp_in_kernelspace(struct perf_event *bp)
 	unsigned long va;
 	struct arch_hw_breakpoint *info = counter_arch_bp(bp);
 
+	printk("BHUPESH inside arch_check_bp_in_kernelspace, %s\n", __func__);
 	va = info->address;
 	len = bp->attr.bp_len;
 
@@ -191,6 +193,7 @@ int arch_check_bp_in_kernelspace(struct perf_event *bp)
 int arch_bp_generic_fields(int x86_len, int x86_type,
 			   int *gen_len, int *gen_type)
 {
+	printk("BHUPESH inside arch_bp_generic_fields, %s\n", __func__);
 	/* Type */
 	switch (x86_type) {
 	case X86_BREAKPOINT_EXECUTE:
@@ -238,6 +241,7 @@ static int arch_build_bp_info(struct perf_event *bp)
 {
 	struct arch_hw_breakpoint *info = counter_arch_bp(bp);
 
+	printk("BHUPESH inside arch_build_bp_info, %s\n", __func__);
 	info->address = bp->attr.bp_addr;
 
 	/* Type */
@@ -328,6 +332,7 @@ int arch_validate_hwbkpt_settings(struct perf_event *bp)
 	unsigned int align;
 	int ret;
 
+	printk("BHUPESH inside arch validate hwbkpt settings, %s\n", __func__);
 
 	ret = arch_build_bp_info(bp);
 	if (ret)
@@ -451,6 +456,7 @@ static int hw_breakpoint_handler(struct die_args *args)
 	unsigned long dr7, dr6;
 	unsigned long *dr6_p;
 
+	printk("BHUPESH inside hw_breakpoint_handler, %s\n", __func__);
 	/* The DR6 value is pointed by args->err */
 	dr6_p = (unsigned long *)ERR_PTR(args->err);
 	dr6 = *dr6_p;
@@ -534,6 +540,7 @@ static int hw_breakpoint_handler(struct die_args *args)
 int hw_breakpoint_exceptions_notify(
 		struct notifier_block *unused, unsigned long val, void *data)
 {
+	printk("BHUPESH hw_breakpoint_exceptions_notify inside %s\n", __func__);
 	if (val != DIE_DEBUG)
 		return NOTIFY_DONE;
 

@@ -46,10 +46,11 @@ int reserve_pmc_hardware(perf_irq_t new_perf_irq)
 {
 	int err = 0;
 
+	printk("BHUPESH inside reserver hardware %s\n", __func__);
 	raw_spin_lock(&pmc_owner_lock);
 
 	if (pmc_owner_caller) {
-		printk(KERN_WARNING "reserve_pmc_hardware: "
+		printk("reserve_pmc_hardware: "
 		       "PMC hardware busy (reserved by caller %p)\n",
 		       pmc_owner_caller);
 		err = -EBUSY;

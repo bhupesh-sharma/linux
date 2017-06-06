@@ -314,13 +314,16 @@ static inline void cinval(void *p)
  */
 static void write_ciabr(unsigned long ciabr)
 {
+	printk("BHUPESH write_ciabr 1, inside %s\n", __func__);
 	if (!cpu_has_feature(CPU_FTR_ARCH_207S))
 		return;
 
 	if (cpu_has_feature(CPU_FTR_HVMODE)) {
+		printk("BHUPESH write_ciabr 1a, inside %s, ciabr=0x%lx\n", __func__, ciabr);
 		mtspr(SPRN_CIABR, ciabr);
 		return;
 	}
+	printk("BHUPESH write_ciabr 1b, inside %s, ciabr=0x%lx\n", __func__, ciabr);
 	plapr_set_ciabr(ciabr);
 }
 
@@ -333,12 +336,16 @@ static void write_ciabr(unsigned long ciabr)
  */
 static void set_ciabr(unsigned long addr)
 {
+	printk("BHUPESH write_ciabr 2, inside %s\n", __func__);
 	addr &= ~CIABR_PRIV;
 
-	if (cpu_has_feature(CPU_FTR_HVMODE))
+	if (cpu_has_feature(CPU_FTR_HVMODE)) {
+		printk("BHUPESH write_ciabr 2a, inside %s, addr=0x%lx\n", __func__, addr);
 		addr |= CIABR_PRIV_HYPER;
-	else
+	} else {
+		printk("BHUPESH write_ciabr 2b, inside %s, addr=0x%lx\n", __func__, addr);
 		addr |= CIABR_PRIV_SUPER;
+	}
 	write_ciabr(addr);
 }
 

@@ -2061,6 +2061,7 @@ static int x86_pmu_event_init(struct perf_event *event)
 	struct pmu *tmp;
 	int err;
 
+	printk("BHUPESH x86_pmu_event_init 1, inside %s\n", __func__);
 	switch (event->attr.type) {
 	case PERF_TYPE_RAW:
 	case PERF_TYPE_HARDWARE:
@@ -2071,6 +2072,7 @@ static int x86_pmu_event_init(struct perf_event *event)
 		return -ENOENT;
 	}
 
+	printk("BHUPESH x86_pmu_event_init 2, inside %s\n", __func__);
 	err = __x86_pmu_event_init(event);
 	if (!err) {
 		/*
@@ -2093,6 +2095,7 @@ static int x86_pmu_event_init(struct perf_event *event)
 			event->destroy(event);
 	}
 
+	printk("BHUPESH x86_pmu_event_init 3, inside %s\n", __func__);
 	if (ACCESS_ONCE(x86_pmu.attr_rdpmc))
 		event->hw.flags |= PERF_X86_EVENT_RDPMC_ALLOWED;
 
