@@ -41,6 +41,18 @@ echo "Built on: $lasttag"
 echo -n "Arch built: "
 echo $1
 
+# Was CROSS_COMPILE set to use non-standard compilers?
+if [ "$CROSS_COMPILE" ]; then
+	crossbin=$(whereis -b ${CROSS_COMPILE}gcc | cut -d: -f2 | cut -d' ' -f2)
+	echo "==============================================================================="
+	echo "For patch submissions, use only supported cross-compilers for testing."
+	echo "CROSS_COMPILE set to: $CROSS_COMPILE"
+else
+	crossbin=$(whereis -b ${1}-linux-gnu-gcc | cut -d: -f2 | cut -d' ' -f2)
+fi
+test -x $crossbin && echo "Cross-compiler used: $crossbin"
+
+
 echo "==============================================================================="
 echo "For patch submissions this can optionally be included to show the changes"
 echo "that were compiled into the tree."
