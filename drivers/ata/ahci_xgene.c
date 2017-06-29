@@ -241,6 +241,18 @@ static bool xgene_ahci_is_memram_inited(struct xgene_ahci_context *ctx)
 }
 
 /**
+ * xgene_ahci_dev_config - Apply some errata fixups.
+ * @dev: device
+ *
+ * Apply workaround for broken ALPM on XGene A3/B0.
+ *
+ */
+static void xgene_ahci_dev_config(struct ata_device *dev)
+{
+	dev->horkage |= ATA_HORKAGE_NOLPM;
+}
+
+/**
  * xgene_ahci_read_id - Read ID data from the specified device
  * @dev: device
  * @tf: proposed taskfile
@@ -632,6 +644,7 @@ static irqreturn_t xgene_ahci_irq_intr(int irq, void *dev_instance)
 
 static struct ata_port_operations xgene_ahci_v1_ops = {
 	.inherits = &ahci_ops,
+	.dev_config = xgene_ahci_dev_config,
 	.host_stop = xgene_ahci_host_stop,
 	.hardreset = xgene_ahci_hardreset,
 	.read_id = xgene_ahci_read_id,
