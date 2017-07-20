@@ -18,7 +18,6 @@ rhdistgit_tarball=$5;
 rhdistgit_kabi_tarball=$6;
 rhdistgit_zstream_flag=$7;
 package_name=$8;
-kversion=$9;
 
 redhat=$(dirname $0)/..;
 topdir=$redhat/..;
@@ -57,8 +56,8 @@ $redhat/scripts/copy_files.sh "$topdir" "$tmpdir" "$package_name";
 
 echo "Uploading new tarballs"
 # upload tarballs
-sed -i "/linux-$kversion.*.el7.tar.xz/d" $tmpdir/$package_name/sources;
-sed -i "/linux-$kversion.*.el7.tar.xz/d" $tmpdir/$package_name/.gitignore;
+sed -i "/linux-.*.tar.xz/d" $tmpdir/$package_name/sources;
+sed -i "/linux-.*.tar.xz/d" $tmpdir/$package_name/.gitignore;
 rhpkg upload $rhdistgit_tarball >/dev/null || die "uploading kernel tarball";
 
 # Only upload kernel-abi-whitelists tarball if its release counter changed.

@@ -194,7 +194,7 @@ rh-dist-git: $(REDHAT)/rpm/SOURCES/$(PACKAGE_NAME).spec $(TARBALL) $(KABI_TARBAL
 ifeq ("$(RHDISTGIT_BRANCH)", "")
  $(error RHDISTGIT_BRANCH unset)
 endif
-	$(REDHAT)/scripts/rh-dist-git.sh "$(RHDISTGIT_BRANCH)" "$(RHDISTGIT_CACHE)" "$(RHDISTGIT_TMP)" "$(RHDISTGIT)" "$(TARBALL)" "$(KABI_TARBALL)" "$(__ZSTREAM)" "$(PACKAGE_NAME)" "$(KVERSION)"
+	$(REDHAT)/scripts/rh-dist-git.sh "$(RHDISTGIT_BRANCH)" "$(RHDISTGIT_CACHE)" "$(RHDISTGIT_TMP)" "$(RHDISTGIT)" "$(TARBALL)" "$(KABI_TARBALL)" "$(__ZSTREAM)" "$(PACKAGE_NAME)"
 
 rh-rtg: rh-release
 	@$(MAKE) rh-release-tag
