@@ -907,6 +907,7 @@ BuildKernel() {
 # Placeholder file, no vDSO hwcap entries used in this kernel."
     fi
     %{__install} -D -m 444 ldconfig-kernel.conf $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{bin_pkg_name}-$KernelVer.conf
+    rm -rf $RPM_BUILD_ROOT/lib/modules/$KernelVer/vdso/.build-id
 %endif
 
     # And save the headers/makefiles etc for building modules against
