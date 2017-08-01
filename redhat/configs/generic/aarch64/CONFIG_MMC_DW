@@ -1,1 +1,1 @@
-# CONFIG_MMC_DW is not set
+CONFIG_MMC_DW=m
