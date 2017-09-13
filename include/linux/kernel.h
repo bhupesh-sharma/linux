@@ -972,5 +972,6 @@ struct module;
 void mark_hardware_unsupported(const char *msg);
 void mark_hardware_deprecated(const char *msg);
 void mark_tech_preview(const char *msg, struct module *mod);
+void mark_driver_unsupported(const char *name);
 
 #endif
