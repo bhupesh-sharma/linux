@@ -1522,6 +1522,8 @@ static int __init c4iw_init_module(void)
 {
 	int err;
 
+	mark_tech_preview("CXGB4 infiniband support", THIS_MODULE);
+
 	err = c4iw_cm_init();
 	if (err)
 		return err;

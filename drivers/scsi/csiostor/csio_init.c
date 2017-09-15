@@ -1209,6 +1209,8 @@ csio_init(void)
 {
 	int rv = -ENOMEM;
 
+	mark_tech_preview("Chelsio FCoE support", THIS_MODULE);
+
 	pr_info("%s %s\n", CSIO_DRV_DESC, CSIO_DRV_VERSION);
 
 	csio_dfs_init();

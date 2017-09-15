@@ -1,1 +1,1 @@
-# CONFIG_CHELSIO_T4 is not set
+CONFIG_CHELSIO_T4=m

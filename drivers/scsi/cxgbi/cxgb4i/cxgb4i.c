@@ -2149,6 +2149,8 @@ static int __init cxgb4i_init_module(void)
 {
 	int rc;
 
+	mark_tech_preview("CXGB4 iSCSI support", THIS_MODULE);
+
 	printk(KERN_INFO "%s", version);
 
 	rc = cxgbi_iscsi_init(&cxgb4i_iscsi_transport, &cxgb4i_stt);

@@ -5388,6 +5388,8 @@ static int __init cxgb4_init_module(void)
 {
 	int ret;
 
+	mark_tech_preview("CXGB4 ethernet devices", THIS_MODULE);
+
 	/* Debugfs support is optional, just warn if this fails */
 	cxgb4_debugfs_root = debugfs_create_dir(KBUILD_MODNAME, NULL);
 	if (!cxgb4_debugfs_root)

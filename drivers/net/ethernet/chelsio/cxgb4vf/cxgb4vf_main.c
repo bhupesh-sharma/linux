@@ -3321,6 +3321,8 @@ static int __init cxgb4vf_module_init(void)
 {
 	int ret;
 
+	mark_tech_preview("CXGB4 Virtual Function ethernet devices", THIS_MODULE);
+
 	/*
 	 * Vet our module parameters.
 	 */
