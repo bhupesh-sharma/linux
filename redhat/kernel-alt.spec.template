@@ -327,6 +327,7 @@ BuildRequires: sparse >= 0.4.1
 %if %{with_perf}
 BuildRequires: elfutils-devel zlib-devel binutils-devel bison
 BuildRequires: audit-libs-devel
+BuildRequires: java-devel
 %ifnarch s390 s390x
 BuildRequires: numactl-devel
 %endif
@@ -1457,6 +1458,7 @@ fi\
 %files -n perf%{?bin_suffix:-%{bin_suffix}}
 %defattr(-,root,root)
 %{_bindir}/perf
+%{_libdir}/libperf-jvmti.so
 %dir %{_libexecdir}/perf-core
 %{_libexecdir}/perf-core/*
 %{_libdir}/traceevent
