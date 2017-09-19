@@ -1128,9 +1128,6 @@ popd
 %endif
 
 %if %{with_doc}
-# Make the HTML and man pages.
-make htmldocs mandocs || %{doc_build_fail}
-
 # sometimes non-world-readable files sneak into the kernel source tree
 chmod -R a=rX Documentation
 find Documentation -type d | xargs chmod u+w
@@ -1212,16 +1209,11 @@ cd linux-%{KVRA}
 
 %if %{with_doc}
 docdir=$RPM_BUILD_ROOT%{_datadir}/doc/kernel-doc-%{rpmversion}
-man9dir=$RPM_BUILD_ROOT%{_datadir}
 
 # copy the source over
 mkdir -p $docdir
-tar -f - --exclude=man --exclude='.*' -c Documentation | tar xf - -C $docdir
+tar -f - --exclude='.*' -c Documentation | tar xf - -C $docdir
 
-# Install man pages for the kernel API.
-mkdir -p $man9dir/man/man9
-make INSTALL_MAN_PATH=$man9dir installmandocs
-ls $man9dir/man/man9 | grep -q '' || > $man9dir/man/man9/BROKEN
 %endif # with_doc
 
 # We have to do the headers install before the tools install because the
@@ -1442,7 +1434,6 @@ fi\
 %{_datadir}/doc/kernel-doc-%{rpmversion}/Documentation/*
 %dir %{_datadir}/doc/kernel-doc-%{rpmversion}/Documentation
 %dir %{_datadir}/doc/kernel-doc-%{rpmversion}
-%{_datadir}/man/man9/*
 %{_datadir}/doc/kernel-keys/%{rpmversion}-%{pkgrelease}/kernel-signing-ca.cer
 %dir %{_datadir}/doc/kernel-keys/%{rpmversion}-%{pkgrelease}
 %dir %{_datadir}/doc/kernel-keys
