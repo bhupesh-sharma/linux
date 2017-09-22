@@ -3102,6 +3102,11 @@ static int __init i40evf_init_module(void)
 		i40evf_driver_version);
 
 	pr_info("%s\n", i40evf_copyright);
+#if defined (CONFIG_ARM64)
+	mark_tech_preview(i40evf_driver.name, THIS_MODULE);
+#elif !defined (CONFIG_ARM64) && !defined (CONFIG_PPC)
+	mark_driver_unsupported(i40evf_driver.name);
+#endif
 
 	i40evf_wq = alloc_workqueue("%s", WQ_UNBOUND | WQ_MEM_RECLAIM, 1,
 				    i40evf_driver_name);

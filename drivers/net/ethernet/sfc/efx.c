@@ -3630,6 +3630,11 @@ static int __init efx_init_module(void)
 	int rc;
 
 	printk(KERN_INFO "Solarflare NET driver v" EFX_DRIVER_VERSION "\n");
+#if defined (CONFIG_PPC)
+	mark_tech_preview(efx_pci_driver.name, THIS_MODULE);
+#elif !defined (CONFIG_ARM64) && !defined (CONFIG_PPC)
+	mark_driver_unsupported(efx_pci_driver.name);
+#endif
 
 	rc = register_netdevice_notifier(&efx_netdev_notifier);
 	if (rc)

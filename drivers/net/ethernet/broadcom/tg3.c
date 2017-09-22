@@ -17592,6 +17592,11 @@ static int tg3_init_one(struct pci_dev *pdev,
 	netdev_features_t features = 0;
 
 	printk_once(KERN_INFO "%s\n", version);
+#if defined (CONFIG_ARM64)
+	mark_tech_preview(pci_dev_driver(pdev)->name, THIS_MODULE);
+#elif !defined (CONFIG_ARM64) && !defined (CONFIG_PPC)
+	mark_driver_unsupported(pci_dev_driver(pdev)->name);
+#endif
 
 	err = pci_enable_device(pdev);
 	if (err) {

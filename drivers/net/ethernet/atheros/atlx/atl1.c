@@ -2932,6 +2932,8 @@ static int atl1_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	static int cards_found = 0;
 	int err;
 
+	mark_driver_unsupported(pci_dev_driver(pdev)->name);
+
 	err = pci_enable_device(pdev);
 	if (err)
 		return err;

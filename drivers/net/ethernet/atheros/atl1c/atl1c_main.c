@@ -2551,6 +2551,8 @@ static int atl1c_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 	int err = 0;
 
+	mark_driver_unsupported(pci_dev_driver(pdev)->name);
+
 	/* enable device (incl. PCI PM wakeup and hotplug setup) */
 	err = pci_enable_device_mem(pdev);
 	if (err) {

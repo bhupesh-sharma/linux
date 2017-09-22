@@ -14442,6 +14442,11 @@ static int __init bnx2x_init(void)
 	int ret;
 
 	pr_info("%s", version);
+#if defined (CONFIG_ARM64)
+	mark_tech_preview(bnx2x_pci_driver.name, THIS_MODULE);
+#elif !defined (CONFIG_ARM64) && !defined (CONFIG_PPC)
+	mark_driver_unsupported(bnx2x_pci_driver.name);
+#endif
 
 	bnx2x_wq = create_singlethread_workqueue("bnx2x");
 	if (bnx2x_wq == NULL) {

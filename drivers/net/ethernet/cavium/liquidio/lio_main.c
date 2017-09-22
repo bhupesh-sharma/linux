@@ -504,6 +504,7 @@ static struct pci_driver liquidio_pci_driver = {
  */
 static int liquidio_init_pci(void)
 {
+	mark_driver_unsupported(liquidio_pci_driver.name);
 	return pci_register_driver(&liquidio_pci_driver);
 }
 

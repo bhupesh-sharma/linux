@@ -7992,8 +7992,10 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	if (pci_is_bridge(pdev))
 		return -ENODEV;
 
-	if (version_printed++ == 0)
+	if (version_printed++ == 0) {
 		pr_info("%s", version);
+		mark_driver_unsupported((pci_dev_driver(pdev)->name));
+	}
 
 	max_irqs = bnxt_get_max_irq(pdev);
 	dev = alloc_etherdev_mq(sizeof(*bp), max_irqs);

@@ -1700,6 +1700,8 @@ static int alx_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	bool phy_configured;
 	int err;
 
+	mark_driver_unsupported(pci_dev_driver(pdev)->name);
+
 	err = pci_enable_device_mem(pdev);
 	if (err)
 		return err;

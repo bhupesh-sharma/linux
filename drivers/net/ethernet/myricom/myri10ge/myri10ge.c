@@ -4069,6 +4069,7 @@ static struct notifier_block myri10ge_dca_notifier = {
 static __init int myri10ge_init_module(void)
 {
 	pr_info("Version %s\n", MYRI10GE_VERSION_STR);
+	mark_driver_unsupported(myri10ge_driver.name);
 
 	if (myri10ge_rss_hash > MXGEFW_RSS_HASH_TYPE_MAX) {
 		pr_err("Illegal rssh hash type %d, defaulting to source port\n",

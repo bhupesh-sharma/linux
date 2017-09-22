@@ -280,6 +280,11 @@ int __init qede_init(void)
 	int ret;
 
 	pr_info("qede_init: %s\n", version);
+#if defined (CONFIG_PPC)
+	mark_tech_preview(qede_pci_driver.name, THIS_MODULE);
+#elif !defined (CONFIG_ARM64) && !defined (CONFIG_PPC)
+	mark_driver_unsupported(qede_pci_driver.name);
+#endif
 
 	qed_ops = qed_get_eth_ops();
 	if (!qed_ops) {

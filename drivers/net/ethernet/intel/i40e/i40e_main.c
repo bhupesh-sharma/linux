@@ -12159,6 +12159,11 @@ static int __init i40e_init_module(void)
 	pr_info("%s: %s - version %s\n", i40e_driver_name,
 		i40e_driver_string, i40e_driver_version_str);
 	pr_info("%s: %s\n", i40e_driver_name, i40e_copyright);
+#if defined (CONFIG_ARM64)
+	mark_tech_preview(i40e_driver.name, THIS_MODULE);
+#elif !defined (CONFIG_ARM64) && !defined (CONFIG_PPC)
+	mark_driver_unsupported(i40e_driver.name);
+#endif
 
 	/* There is no need to throttle the number of active tasks because
 	 * each device limits its own task using a state bit for scheduling

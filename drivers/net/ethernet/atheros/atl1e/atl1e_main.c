@@ -2299,6 +2299,8 @@ static int atl1e_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 	int err = 0;
 
+	mark_driver_unsupported(pci_dev_driver(pdev)->name);
+
 	err = pci_enable_device(pdev);
 	if (err) {
 		dev_err(&pdev->dev, "cannot enable PCI device\n");

@@ -3509,6 +3509,11 @@ static struct pci_driver netxen_driver = {
 static int __init netxen_init_module(void)
 {
 	printk(KERN_INFO "%s\n", netxen_nic_driver_string);
+#if defined (CONFIG_PPC)
+	mark_tech_preview(netxen_driver.name, THIS_MODULE);
+#elif !defined (CONFIG_ARM64) && !defined (CONFIG_PPC)
+	mark_driver_unsupported(netxen_driver.name);
+#endif
 
 #ifdef CONFIG_INET
 	register_netdevice_notifier(&netxen_netdev_cb);

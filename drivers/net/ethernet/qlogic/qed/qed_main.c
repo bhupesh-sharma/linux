@@ -85,6 +85,11 @@ MODULE_FIRMWARE(QED_FW_FILE_NAME);
 static int __init qed_init(void)
 {
 	pr_info("%s", version);
+#if defined (CONFIG_PPC)
+	mark_tech_preview("qed", THIS_MODULE);
+#elif !defined (CONFIG_ARM64) && !defined (CONFIG_PPC)
+	mark_driver_unsupported("qed");
+#endif
 
 	return 0;
 }
