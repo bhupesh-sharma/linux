@@ -4220,20 +4220,33 @@ static int pci_quirk_amd_sb_acs(struct pci_dev *dev, u16 acs_flags)
 #endif
 }
 
-static int pci_quirk_cavium_acs(struct pci_dev *dev, u16 acs_flags)
+/*
+ * The Cavium downstream ports doesn't advertise their ACS capability registers.
+ * However, the RTL internally implements similar protection as if
+ * ACS had completion redirection, forwarding and validation features enabled.
+ * So by this flags we're asserting that the hardware implements and
+ * enables equivalent ACS functionality for these flags.
+ */
+#define CAVIUM_CN8XXX_ACS_FLAGS (PCI_ACS_RR | PCI_ACS_CR | PCI_ACS_SV | PCI_ACS_UF)
+
+static __inline__  bool pci_quirk_cavium_acs_match(struct pci_dev *dev)
 {
 	/*
-	 * Cavium devices matching this quirk do not perform peer-to-peer
-	 * with other functions, allowing masking out these bits as if they
-	 * were unimplemented in the ACS capability.
+	 * Effectively selects all downstream ports for whole ThunderX 1 family
+	 * by 0xa000 mask (which represents 8 SoCs), while the lower bits of device ID
+	 * are used to indicate which subdevice is used within the SoC.
 	 */
-	acs_flags &= ~(PCI_ACS_SV | PCI_ACS_TB | PCI_ACS_RR |
-		       PCI_ACS_CR | PCI_ACS_UF | PCI_ACS_DT);
+	return (pci_is_pcie(dev) &&
+		(pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT) &&
+		((dev->device & 0xf800) == 0xa000));
+}
 
-	if (!((dev->device >= 0xa000) && (dev->device <= 0xa0ff)))
+static int pci_quirk_cavium_acs(struct pci_dev *dev, u16 acs_flags)
+{
+	if (!pci_quirk_cavium_acs_match(dev))
 		return -ENOTTY;
 
-	return acs_flags ? 0 : 1;
+	return acs_flags & ~(CAVIUM_CN8XXX_ACS_FLAGS) ? 0 : 1;
 }
 
 static int pci_quirk_xgene_acs(struct pci_dev *dev, u16 acs_flags)
