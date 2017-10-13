@@ -23,6 +23,7 @@
 #include <linux/sched/topology.h>
 #include <linux/slab.h>
 #include <linux/string.h>
+#include <linux/acpi.h>
 
 #include <asm/cpu.h>
 #include <asm/cputype.h>
@@ -244,6 +245,8 @@ static void update_siblings_masks(unsigned int cpuid)
 	}
 }
 
+static int num_threads  = -1;
+static int num_cores    = -1;
 void store_cpu_topology(unsigned int cpuid)
 {
 	struct cpu_topology *cpuid_topo = &cpu_topology[cpuid];
@@ -273,6 +276,14 @@ void store_cpu_topology(unsigned int cpuid)
 					 MPIDR_AFFINITY_LEVEL(mpidr, 2) << 8 |
 					 MPIDR_AFFINITY_LEVEL(mpidr, 3) << 16;
 	}
+	/*
+	 * For adjustment to topology later; see RHELSA topology
+	 * adjustment below
+	 */
+	if (cpuid_topo->thread_id > num_threads)
+		num_threads = cpuid_topo->thread_id;
+	if (cpuid_topo->core_id > num_cores)
+		num_cores = cpuid_topo->core_id;
 
 	pr_debug("CPU%u: cluster %d core %d thread %d mpidr %#016llx\n",
 		 cpuid, cpuid_topo->cluster_id, cpuid_topo->core_id,
@@ -292,6 +303,7 @@ static void __init reset_cpu_topology(void)
 		cpu_topo->thread_id = -1;
 		cpu_topo->core_id = 0;
 		cpu_topo->cluster_id = -1;
+		cpu_topo->physical_package_id = 0;
 
 		cpumask_clear(&cpu_topo->core_sibling);
 		cpumask_set_cpu(cpu, &cpu_topo->core_sibling);
@@ -311,3 +323,56 @@ void __init init_cpu_topology(void)
 	if (of_have_populated_dt() && parse_dt_topology())
 		reset_cpu_topology();
 }
+
+/*
+ * RHELSA topology adjustment
+ *  -- DT-based topology not used
+ *  -- default use of MPIDR.Affx fields generates
+ *     incorrect topology information as coded today.
+ *  Need to work create ACPI-based topology information
+ *  but need time to work through standards.
+ *  For now, this will do for early chip partners.
+ *  Note: vcpus now use Aff1 and Aff0 (but still not more than 123 vcpus).
+ *        Since we flatten the topology, except sockets, and still don't
+ *        support multi-socket VMs this will also work in the VM case.
+ */
+static int __init acpi_adjust_cpu_topology(void)
+{
+	/* Adjust for case when ACPI is enabled */
+	if (!acpi_disabled) {
+		unsigned int cpu;
+		struct cpu_topology *cpu_topo;
+		int aff1;
+		int aff2;
+
+		/* adjust counts to be base 1 vs base 0 */
+		num_threads++;	/* num threads per core */
+		num_cores++;	/* num cores per cluster */
+
+		for_each_possible_cpu(cpu) {
+			cpu_topo = &cpu_topology[cpu];
+
+			if (cpu_topo->thread_id < 0) {	/* SMT == 1 */
+				aff1 = cpu_topo->cluster_id & 0xff;
+				cpu_topo->core_id += aff1 * num_cores;
+				aff2 = (cpu_topo->cluster_id >> 8) & 0xff;
+			} else 				/* SMT > 1  */
+				aff2 = cpu_topo->cluster_id & 0xff;
+
+			cpu_topo->cluster_id = aff2;
+			cpu_topo->physical_package_id = aff2;
+
+			/* reset sibling masks */
+			cpumask_clear(&cpu_topo->core_sibling);
+			cpumask_clear(&cpu_topo->thread_sibling);
+		}
+
+		/* update sibling masks */
+		for_each_possible_cpu(cpu)
+			update_siblings_masks(cpu);
+	}
+
+	return 0;
+}
+/* adjust topology after all cpu's started up and Affx fields extracted from per-cpu MPIDR */
+late_initcall(acpi_adjust_cpu_topology);
