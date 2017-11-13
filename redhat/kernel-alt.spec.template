@@ -1567,6 +1567,43 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Nov 13 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-1.el7a]
+- [redhat] kernel-alt rebased to 4.14 ("Herton R. Krzesinski") [1492717]
+- [scsi] cxlflash: Derive pid through accessors (Steve Best) [1510168]
+- [scsi] cxlflash: Allow cards without WWPN VPD to configure (Steve Best) [1510168]
+- [scsi] cxlflash: Use derived maximum write same length (Steve Best) [1510168]
+- [redhat] configs: Enable hardlockup detector for powerpc64le (Bhupesh Sharma) [1478225]
+- [redhat] configs: Enable softlockup detector by default (Bhupesh Sharma) [1478225]
+- [powerpc] powerpc/powernv: Implement NMI IPI with OPAL_SIGNAL_SYSTEM_RESET (Bhupesh Sharma) [1478225]
+- [powerpc] powerpc/xmon: Avoid tripping SMP hardlockup watchdog (Bhupesh Sharma) [1478225]
+- [powerpc] powerpc/watchdog: Do not trigger SMP crash from touch_nmi_watchdog (Bhupesh Sharma) [1478225]
+- [powerpc] powerpc/watchdog: Do not backtrace locked CPUs twice if allcpus backtrace is enabled (Bhupesh Sharma) [1478225]
+- [powerpc] powerpc/watchdog: Do not panic from locked CPU's IPI handler (Bhupesh Sharma) [1478225]
+- [powerpc] powerpc/64s: Implement system reset idle wakeup reason (Bhupesh Sharma) [1478225]
+- [misc] cxl: Enable global TLBIs for cxl contexts (Gustavo Duarte) [1498927]
+- [powerpc] powerpc/mm: Export flush_all_mm() (Gustavo Duarte) [1498927]
+- [misc] cxl: Set the valid bit in PE for dedicated mode (Gustavo Duarte) [1498927]
+- [kernel] kdump: support crashkernel=auto for compatibility (Pingfan Liu) [1431982]
+- [kernel] kdump/parse_crashkernel_mem: round up the total memory size to 128M (Dave Young) [1431982]
+- [x86] x86/kdump: crashkernel=X try to reserve below 896M first then below 4G and MAXMEM (Dave Young) [1431982]
+- [netdrv] ibmvnic: Fix failover error path for non-fatal resets (Steve Best) [1464528]
+- [netdrv] ibmvnic: Update reset infrastructure to support tunable parameters (Steve Best) [1464528]
+- [netdrv] ibmvnic: Let users change net device features (Steve Best) [1464528]
+- [netdrv] ibmvnic: Enable TSO support (Steve Best) [1464528]
+- [netdrv] ibmvnic: Enable scatter-gather support (Steve Best) [1464528]
+- [powerpc] KVM: PPC: Tie KVM_CAP_PPC_HTM to the user-visible TM feature (Steve Best) [1498555]
+- [powerpc] powerpc/tm: P9 disable transactionally suspended sigcontexts (Steve Best) [1498555]
+- [powerpc] powerpc/powernv: Enable TM without suspend if possible (Steve Best) [1498555]
+- [powerpc] Add PPC_FEATURE2_HTM_NO_SUSPEND (Steve Best) [1498555]
+- [powerpc] powerpc/tm: Add commandline option to disable hardware transactional memory (Steve Best) [1498555]
+- [arm64] DO NOT UPSTREAM - topology: Adjust sysfs topology (Andrew Jones) [1501443]
+- [arm64] DO NOT UPSTREAM - pmuv3: disable PMUv3 in VM when vPMU=off (Andrew Jones) [1501452]
+- [redhat] configs: s390: Enable CONFIG_FTRACE_SYSCALLS option (Jiri Olsa) [1469687]
+- [redhat] configs: s390x: Disable CONFIG_S390_GUEST_OLD_TRANSPORT (David Hildenbrand) [1495197]
+- [redhat] configs: enable CONFIG_MEM_SOFT_DIRTY on ppc64le (Adrian Reber) [1496347]
+- [redhat] configs: enable CHECKPOINT_RESTORE on s390x (Adrian Reber) [1457968]
+- [redhat] remove usage of mandocs target for kernel-doc, avoid running htmldocs ("Herton R. Krzesinski")
+
 
 ###
 # The following Emacs magic makes C-c C-e use UTC dates.
