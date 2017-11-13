@@ -259,6 +259,19 @@ static int __init __parse_crashkernel(char *cmdline,
 	if (suffix)
 		return parse_crashkernel_suffix(ck_cmdline, crash_size,
 				suffix);
+
+	if (strncmp(ck_cmdline, "auto", 4) == 0) {
+#ifdef CONFIG_X86_64
+	ck_cmdline="2G-:160M";
+#elif defined(CONFIG_S390)
+	ck_cmdline="4G-:160M";
+#elif defined(CONFIG_ARM64)
+	ck_cmdline="2G-:512M";
+#elif defined(CONFIG_PPC64)
+	ck_cmdline="2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G";
+#endif
+	}
+
 	/*
 	 * if the commandline contains a ':', then that's the extended
 	 * syntax -- if not, it must be the classic syntax
