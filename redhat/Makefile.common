@@ -3,11 +3,11 @@ RPMBUILD := $(shell if [ -x "/usr/bin/rpmbuild" ]; then echo rpmbuild; \
 REDHAT:=$(shell pwd)
 TOPDIR:=$(shell dirname $(REDHAT))
 MACH :=  $(shell uname -m)
-KVERSION:=4.11.0
+KVERSION:=4.14.0
 GITID:= $(shell git log --max-count=1 --pretty=format:%H)
-RPMVERSION:=4.11.0
+RPMVERSION:=4.14.0
 # marker is git tag which we base off of for exporting patches
-MARKER:=kernel-pegas-4.11.0-5.el7
+MARKER:=rebase-kernel-alt-4.11.0-44.el7a_to_v4.14
 PREBUILD:=
 BUILD:=0
 DIST:=.el7a
