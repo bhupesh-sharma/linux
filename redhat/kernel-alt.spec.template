@@ -1567,6 +1567,11 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Fri Nov 17 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-2.el7a]
+- [powerpc] powerpc/powernv/cpufreq: Fix the frequency read by /proc/cpuinfo (Steve Best) [1501944]
+- [netdrv] ibmvnic: Set state UP (Steve Best) [1512272]
+- [powerpc] powerpc/64s: Add workaround for P9 vector CI load issue (Steve Best) [1501403]
+
 * Mon Nov 13 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-1.el7a]
 - [redhat] kernel-alt rebased to 4.14 ("Herton R. Krzesinski") [1492717]
 - [scsi] cxlflash: Derive pid through accessors (Steve Best) [1510168]
