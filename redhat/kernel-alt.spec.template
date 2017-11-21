@@ -1567,6 +1567,23 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Tue Nov 21 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-3.el7a]
+- [cpufreq] stats: Handle the case when trans_table goes beyond PAGE_SIZE (Desnes Augusto Nunes do Rosario) [1499411]
+- [virt] KVM: arm/arm64: vgic-its: Implement KVM_DEV_ARM_ITS_CTRL_RESET (Auger Eric) [1490315]
+- [documentation] KVM: arm/arm64: Document KVM_DEV_ARM_ITS_CTRL_RESET (Auger Eric) [1490315]
+- [virt] KVM: arm/arm64: vgic-its: Free caches when GITS_BASER Valid bit is cleared (Auger Eric) [1490315]
+- [virt] KVM: arm/arm64: vgic-its: New helper functions to free the caches (Auger Eric) [1490315]
+- [virt] KVM: arm/arm64: vgic-its: Remove kvm_its_unmap_device (Auger Eric) [1490315]
+- [tools] cpupower : Fix cpupower working when cpu0 is offline (Steve Best) [1495559]
+- [scsi] scsi_sysfs: make unpriv_sgio queue attribute accessible for non-block devices (Paolo Bonzini) [1492769]
+- [block] sg_io: introduce unpriv_sgio queue flag (Paolo Bonzini) [1492769]
+- [block] sg_io: pass request_queue to blk_verify_command (Paolo Bonzini) [1492769]
+- [kernel] locking/qrwlock: Prevent slowpath writers getting held up by fastpath (Waiman Long) [1507568]
+- [arm64] locking/qrwlock, arm64: Move rwlock implementation over to qrwlocks (Waiman Long) [1507568]
+- [kernel] locking/qrwlock: Use atomic_cond_read_acquire() when spinning in qrwlock (Waiman Long) [1507568]
+- [kernel] locking/atomic: Add atomic_cond_read_acquire() (Waiman Long) [1507568]
+- [kernel] locking/qrwlock: Use 'struct qrwlock' instead of 'struct __qrwlock' (Waiman Long) [1507568]
+
 * Fri Nov 17 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-2.el7a]
 - [powerpc] powerpc/powernv/cpufreq: Fix the frequency read by /proc/cpuinfo (Steve Best) [1501944]
 - [netdrv] ibmvnic: Set state UP (Steve Best) [1512272]
