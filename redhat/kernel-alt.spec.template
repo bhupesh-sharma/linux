@@ -1567,6 +1567,9 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Wed Nov 22 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-4.el7a]
+- [powerpc] revert powerpc/powernv/cpufreq: Fix the frequency read by /proc/cpuinfo (Steve Best) [1514611]
+
 * Tue Nov 21 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-3.el7a]
 - [cpufreq] stats: Handle the case when trans_table goes beyond PAGE_SIZE (Desnes Augusto Nunes do Rosario) [1499411]
 - [virt] KVM: arm/arm64: vgic-its: Implement KVM_DEV_ARM_ITS_CTRL_RESET (Auger Eric) [1490315]
