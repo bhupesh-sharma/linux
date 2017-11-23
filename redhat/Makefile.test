@@ -93,17 +93,17 @@ setup-xml:
 	@rm $(TMPFILE2)
 
 .PHONY: rh-test
-rh-test: TASK ?= $(shell test -n "$(OUTFILE)" && awk '/Created task:/{print $$3}' $(OUTFILE))
+rh-test: TASK ?= $(shell test -e $(OUTFILE) && awk '/Created task:/{print $$3}' $(OUTFILE))
 rh-test: pre-xml-check setup-xml
 	@echo "Submitting redhat/$(TESTNAME)"
 	@/usr/bin/submit_job.py -S rhts.redhat.com -j $(TMPFILE) > /dev/null || echo "Failed"
 
 .PHONY: rh-brew-test rh-brew-watch
-rh-brew-watch: TASK ?= $(shell awk '/Created task:/{print $$3}' $(OUTFILE))
+rh-brew-watch: TASK ?= $(shell test -e $(OUTFILE) && awk '/Created task:/{print $$3}' $(OUTFILE))
 rh-brew-watch: rh-%-watch:
 	$* watch-task $(TASK)
 
-rh-brew-test: OUTFILE:=$(shell mktemp)
+rh-brew-test: OUTFILE:=$(shell mktemp -u /tmp/rh-brew-test.$$$$.XXXXXXXXXX)
 rh-brew-test: TEST_FLAGS=--nowait
 rh-brew-test: OUTPUT_FILE=| tee $(OUTFILE)
 rh-brew-test: rh-%-test: rh-% rh-%-watch rh-test
