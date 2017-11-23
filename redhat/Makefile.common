@@ -34,10 +34,13 @@ LOCVERFILE:=../localversion
 # create an empty localversion file if you don't want a local buildid
 ifneq ($(wildcard $(LOCVERFILE)),)
   BUILDID:=$(shell cat $(LOCVERFILE))
+  $(info BUILDID is "$(BUILDID)". Update '$(shell dirname $(REDHAT))/localversion' to change.)
 else
-  BUILDID:=.test
+  ifeq ($(BUILDID),)
+    BUILDID:=.test
+  endif
+  $(info BUILDID is "$(BUILDID)".)
 endif
-$(info BUILDID is "$(BUILDID)". Update '$(shell dirname $(REDHAT))/localversion' to change.)
 
 PKGRELEASE:=$(PREBUILD)$(BUILD)$(DIST)$(BUILDID)
 SPECRELEASE:=$(PREBUILD)$(BUILD)%{?dist}$(BUILDID)
