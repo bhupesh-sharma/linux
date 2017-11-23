@@ -1,3 +1,4 @@
 *merged
 config-*
 kernel*config
+*.old
