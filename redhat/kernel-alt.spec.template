@@ -1567,6 +1567,13 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Nov 27 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-5.el7a]
+- [pci] Vulcan: AHCI PCI bar fix for Broadcom Vulcan early silicon (Torez Smith) [1508505 1513168]
+- [iommu] arm-smmu, acpi: Enable Cavium SMMU-v3 (Torez Smith) [1508505 1513168]
+- [iommu] arm-smmu, acpi: Enable Cavium SMMU-v2 (Torez Smith) [1508505 1513168]
+- [netdrv] net: thunderx: Fix TCP/UDP checksum offload for IPv6 pkts (Florian Westphal) [1511683]
+- [net] ipv6: Fixup device for anycast routes during copy (Florian Westphal) [1508339]
+
 * Wed Nov 22 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-4.el7a]
 - [powerpc] revert powerpc/powernv/cpufreq: Fix the frequency read by /proc/cpuinfo (Steve Best) [1514611]
 
