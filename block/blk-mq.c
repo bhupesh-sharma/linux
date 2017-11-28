@@ -127,6 +127,8 @@ void blk_freeze_queue_start(struct request_queue *q)
 		percpu_ref_kill(&q->q_usage_counter);
 		if (q->mq_ops)
 			blk_mq_run_hw_queues(q, false);
+		else
+			blk_run_queue(q);
 	}
 }
 EXPORT_SYMBOL_GPL(blk_freeze_queue_start);
