@@ -1567,6 +1567,9 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Tue Nov 28 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-6.el7a]
+- [tools] perf vendor events powerpc: Update POWER9 events (Steve Best) [1509681]
+
 * Mon Nov 27 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-5.el7a]
 - [pci] Vulcan: AHCI PCI bar fix for Broadcom Vulcan early silicon (Torez Smith) [1508505 1513168]
 - [iommu] arm-smmu, acpi: Enable Cavium SMMU-v3 (Torez Smith) [1508505 1513168]
