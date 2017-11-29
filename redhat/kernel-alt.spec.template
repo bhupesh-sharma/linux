@@ -1567,6 +1567,10 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Wed Nov 29 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-9.el7a]
+- [netdrv] i40e: Use smp_rmb rather than read_barrier_depends (Mauricio Oliveira) [1513182]
+- [netdrv] ixgbe: Fix skb list corruption on Power systems (Mauricio Oliveira) [1513182]
+
 * Wed Nov 29 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-8.el7a]
 - [netdrv] ibmvnic: fix dma_mapping_error call (Steve Best) [1515330]
 - [netdrv] ibmvnic: Feature implementation of Vital Product Data (VPD) for the ibmvnic driver (Steve Best) [1515330]
