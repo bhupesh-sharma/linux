@@ -1567,6 +1567,15 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Wed Nov 29 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-8.el7a]
+- [netdrv] ibmvnic: fix dma_mapping_error call (Steve Best) [1515330]
+- [netdrv] ibmvnic: Feature implementation of Vital Product Data (VPD) for the ibmvnic driver (Steve Best) [1515330]
+- [netdrv] ibmvnic: Add vnic client data to login buffer (Steve Best) [1515330]
+- Revert "[block] Make q_usage_counter also track legacy requests" ("Herton R. Krzesinski")
+- Revert "[block] wake up all tasks blocked in get_request()" ("Herton R. Krzesinski")
+- Revert "[block] run queue before waiting for q_usage_counter becoming zero" ("Herton R. Krzesinski")
+- Revert "[block] drain blkcg part of request_queue in blk_cleanup_queue()" ("Herton R. Krzesinski")
+
 * Tue Nov 28 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-7.el7a]
 - [block] drain blkcg part of request_queue in blk_cleanup_queue() (Ming Lei) [1513036]
 - [block] run queue before waiting for q_usage_counter becoming zero (Ming Lei) [1513036]
