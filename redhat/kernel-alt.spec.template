@@ -1567,6 +1567,15 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Thu Nov 30 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-10.el7a]
+- [block] bio: ensure __bio_clone_fast copies bi_partno (Ming Lei) [1516243]
+- [net] icmp: don't fail on fragment reassembly time exceeded (Matteo Croce) [1495458]
+- [netdrv] geneve: only configure or fill UDP_ZERO_CSUM6_RX/TX info when CONFIG_IPV6 (Hangbin Liu) [1511839]
+- [netdrv] geneve: fix fill_info when link down (Hangbin Liu) [1511839]
+- [redhat] allow specifying BUILDID on the command line (Andrew Jones)
+- [redhat] also ignore .old config files (Andrew Jones)
+- [redhat] stop leaving empty temp files (Andrew Jones)
+
 * Wed Nov 29 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-9.el7a]
 - [netdrv] i40e: Use smp_rmb rather than read_barrier_depends (Mauricio Oliveira) [1513182]
 - [netdrv] ixgbe: Fix skb list corruption on Power systems (Mauricio Oliveira) [1513182]
