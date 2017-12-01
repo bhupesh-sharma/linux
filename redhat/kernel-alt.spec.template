@@ -1567,6 +1567,14 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Fri Dec 01 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-11.el7a]
+- [powerpc] powerpc/mce: hookup memory_failure for UE errors (Steve Best) [1517693]
+- [powerpc] powerpc/mce: Hookup ierror (instruction) UE errors (Steve Best) [1517693]
+- [powerpc] powerpc/mce: Hookup derror (load/store) UE errors (Steve Best) [1517693]
+- [powerpc] powerpc/mce: Align the print of physical address better (Steve Best) [1517693]
+- [powerpc] powerpc/mce: Remove unused function get_mce_fault_addr() (Steve Best) [1517693]
+- [virtio] virtio_balloon: fix deadlock on OOM (Andrew Jones) [1516486]
+
 * Thu Nov 30 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-10.el7a]
 - [block] bio: ensure __bio_clone_fast copies bi_partno (Ming Lei) [1516243]
 - [net] icmp: don't fail on fragment reassembly time exceeded (Matteo Croce) [1495458]
