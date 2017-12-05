@@ -745,6 +745,14 @@ S:	Maintained
 F:	Documentation/rfkill.txt
 F:	net/rfkill/
 
+S390 VFIO-CCW DRIVER
+M:	Cornelia Huck <cohuck@redhat.com>
+L:	rhvirt-patches@redhat.com
+S:	Supported
+F:	drivers/s390/cio/vfio_ccw*
+F:	Documentation/s390/vfio-ccw.txt
+F:	include/uapi/linux/vfio_ccw.h
+
 SCSI CORE SUBSYSTEM (NOT INDIVIDUAL DRIVERS)
 M:	David Milburn <dmilburn@redhat.com>
 S:	Maintained
@@ -848,12 +856,39 @@ M:	Tony Camuso <tcamuso@redhat.com>
 S:	Maintained
 F:	drivers/media/video/uvc/
 
+VFIO DRIVER
+M:	Alex Williamson <alex.williamson@redhat.com>
+M:	Eric Auger <eric.auger@redhat.com>
+L:	rhvirt-patches@redhat.com
+S:	Supported
+F:	Documentation/vfio.txt
+F:	drivers/vfio/
+F:	include/linux/vfio.h
+F:	include/uapi/linux/vfio.h
+
+VFIO MEDIATED DEVICE DRIVERS
+M:	Alex Williamson <alex.williamson@redhat.com>
+M:	Eric Auger <eric.auger@redhat.com>
+L:	rhvirt-patches@redhat.com
+S:	Supported
+F:	Documentation/vfio-mediated-device.txt
+F:	drivers/vfio/mdev/
+F:	include/linux/mdev.h
+F:	samples/vfio-mdev/
+
 VIDEO DRIVERS
 M:	David Airlie <airlied@redhat.com>
 M:	Adam Jackson <ajax@redhat.com>
 M:	Rob Clark <rclark@redhat.com>
 S:	Maintained
 F:	drivers/gpu/
+
+VIRT LIB
+M:	Alex Williamson <alex.williamson@redhat.com>
+M:	Paolo Bonzini <pbonzini@redhat.com>
+L:	rhvirt-patches@redhat.com
+S:	Supported
+F:	virt/lib/
 
 VIRTIO AND VHOST VSOCK DRIVER
 M:	Stefan Hajnoczi <stefanha@redhat.com>
