@@ -1567,6 +1567,21 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Tue Dec 05 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-15.el7a]
+- [virtio] virtio_balloon: fix increment of vb->num_pfns in fill_balloon() (Andrew Jones) [1516486]
+- [redhat] RHMAINTAINERS: add vfio sections (Andrew Jones)
+- [redhat] RHMAINTAINERS: update virtio sections (Andrew Jones)
+- [redhat] RHMAINTAINERS: update KVM sections (Andrew Jones)
+- [net] ip6_tunnel: clean up ip4ip6 and ip6ip6's err_handlers (Xin Long) [1510242]
+- [net] ip6_tunnel: process toobig in a better way (Xin Long) [1510242]
+- [net] ip6_tunnel: add the process for redirect in ip6_tnl_err (Xin Long) [1510242]
+- [net] ip6_gre: process toobig in a better way (Xin Long) [1509915]
+- [net] ip6_gre: add the process for redirect in ip6gre_err (Xin Long) [1509915]
+- [net] route: also update fnhe_genid when updating a route cache (Xin Long) [1509098]
+- [net] route: update fnhe_expires for redirect when the fnhe exists (Xin Long) [1509098]
+- [net] ip_gre: add the support for i/o_flags update via ioctl (Xin Long) [1489338]
+- [net] ip_gre: add the support for i/o_flags update via netlink (Xin Long) [1489338]
+
 * Tue Dec 05 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-14.el7a]
 - [block] drain queue before waiting for q_usage_counter becoming zero (Ming Lei) [1513036]
 - [block] wake up all tasks blocked in get_request() (Ming Lei) [1513036]
