@@ -1567,6 +1567,11 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Tue Dec 05 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-14.el7a]
+- [block] drain queue before waiting for q_usage_counter becoming zero (Ming Lei) [1513036]
+- [block] wake up all tasks blocked in get_request() (Ming Lei) [1513036]
+- [block] Make q_usage_counter also track legacy requests (Ming Lei) [1513036]
+
 * Tue Dec 05 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-13.el7a]
 - [redhat] configs: disable ATA on s390x ("Herton R. Krzesinski") [1514589]
 - [iommu] Print a message with the default domain type created (Al Stone) [1518977]
