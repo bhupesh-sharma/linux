@@ -206,6 +206,7 @@ static void __init request_standard_resources(void)
 {
 	struct memblock_region *region;
 	struct resource *res;
+	phys_addr_t addr_start, addr_end;
 
 	kernel_code.start   = __pa_symbol(_text);
 	kernel_code.end     = __pa_symbol(__init_begin - 1);
@@ -218,9 +219,17 @@ static void __init request_standard_resources(void)
 			res->name  = "reserved";
 			res->flags = IORESOURCE_MEM;
 		} else {
-			res->name  = "System RAM";
-			res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
+			addr_start = __pfn_to_phys(memblock_region_reserved_base_pfn(region));
+			addr_end = __pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
+			if ((efi_mem_type(addr_start) == EFI_ACPI_RECLAIM_MEMORY) || (efi_mem_type(addr_end) == EFI_ACPI_RECLAIM_MEMORY)) {
+				res->name  = "ACPI reclaim region";
+				res->flags = IORESOURCE_MEM;
+			} else {
+				res->name  = "System RAM";
+				res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
+			}
 		}
+
 		res->start = __pfn_to_phys(memblock_region_memory_base_pfn(region));
 		res->end = __pfn_to_phys(memblock_region_memory_end_pfn(region)) - 1;
 
@@ -292,6 +301,7 @@ void __init setup_arch(char **cmdline_p)
 
 	request_standard_resources();
 
+	efi_memmap_unmap();
 	early_ioremap_reset();
 
 	if (acpi_disabled)
