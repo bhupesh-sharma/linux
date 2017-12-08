@@ -1567,6 +1567,23 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Fri Dec 08 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-17.el7a]
+- [mm] kernel: pmd can become dirty without going through a COW cycle (Chris von Recklinghausen) [1518612] {CVE-2017-1000405}
+- [powerpc] powerpc/perf: Fix oops when grouping different pmu events (Steve Best) [1520838]
+- [net] sctp: use right member as the param of list_for_each_entry (Xin Long) [1520264]
+- [netdrv] cxgb4: add new T6 pci device id's (Arjun Vynipadath) [1458297]
+- [netdrv] cxgb4: add new T5 pci device id's (Arjun Vynipadath) [1458297]
+- [netdrv] cxgb4: add new T6 pci device id's (Arjun Vynipadath) [1458297]
+- [netdrv] cxgb4: do DCB state reset in couple of places (Arjun Vynipadath) [1458297]
+- [netdrv] cxgb4: avoid stall while shutting down the adapter (Arjun Vynipadath) [1458297]
+- [netdrv] cxgb4: add new T5 pci device id's (Arjun Vynipadath) [1458297]
+- [powerpc] Revert powerpc: Do not call ppc_md.panic in fadump panic notifier (David Gibson) [1513858]
+- [arm64] KVM: fix VTTBR_BADDR_MASK BUG_ON off-by-one (Andrew Jones) [1520938]
+- [firmware] Revert efi/arm: Don't mark ACPI reclaim memory as MEMBLOCK_NOMAP (Bhupesh Sharma) [1512379]
+- [gpio] dwapb: Add wakeup source support (Iyappan Subramanian) [1497813]
+- [redhat] configs: zram, ppc64: enable zram on ppc64 (Jerome Marchand) [1499197]
+- [redhat] configs: Enable MMC DesignWare (Slava Shwartsman) [1477045]
+
 * Thu Dec 07 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-16.el7a]
 - [powerpc] Do not assign thread.tidr if already assigned (Gustavo Duarte) [1320916]
 - [powerpc] Avoid signed to unsigned conversion in set_thread_tidr() (Gustavo Duarte) [1320916]
