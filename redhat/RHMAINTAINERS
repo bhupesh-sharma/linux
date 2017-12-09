@@ -858,7 +858,8 @@ S:	Maintained
 F:	drivers/net/ethernet/marvell/skge.*
 
 SKY2 10/100/1000 GIGABIT ETHERNET DRIVER
-S:	Orphan
+M:	Jeremy Linton <jlinton@redhat.com>
+S:	Odd Fixes
 F:	drivers/net/ethernet/marvell/sky2.*
 
 SOFTWARE RAID (Multiple Disks, MD) SUPPORT
