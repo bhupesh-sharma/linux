@@ -117,6 +117,40 @@ M:      Tomas Henzl <thenzl@redhat.com>
 S:      Maintained
 F:      drivers/scsi/arcmsr/
 
+ARM ARCHITECTED TIMER DRIVER
+M:	Mark Salter <msalter@redhat.com>
+M:	Jeremy Linton <jlinton@redhat.com>
+S:	Maintained
+F:	arch/arm64/include/asm/arch_timer.h
+F:	drivers/clocksource/arm_arch_timer.c
+
+ARM INTERRUPT CONTROLLERS (GIC)
+M:	Mark Salter <msalter@redhat.com>
+M:	Jeremy Linton <jlinton@redhat.com>
+S:	Maintained
+F:	drivers/irqchip/irq-gic*
+F:	include/linux/irqchip/arm-gic*
+
+ARM PMU PROFILING AND DEBUGGING
+M:	Mark Salter <msalter@redhat.com>
+M:	Jeremy Linton <jlinton@redhat.com>
+S:	Maintained
+F:	arch/arm*/kernel/perf_*
+F:	arch/arm/oprofile/common.c
+F:	arch/arm*/kernel/hw_breakpoint.c
+F:	arch/arm*/include/asm/hw_breakpoint.h
+F:	arch/arm*/include/asm/perf_event.h
+F:	drivers/perf/*
+F:	include/linux/perf/arm_pmu.h
+
+ARM SMMU DRIVERS
+M:	Mark Salter <msalter@redhat.com>
+M:	Jeremy Linton <jlinton@redhat.com>
+S:	Maintained
+F:	drivers/iommu/arm-smmu.c
+F:	drivers/iommu/arm-smmu-v3.c
+F:	drivers/iommu/io-pgtable-arm.c
+
 ATHEROS WIRELESS LAN DRIVERS
 M:	Stanislaw Gruszka <sgruszka@redhat.com>
 M:	John Linville <linville@redhat.com>
@@ -703,6 +737,14 @@ F:	arch/*/include/asm/perf_event.h
 F:	arch/*/kernel/perf_callchain.c
 F:	tools/perf/
 F:	tools/lib/
+
+POWER STATE COORDINATION INTERFACE (PSCI)
+M:	Mark Salter <msalter@redhat.com>
+M:	Jeremy Linton <jlinton@redhat.com>
+S:	Maintained
+F:	drivers/firmware/psci*.c
+F:	include/linux/psci.h
+F:	include/uapi/linux/psci.h
 
 PTP HARDWARE CLOCK SUPPORT
 M:	Jiri Benc <jbenc@redhat.com>
