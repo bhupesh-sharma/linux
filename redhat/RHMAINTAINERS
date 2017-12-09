@@ -2,7 +2,7 @@
 	List of RHEL maintainers and how to submit kernel changes
 
 	OPTIONAL CC: the maintainers and mailing lists that are generated
-	by redhat/scripts/rh_get_maintainer.pl.  The results returned by the
+	by redhat/scripts/rh_get_maintainer.pl.	 The results returned by the
 	script will be best if you have git installed and are making
 	your changes in a branch derived from the latest RHEL git tree.
 
@@ -12,7 +12,7 @@ Descriptions of section entries:
 	M: Mail patches to: FullName <address@domain>
 	L: Mailing list that is relevant to this area
 	W: Web-page with status/info
-	T: SCM tree type and location.  Type is one of: git, hg, quilt, stgit.
+	T: SCM tree type and location.	Type is one of: git, hg, quilt, stgit.
 	S: Status, one of the following:
 	   Supported:	Someone is actually paid to look after this.
 	   Maintained:	Someone actually looks after it.
@@ -42,7 +42,7 @@ Descriptions of section entries:
 	   K: \b(printk|pr_(info|err))\b
 	      matches patches or files that contain one or more of the words
 	      printk, pr_info or pr_err
-	   One regex pattern per line.  Multiple K: lines acceptable.
+	   One regex pattern per line.	Multiple K: lines acceptable.
 
 Note: For the hard of thinking, this list is meant to remain in alphabetical
 order. If you could add yourselves to it in alphabetical order that would be
@@ -99,10 +99,10 @@ M:	Jaroslav Kysela <jkysela@redhat.com>
 S:	Maintained
 
 AMAZON ETHERNET DRIVERS
-M:      John Linville <linville@redhat.com>
-S:      Supported
-F:      Documentation/networking/ena.txt
-F:      drivers/net/ethernet/amazon/
+M:	John Linville <linville@redhat.com>
+S:	Supported
+F:	Documentation/networking/ena.txt
+F:	drivers/net/ethernet/amazon/
 
 AMD IOMMU (AMD-VI)
 M:	Myron Stowe <myron.stowe@redhat.com>
@@ -113,9 +113,9 @@ F:	drivers/iommu/amd_iommu*.[ch]
 F:	include/linux/amd-iommu.h
 
 ARECA (ARC11xx/12xx/16xx/1880) SATA/SAS RAID Host Bus Adapter (arcmsr)
-M:      Tomas Henzl <thenzl@redhat.com>
-S:      Maintained
-F:      drivers/scsi/arcmsr/
+M:	Tomas Henzl <thenzl@redhat.com>
+S:	Maintained
+F:	drivers/scsi/arcmsr/
 
 ARM64 PORT (AARCH64 ARCHITECTURE)
 M:	Mark Salter <msalter@redhat.com>
@@ -160,9 +160,9 @@ F:	drivers/iommu/io-pgtable-arm.c
 ATHEROS WIRELESS LAN DRIVERS
 M:	Stanislaw Gruszka <sgruszka@redhat.com>
 M:	John Linville <linville@redhat.com>
-S: 	Maintained
+S:	Maintained
 F:	drivers/net/wireless/ath5k
-F: 	drivers/net/wireless/ath9k
+F:	drivers/net/wireless/ath9k
 
 ATHEROS ETHERNET DRIVERS
 M:	Jarod Wilson <jarod@redhat.com>
@@ -401,7 +401,7 @@ S:	Maintained
 F:	drivers/powercap/intel_rapl.c
 
 INTEL TRUSTED PLATFORM MODULE (TPM)
-M: 	Jerry Snitselaar <jsnitsel@redhat.com>
+M:	Jerry Snitselaar <jsnitsel@redhat.com>
 S:	Maintained
 F:	drivers/char/tpm/*
 F:	include/linux/tpm.h
@@ -784,7 +784,7 @@ F:	drivers/net/wireless/rt2x00/
 REALTEK WIRELESS LAN DRIVERS
 M:	Stanislaw Gruszka <sgruszka@redhat.com>
 M:	John Linville <linville@redhat.com>
-S: 	Maintained
+S:	Maintained
 F:	drivers/net/wireless/rtl818x
 
 RFKILL
@@ -840,7 +840,7 @@ F:	drivers/net/ethernet/sfc/
 SGI SPECIFIC
 M:	George Beshers <gbeshers@redhat.com>
 M:	Frank Ramsay <framsay@redhat.com>
-M: 	Russ Anderson <randerso@redhat.com>
+M:	Russ Anderson <randerso@redhat.com>
 S:	Maintained
 F:	drivers/char/uv_mmtimer.c
 F:	drivers/misc/sgi-gru/
