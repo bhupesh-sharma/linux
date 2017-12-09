@@ -117,6 +117,12 @@ M:      Tomas Henzl <thenzl@redhat.com>
 S:      Maintained
 F:      drivers/scsi/arcmsr/
 
+ARM64 PORT (AARCH64 ARCHITECTURE)
+M:	Mark Salter <msalter@redhat.com>
+M:	Jeremy Linton <jlinton@redhat.com>
+S:	Maintained
+F:	arch/arm64/
+
 ARM ARCHITECTED TIMER DRIVER
 M:	Mark Salter <msalter@redhat.com>
 M:	Jeremy Linton <jlinton@redhat.com>
