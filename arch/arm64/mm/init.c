@@ -40,6 +40,7 @@
 #include <linux/mm.h>
 #include <linux/kexec.h>
 #include <linux/crash_dump.h>
+#include <linux/libfdt.h>
 
 #include <asm/boot.h>
 #include <asm/fixmap.h>
@@ -327,6 +328,7 @@ static int __init early_mem(char *p)
 }
 early_param("mem", early_mem);
 
+#if 0
 static int __init early_init_dt_scan_usablemem(unsigned long node,
 		const char *uname, int depth, void *data)
 {
@@ -358,6 +360,175 @@ static void __init fdt_enforce_memory_region(void)
 	if (reg.size)
 		memblock_cap_memory_range(reg.base, reg.size);
 }
+
+#else
+#define PALIGN(p, a)    ((void *)(ALIGN((unsigned long)(p), (a))))
+#define GET_CELL(p)     (p += 4, *((const uint32_t *)(p-4)))
+
+static uint64_t IsPrintableString (const void* data, uint64_t len)
+{
+  const char *s = data;
+  const char *ss;
+
+  // Zero length is not
+  if (len == 0) {
+    return 0;
+  }
+
+  // Must terminate with zero
+  if (s[len - 1] != '\0') {
+    return 0;
+  }
+
+  ss = s;
+  while (*s/* && isprint(*s)*/) {
+    s++;
+  }
+
+  // Not zero, or not done yet
+  if (*s != '\0' || (s + 1 - ss) < len) {
+    return 0;
+  }
+
+  return 1;
+}
+
+static void PrintData (const char* data, uint64_t len)
+{
+  uint64_t i;
+  const char *p = data;
+
+  // No data, don't print
+  if (len == 0)
+    return;
+
+  if (IsPrintableString (data, len)) {
+    printk(" = \"%s\"", (const char *)data);
+  } else if ((len % 4) == 0) {
+    printk(" = <");
+    for (i = 0; i < len; i += 4) {
+      printk("0x%08x%s", fdt32_to_cpu(GET_CELL(p)),i < (len - 4) ? " " : "");
+    }
+    printk(">");
+  } else {
+    printk(" = [");
+    for (i = 0; i < len; i++)
+      printk("%02x%s", *p++, i < len - 1 ? " " : "");
+    printk("]");
+  }
+}
+
+void DumpFdt (void* FdtBlob)
+{
+  struct fdt_header *bph;
+  uint32_t off_dt;
+  uint32_t off_str;
+  const char* p_struct;
+  const char* p_strings;
+  const char* p;
+  const char* s;
+  const char* t;
+  uint32_t tag;
+  uint64_t sz;
+  uint64_t depth;
+  uint64_t shift;
+  uint32_t version;
+
+  depth = 0;
+  shift = 4;
+
+  bph = FdtBlob;
+  off_dt = fdt32_to_cpu(bph->off_dt_struct);
+  off_str = fdt32_to_cpu(bph->off_dt_strings);
+  p_struct = (const char*)FdtBlob + off_dt;
+  p_strings = (const char*)FdtBlob + off_str;
+  version = fdt32_to_cpu(bph->version);
+
+  p = p_struct;
+  while ((tag = fdt32_to_cpu(GET_CELL(p))) != FDT_END) {
+
+    if (tag == FDT_BEGIN_NODE) {
+      s = p;
+      p = PALIGN(p + strlen(s) + 1, 4);
+
+      if (*s == '\0')
+              s = "/";
+
+      printk("%*s%s {\n", (int)depth * (int)shift, " ", s);
+
+      depth++;
+      continue;
+    }
+
+    if (tag == FDT_END_NODE) {
+      depth--;
+
+      printk("%*s};\n", (int)depth * (int)shift, " ");
+      continue;
+    }
+
+    if (tag == FDT_NOP) {
+      printk("%*s// [NOP]\n", (int)depth * (int)shift, " ");
+      continue;
+    }
+
+    if (tag != FDT_PROP) {
+      printk("%*s ** Unknown tag 0x%08x\n", (int)depth * (int)shift, " ", tag);
+      break;
+    }
+    sz = fdt32_to_cpu(GET_CELL(p));
+    s = p_strings + fdt32_to_cpu(GET_CELL(p));
+    if (version < 16 && sz >= 8)
+            p = PALIGN(p, 8);
+    t = p;
+
+    p = PALIGN(p + sz, 4);
+
+    printk("%*s%s", (int)depth * (int)shift, " ", s);
+    PrintData(t, sz);
+    printk(";\n");
+  }
+}
+
+static void __init fdt_enforce_memory_region(void)
+{
+	int len, offset, i;
+	const __be32 *reg, *endp;
+	void *fdt = initial_boot_params;
+
+	DumpFdt(fdt);
+
+	offset = fdt_path_offset(fdt, "/chosen");
+	if (offset < 0)
+		return;
+
+	reg = fdt_getprop(fdt, offset, "linux,usable-memory-range", &len);
+	if (!reg || !len )
+		return;
+	
+	endp = reg + ((len * 4) / sizeof(__be32));
+
+	pr_info("linux,usable-memory-range, len=%d\n", len);
+	
+	//while ((endp - reg) >= (dt_root_addr_cells + dt_root_size_cells)) {
+	for (i = 0; i < 4; i++) {
+		u64 base, size;
+	
+		base = dt_mem_next_cell(dt_root_addr_cells, &reg);
+		size = dt_mem_next_cell(dt_root_size_cells, &reg);
+		pr_info("linux,usable-memory-range base %llx, size %llx\n", base, size);
+		if (size == 0)
+			continue;
+		
+		pr_info(" - %llx ,  %llx\n", (unsigned long long)base,
+		    (unsigned long long)size);
+
+		if (size)
+			memblock_cap_memory_range(base, size);
+	}
+}
+
+#endif
 
 void __init arm64_memblock_init(void)
 {
