@@ -352,11 +352,17 @@ static void __init fdt_enforce_memory_region(void)
 	struct memblock_region reg = {
 		.size = 0,
 	};
+	u64 idx;
+	phys_addr_t start, end;
 
 	of_scan_flat_dt(early_init_dt_scan_usablemem, &reg);
 
-	if (reg.size)
-		memblock_cap_memory_range(reg.base, reg.size);
+	if (reg.size) {
+		for_each_free_mem_range(idx, NUMA_NO_NODE, MEMBLOCK_NONE,
+				&start, &end, NULL)
+			memblock_mark_nomap(start, end - start);
+		memblock_clear_nomap(reg.base, reg.size);
+	}
 }
 
 void __init arm64_memblock_init(void)
