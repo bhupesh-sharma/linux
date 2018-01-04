@@ -1567,6 +1567,19 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Thu Jan 04 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-19.el7a]
+- [redhat] RHMAINTAINERS: Cleanup tabs/spaces (Jeremy Linton)
+- [redhat] RHMAINTAINERS: claim orphan sky2 (Jeremy Linton)
+- [redhat] RHMAINTAINERS: arch/arm64 is supported (Jeremy Linton)
+- [redhat] RHMAINTAINERS: add ARM device IP drivers (Jeremy Linton)
+- [powerpc] powerpc/64s/slice: Use addr limit when computing slice mask (Steve Best) [1523265]
+- [powerpc] powerpc/64s: mm_context.addr_limit is only used on hash (Steve Best) [1523265]
+- [powerpc] powerpc/64s/hash: Allow MAP_FIXED allocations to cross 128TB boundary (Steve Best) [1523265]
+- [powerpc] powerpc/64s/hash: Fix 128TB-512TB virtual address boundary case allocation (Steve Best) [1523265]
+- [powerpc] powerpc/64s/hash: Fix fork() with 512TB process address space (Steve Best) [1523265]
+- [powerpc] powerpc/64s/radix: Fix 128TB-512TB virtual address boundary case allocation (Steve Best) [1523265]
+- [powerpc] powerpc/64s/hash: Fix 512T hint detection to use >= 128T (Steve Best) [1523265]
+
 * Fri Dec 08 2017 Herton R. Krzesinski <herton@redhat.com> [4.14.0-18.el7a]
 - [powerpc] powerpc/64s: Initialize ISAv3 MMU registers before setting partition table (Steve Best) [1523226]
 - [powerpc] KVM: PPC: Book3S HV: Fix use after free in case of multiple resize requests (Serhii Popovych) [1519046]
