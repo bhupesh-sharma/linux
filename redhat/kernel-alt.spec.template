@@ -1567,6 +1567,25 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Fri Jan 05 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-20.el7a]
+- [netdrv] igb: Use smp_rmb rather than read_barrier_depends (Steve Best) [1531097]
+- [netdrv] ibmvnic: Include header descriptor support for ARP packets (Steve Best) [1529747]
+- [netdrv] ibmvnic: Increase maximum number of RX/TX queues (Steve Best) [1529747]
+- [netdrv] ibmvnic: Rename IBMVNIC_MAX_TX_QUEUES to IBMVNIC_MAX_QUEUES (Steve Best) [1529747]
+- [powerpc] KVM: PPC: Book3S HV: Fix pending_pri value in kvmppc_xive_get_icp() (Laurent Vivier) [1524884]
+- [powerpc] KVM: PPC: Book3S: fix XIVE migration of pending interrupts (Laurent Vivier) [1493453]
+- [fs] cifs: fix NULL deref in SMB2_read (Leif Sahlberg) [1524797]
+- [powerpc] perf: Dereference BHRB entries safely (Steve Best) [1525101]
+- [tools] perf tests attr: Fix group stat tests (Jiri Olsa) [1518232]
+- [tools] perf test attr: Fix ignored test case result (Jiri Olsa) [1518232]
+- [tools] perf test attr: Fix python error on empty result (Jiri Olsa) [1518232]
+- [tools] perf tests attr: Make hw events optional (Jiri Olsa) [1518232]
+- [tools] perf tests attr: Fix task term values (Jiri Olsa) [1518232]
+- [powerpc] kvm: ppc: book3s hv: Don't call real-mode XICS hypercall handlers if not enabled (Laurent Vivier) [1524664]
+- [tools] perf vendor events: Use more flexible pattern matching for CPU identification for mapfile.csv (Jiri Olsa) [1513805]
+- [tools] perf pmu: Extract function to get JSON alias map (Jiri Olsa) [1513805]
+- [tools] perf pmu: Add helper function is_pmu_core to detect PMU CORE devices (Jiri Olsa) [1513805]
+
 * Thu Jan 04 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-19.el7a]
 - [redhat] RHMAINTAINERS: Cleanup tabs/spaces (Jeremy Linton)
 - [redhat] RHMAINTAINERS: claim orphan sky2 (Jeremy Linton)
