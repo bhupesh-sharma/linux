@@ -1567,6 +1567,27 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Jan 08 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-21.el7a]
+- [netdrv] bnx2x: Improve reliability in case of nested PCI errors (Steve Best) [1529861]
+- [netdrv] tg3: Fix rx hang on MTU change with 5717/5719 (Mauricio Oliveira) [1526319]
+- [target] cxgbit: Abort the TCP connection in case of data out timeout (Arjun Vynipadath) [1458313]
+- [scsi] csiostor: enable PCIe relaxed ordering if supported (Arjun Vynipadath) [1458319]
+- [crypto] chcr: Replace _manual_ swap with swap macro (Arjun Vynipadath) [1458316]
+- [crypto] chelsio: Fix memory leak (Arjun Vynipadath) [1458316]
+- [crypto] chelsio: Move DMA un/mapping to chcr from lld cxgb4 driver (Arjun Vynipadath) [1458316]
+- [crypto] chelsio: Remove allocation of sg list to implement 2K limit of dsgl header (Arjun Vynipadath) [1458316]
+- [crypto] chelsio: Use x8_ble gf multiplication to calculate IV (Arjun Vynipadath) [1458316]
+- [crypto] gf128mul: The x8_ble multiplication functions (Arjun Vynipadath) [1458316]
+- [crypto] chelsio: Check error code with IS_ERR macro (Arjun Vynipadath) [1458316]
+- [crypto] chelsio: Remove unused parameter (Arjun Vynipadath) [1458316]
+- [crypto] chelsio: pr_err() strings should end with newlines (Arjun Vynipadath) [1458316]
+- [crypto] chelsio: Use GCM IV size constant (Arjun Vynipadath) [1458316]
+- [crypto] gcm: add GCM IV size constant (Arjun Vynipadath) [1458316]
+- [scsi] libcxgbi: simplify task->hdr allocation for mgmt cmds (Arjun Vynipadath) [1458308]
+- [scsi] cxgb4i: fix Tx skb leak (Arjun Vynipadath) [1458308]
+- [scsi] libcxgbi: in case of vlan pass 0 as ifindex to find route (Arjun Vynipadath) [1458308]
+- [scsi] libcxgbi: remove redundant check and close on csk (Arjun Vynipadath) [1458308]
+
 * Fri Jan 05 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-20.el7a]
 - [netdrv] igb: Use smp_rmb rather than read_barrier_depends (Steve Best) [1531097]
 - [netdrv] ibmvnic: Include header descriptor support for ARP packets (Steve Best) [1529747]
