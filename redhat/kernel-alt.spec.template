@@ -1567,6 +1567,27 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Tue Jan 09 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-22.el7a]
+- [arm64] kaslr: Put kernel vectors address in separate data page (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Introduce TTBR_ASID_MASK for getting at the ASID in the TTBR (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] Kconfig: Add CONFIG_UNMAP_KERNEL_AT_EL0 (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] entry: Add fake CPU feature for unmapping the kernel at EL0 (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] tls: Avoid unconditional zeroing of tpidrro_el0 for native tasks (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] erratum: Work around Falkor erratum #E1003 in trampoline code (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] entry: Hook up entry trampoline to exception vectors (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] entry: Explicitly pass exception level to kernel_ventry macro (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Map entry trampoline into trampoline and kernel page tables (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] entry: Add exception trampoline page for exceptions from EL0 (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Invalidate both kernel and user ASIDs when performing TLBI (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Add arm64_kernel_unmapped_at_el0 helper (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Allocate ASIDs in pairs (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Fix and re-enable ARM64_SW_TTBR0_PAN (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Rename post_ttbr0_update_workaround (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Remove pre_ttbr0_update_workaround for Falkor erratum #E1003 (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Move ASID from TTBR0 to TTBR1 (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Temporarily disable ARM64_SW_TTBR0_PAN (Mark Salter) [1531357] {CVE-2017-5754}
+- [arm64] mm: Use non-global mappings for kernel space (Mark Salter) [1531357] {CVE-2017-5754}
+
 * Mon Jan 08 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-21.el7a]
 - [netdrv] bnx2x: Improve reliability in case of nested PCI errors (Steve Best) [1529861]
 - [netdrv] tg3: Fix rx hang on MTU change with 5717/5719 (Mauricio Oliveira) [1526319]
