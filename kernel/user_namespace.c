@@ -540,13 +540,10 @@ static int projid_m_show(struct seq_file *seq, void *v)
 static void *m_start(struct seq_file *seq, loff_t *ppos,
 		     struct uid_gid_map *map)
 {
-	struct uid_gid_extent *extent = NULL;
 	loff_t pos = *ppos;
 
-	if (pos < map->nr_extents)
-		extent = &map->extent[pos];
-
-	return extent;
+	return nospec_ptr(&map->extent[pos], &map->extent[0],
+			  &map->extent[map->nr_extents]);
 }
 
 static void *uid_m_start(struct seq_file *seq, loff_t *ppos)
