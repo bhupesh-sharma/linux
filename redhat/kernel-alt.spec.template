@@ -1567,6 +1567,29 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Thu Jan 11 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-23.el7a]
+- [s390] KVM: s390: Fix skey emulation permission check (Thomas Huth) [1530594]
+- [scsi] core: check for device state in __scsi_remove_target() (Ewan Milne) [1513029]
+- [virtio] virtio_mmio: fix devm cleanup (Andrew Jones) [1529279]
+- [virtio] ptr_ring: add barriers (Andrew Jones) [1529279]
+- [tools] virtio: ptr_ring: fix up after recent ptr_ring changes (Andrew Jones) [1529279]
+- [netdrv] virtio_net: fix return value check in receive_mergeable() (Andrew Jones) [1529279]
+- [virtio] virtio_mmio: add cleanup for virtio_mmio_remove (Andrew Jones) [1529279]
+- [virtio] virtio_mmio: add cleanup for virtio_mmio_probe (Andrew Jones) [1529279]
+- [netdrv] tap: free skb if flags error (Andrew Jones) [1529279]
+- [netdrv] tun: free skb in early errors (Andrew Jones) [1529279]
+- [vhost] net: fix skb leak in handle_rx() (Andrew Jones) [1529279]
+- [virtio] virtio: release virtio index when fail to device_register (Andrew Jones) [1529279]
+- [nvme] call blk_integrity_unregister after queue is cleaned up (Ming Lei) [1521000]
+- [redhat] configs: Disable CONFIG_CMA and CONFIG_DMA_CMA support for RHEL archs (Bhupesh Sharma) [1519317]
+- [redhat] configs: disable bnx2* storage offload drivers on aarch64 (Michal Schmidt) [1500020]
+- [redhat] configs: Enable Qualcomm L2&L3 PMU drivers (Steve Ulrich) [1268469]
+- [perf] qcom_l2_pmu: add event names (Steve Ulrich) [1268469]
+- [i2c] xgene-slimpro: Support v2 (Iyappan Subramanian) [1524732]
+- [hwmon] xgene: Minor clean up of ifdef and acpi_match_table reference (Iyappan Subramanian) [1524732]
+- [hwmon] xgene: Support hwmon v2 (Iyappan Subramanian) [1524732]
+- [net] Fix double free and memory corruption in get_net_ns_by_id() (Aristeu Rozanski) [1531553] {CVE-2017-15129}
+
 * Tue Jan 09 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-22.el7a]
 - [arm64] kaslr: Put kernel vectors address in separate data page (Mark Salter) [1531357] {CVE-2017-5754}
 - [arm64] mm: Introduce TTBR_ASID_MASK for getting at the ASID in the TTBR (Mark Salter) [1531357] {CVE-2017-5754}
