@@ -1567,6 +1567,28 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Jan 15 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-24.el7a]
+- [powerpc] KVM: PPC: Book3S HV: Always flush TLB in kvmppc_alloc_reset_hpt() (David Gibson) [1533315]
+- [powerpc] pseries: Make RAS IRQ explicitly dependent on DLPAR WQ (David Gibson) [1517598]
+- [tools] cpupower: Fix no-rounding MHz frequency output (Prarit Bhargava) [1503286]
+- [x86] perf/x86/intel: Hide TSX events when RTM is not supported (Jiri Olsa) [1510552]
+- [tools] perf test: Disable test cases 19 and 20 on s390x (Jiri Olsa) [1432652]
+- [infiniband] iw_cxgb4: only clear the ARMED bit if a notification is needed (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: atomically flush the qp (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: only call the cq comp_handler when the cq is armed (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: Fix possible circular dependency locking warning (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: remove BUG_ON() usage (Arjun Vynipadath) [1458305]
+- [infiniband] RDMA/cxgb4: Protect from possible dereference (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: add referencing to wait objects (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: allocate wait object for each ep object (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: allocate wait object for each qp object (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: allocate wait object for each cq object (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: allocate wait object for each memory object (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: change pr_debug to appropriate log level (Arjun Vynipadath) [1458305]
+- [infiniband] iw_cxgb4: Remove __func__ parameter from pr_debug() (Arjun Vynipadath) [1458305]
+- [mm] kernel: mm/pagewalk.c: walk_hugetlb_range function mishandles holes in hugetlb ranges causing information leak (Chris von Recklinghausen) [1520395] {CVE-2017-16994}
+- [redhat] Disable CONFIG_RC_CORE for s390x and aarch64 ("Herton R. Krzesinski") [1516037]
+
 * Thu Jan 11 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-23.el7a]
 - [s390] KVM: s390: Fix skey emulation permission check (Thomas Huth) [1530594]
 - [scsi] core: check for device state in __scsi_remove_target() (Ewan Milne) [1513029]
