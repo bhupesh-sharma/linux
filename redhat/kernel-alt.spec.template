@@ -1567,6 +1567,16 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Fri Jan 19 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-27.el7a]
+- [acpi] ACPI / APEI: Remove arch_apei_flush_tlb_one() (Prarit Bhargava) [1513713]
+- [arm64] mm: Remove arch_apei_flush_tlb_one() (Prarit Bhargava) [1513713]
+- [acpi] ACPI / APEI: Remove ghes_ioremap_area (Prarit Bhargava) [1513713]
+- [acpi] ACPI / APEI: Replace ioremap_page_range() with fixmap (Prarit Bhargava) [1513713]
+- [misc] cxl: Add support for POWER9 DD2 (Steve Best) [1534959]
+- [netdrv] ibmvnic: Fix pending MAC address changes (Steve Best) [1535360]
+- [cpufreq] powernv: Dont assume distinct pstate values for nominal and pmin (Steve Best) [1534464]
+- [netdrv] net: hns: add ACPI mode support for ethtool -p (Zhou Wang) [1530124]
+
 * Thu Jan 18 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-26.el7a]
 - [drm] uapi: fix linux/kfd_ioctl.h userspace compilation errors (Yaakov Selkowitz) [1510150]
 - [net] uapi: fix linux/tls.h userspace compilation error (Yaakov Selkowitz) [1510150]
