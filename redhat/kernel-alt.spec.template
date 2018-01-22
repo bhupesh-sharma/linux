@@ -1568,6 +1568,31 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Jan 22 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-29.el7a]
+- [misc] cxl: Provide debugfs access to PSL_DEBUG/XSL_DEBUG registers (Steve Best) [1534500]
+- [cpufreq] powernv-cpufreq: Treat pstates as opaque 8-bit values (Steve Best) [1534472]
+- [cpufreq] powernv-cpufreq: Fix pstate_to_idx() to handle non-continguous pstates (Steve Best) [1534472]
+- [cpufreq] powernv-cpufreq: Add helper to extract pstate from PMSR (Steve Best) [1534472]
+- [net] openvswitch: Fix pop_vlan action for double tagged frames (Eric Garver) [1532639]
+- [net] xfrm: Fix stack-out-of-bounds read on socket policy lookup. (Florian Westphal) [1513059]
+- [net] xfrm: Forbid state updates from changing encap type (Florian Westphal) [1513059]
+- [net] xfrm: Fix stack-out-of-bounds with misconfigured transport mode policies. (Florian Westphal) [1513059]
+- [net] xfrm: skip policies marked as dead while rehashing (Florian Westphal) [1513059]
+- [net] revert "xfrm: Fix stack-out-of-bounds read in xfrm_state_find." (Florian Westphal) [1513059]
+- [net] xfrm: put policies when reusing pcpu xdst entry (Florian Westphal) [1513059]
+- [net] xfrm: Copy policy family in clone_policy (Florian Westphal) [1513059]
+- [net] netfilter: uapi: correct UNTRACKED conntrack state bit number (Florian Westphal) [1530258]
+- [net] netfilter: ip6t_MASQUERADE: add dependency on conntrack module (Florian Westphal) [1527250]
+- [net] ipv4: fib: Fix metrics match when deleting a route (Phil Sutter) [1527591]
+- [net] ipv4: fix for a race condition in raw_sendmsg (Stefano Brivio) [1527027] {CVE-2017-17712}
+- [net] ipv6: remove from fib tree aged out RTF_CACHE dst (Paolo Abeni) [1524275]
+- [net] vxlan: fix the issue that neigh proxy blocks all icmpv6 packets (Lorenzo Bianconi) [1523020]
+- [net] sched: fix use-after-free in tcf_block_put_ext (Paolo Abeni) [1518144]
+- [net] net_sched: get rid of rcu_barrier() in tcf_block_put_ext() (Paolo Abeni) [1518144]
+- [net] net_sched: no need to free qdisc in RCU callback (Paolo Abeni) [1518144]
+- [net] sched: crash on blocks with goto chain action (Paolo Abeni) [1518144]
+- [net] ipv6: set all.accept_dad to 0 by default (Florian Westphal) [1516744]
+
 * Mon Jan 22 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-28.el7a]
 - [misc] cxl: Dump PSL_FIR register on PSL9 error irq (Steve Best) [1534493]
 - [misc] cxl: Rename register PSL9_FIR2 to PSL9_FIR_MASK (Steve Best) [1534493]
