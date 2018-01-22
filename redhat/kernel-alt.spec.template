@@ -1568,6 +1568,24 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Jan 22 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-28.el7a]
+- [misc] cxl: Dump PSL_FIR register on PSL9 error irq (Steve Best) [1534493]
+- [misc] cxl: Rename register PSL9_FIR2 to PSL9_FIR_MASK (Steve Best) [1534493]
+- [crypto] crypto/nx: Do not initialize workmem allocation (Gustavo Duarte) [1534949]
+- [crypto] crypto/nx: Use percpu send window for NX requests (Gustavo Duarte) [1534949]
+- [fs] debugfs: fix debugfs_real_fops() build error (Gustavo Duarte) [1533827]
+- [fs] debugfs: defer debugfs_fsdata allocation to first usage (Gustavo Duarte) [1533827]
+- [fs] debugfs: call debugfs_real_fops() only after debugfs_file_get() (Gustavo Duarte) [1533827]
+- [fs] debugfs: purge obsolete SRCU based removal protection (Gustavo Duarte) [1533827]
+- [infiniband] IB/hfi1: convert to debugfs_file_get() and -put() (Gustavo Duarte) [1533827]
+- [fs] debugfs: convert to debugfs_file_get() and -put() (Gustavo Duarte) [1533827]
+- [fs] debugfs: debugfs_real_fops(): drop __must_hold sparse annotation (Gustavo Duarte) [1533827]
+- [fs] debugfs: implement per-file removal protection (Gustavo Duarte) [1533827]
+- [fs] debugfs: add support for more elaborate ->d_fsdata (Gustavo Duarte) [1533827]
+- [netdrv] cxgb4vf: Fix SGE FL buffer initialization logic for 64K pages (Arjun Vynipadath) [1533344]
+- [redhat] spec: Add new arch/powerpc/kernel/module.lds file to kernel-devel rpm (Desnes Augusto Nunes do Rosario) [1466697]
+- [powerpc] powerpc/modules: Fix alignment of .toc section in kernel modules (Desnes Augusto Nunes do Rosario) [1466697]
+
 * Fri Jan 19 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-27.el7a]
 - [acpi] ACPI / APEI: Remove arch_apei_flush_tlb_one() (Prarit Bhargava) [1513713]
 - [arm64] mm: Remove arch_apei_flush_tlb_one() (Prarit Bhargava) [1513713]
