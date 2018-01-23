@@ -12,7 +12,6 @@ map_virtual(u64 offset, struct page **pp)
 	struct page *page;
 	unsigned long pfn;
 	void *vaddr;
-	int test;
 
 	pfn = (unsigned long)(offset >> PAGE_SHIFT);
 
@@ -37,9 +36,6 @@ map_virtual(u64 offset, struct page **pp)
 			pfn, (unsigned long)page);
 		return NULL;
 	}
-
-	if (probe_kernel_read(&test, vaddr, sizeof(int)))
-		return NULL;
 
 	*pp = page;
 	return (vaddr + (offset & (PAGE_SIZE-1)));
