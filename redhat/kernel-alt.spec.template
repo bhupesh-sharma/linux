@@ -1568,6 +1568,28 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Tue Jan 23 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-30.el7a]
+- [arm64] Implement branch predictor hardening for Falkor (Mark Langsdorf) [1532118]
+- [arm64] Implement branch predictor hardening for affected Cortex-A CPUs (Mark Langsdorf) [1532118]
+- [arm64] cputype: Add missing MIDR values for Cortex-A72 and Cortex-A75 (Mark Langsdorf) [1532118]
+- [arm64] KVM: Make PSCI_VERSION a fast path (Mark Langsdorf) [1532118]
+- [arm64] KVM: Use per-CPU vector when BP hardening is enabled (Mark Langsdorf) [1532118]
+- [arm64] Add skeleton to harden the branch predictor against aliasing attacks (Mark Langsdorf) [1532118]
+- [arm64] Move post_ttbr_update_workaround to C code (Mark Langsdorf) [1532118]
+- [firmware] drivers/firmware: Expose psci_get_version through psci_ops structure (Mark Langsdorf) [1532118]
+- [arm64] cpufeature: Pass capability structure to ->enable callback (Mark Langsdorf) [1532118]
+- [arm64] Take into account ID_AA64PFR0_EL1.CSV3 (Mark Langsdorf) [1532118]
+- [arm64] Kconfig: Reword UNMAP_KERNEL_AT_EL0 kconfig entry (Mark Langsdorf) [1532118]
+- [arm64] use RET instruction for exiting the trampoline (Mark Langsdorf) [1532118]
+- [arm64] entry.S: convert elX_irq (Mark Langsdorf) [1532118]
+- [arm64] entry.S convert el0_sync (Mark Langsdorf) [1532118]
+- [arm64] entry.S: convert el1_sync (Mark Langsdorf) [1532118]
+- [arm64] entry.S: Remove disable_dbg (Mark Langsdorf) [1532118]
+- [arm64] Mask all exceptions during kernel_exit (Mark Langsdorf) [1532118]
+- [arm64] Move the async/fiq helpers to explicitly set process context flags (Mark Langsdorf) [1532118]
+- [arm64] introduce an order for exceptions (Mark Langsdorf) [1532118]
+- [arm64] explicitly mask all exceptions (Mark Langsdorf) [1532118]
+
 * Mon Jan 22 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-29.el7a]
 - [misc] cxl: Provide debugfs access to PSL_DEBUG/XSL_DEBUG registers (Steve Best) [1534500]
 - [cpufreq] powernv-cpufreq: Treat pstates as opaque 8-bit values (Steve Best) [1534472]
