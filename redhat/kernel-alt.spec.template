@@ -1568,6 +1568,22 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Wed Jan 24 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-31.el7a]
+- [fs] udf: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [fs] vfs, fdtable: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [net] ipv4: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [net] ipv6: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [thermal] Thermal/int340x: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [wireless] cw1200: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [scsi] qla2xxx: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [wireless] p54: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [wireless] carl9170: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [usb] uvcvideo: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [kernel] userns: prevent speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [arm64] implement nospec_ptr() (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [documentation] document nospec helpers (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+- [kernel] asm-generic/barrier: add generic nospec helpers (Josh Poimboeuf) [1527436] {CVE-2017-5753}
+
 * Tue Jan 23 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-30.el7a]
 - [arm64] Implement branch predictor hardening for Falkor (Mark Langsdorf) [1532118]
 - [arm64] Implement branch predictor hardening for affected Cortex-A CPUs (Mark Langsdorf) [1532118]
