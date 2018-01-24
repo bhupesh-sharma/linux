@@ -1568,6 +1568,34 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Wed Jan 24 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-32.el7a]
+- [scsi] lpfc: fix kzalloc-simple.cocci warnings (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix hard lock up NMI in els timeout handling (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix a precedence bug in lpfc_nvme_io_cmd_wqe_cmpl() (Dick Kennedy) [1396074]
+- [scsi] lpfc: change version to 11.4.0.4 (Dick Kennedy) [1396074]
+- [scsi] lpfc: correct nvme sg segment count check (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix oops of nvme host during driver unload (Dick Kennedy) [1396074]
+- [scsi] lpfc: Extend RDP support (Dick Kennedy) [1396074]
+- [scsi] lpfc: Ensure io aborts interlocked with the target (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix secure firmware updates (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix crash in lpfc_nvme_fcp_io_submit during LIP (Dick Kennedy) [1396074]
+- [scsi] lpfc: Disable NPIV support if NVME is enabled (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix oops if nvmet_fc_register_targetport fails (Dick Kennedy) [1396074]
+- [scsi] lpfc: Revise NVME module parameter descriptions for better clarity (Dick Kennedy) [1396074]
+- [scsi] lpfc: Set missing abort context (Dick Kennedy) [1396074]
+- [scsi] lpfc: Reduce log spew on controller reconnects (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix FCP hba_wqidx assignment (Dick Kennedy) [1396074]
+- [scsi] lpfc: Move CQ processing to a soft IRQ (Dick Kennedy) [1396074]
+- [scsi] lpfc: Make ktime sampling more accurate (Dick Kennedy) [1396074]
+- [scsi] lpfc: PLOGI failures during NPIV testing (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix warning messages when NVME_TARGET_FC not defined (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix lpfc nvme host rejecting IO with Not Ready message (Dick Kennedy) [1396074]
+- [scsi] lpfc: Fix crash receiving ELS while detaching driver (Dick Kennedy) [1396074]
+- [scsi] lpfc: fix pci hot plug crash in list_add call (Dick Kennedy) [1396074]
+- [scsi] lpfc: fix pci hot plug crash in timer management routines (Dick Kennedy) [1396074]
+- [scsi] lpfc: Cocci spatch pool_zalloc-simple (Dick Kennedy) [1396074]
+- [scsi] lpfc: remove redundant null check on eqe (Dick Kennedy) [1396074]
+
 * Wed Jan 24 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-31.el7a]
 - [fs] udf: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
 - [fs] vfs, fdtable: prevent bounds-check bypass via speculative execution (Josh Poimboeuf) [1527436] {CVE-2017-5753}
