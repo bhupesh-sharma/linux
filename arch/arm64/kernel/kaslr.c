@@ -39,6 +39,7 @@ static __init u64 get_kaslr_seed(void *fdt)
 		return 0;
 
 	ret = fdt64_to_cpu(*prop);
+	printk("BHUPESH inside %s, seed prop=%p\n", __func__, *prop);
 	*prop = 0;
 	return ret;
 }
@@ -102,8 +103,11 @@ u64 __init kaslr_early_init(u64 dt_phys)
 	 * Retrieve (and wipe) the seed from the FDT
 	 */
 	seed = get_kaslr_seed(fdt);
-	if (!seed)
+	if (!seed) {
+		printk("BHUPESH inside %s, EFI doesn't support KASLR, "
+				"_text=%llx\n", __func__, _text);
 		return 0;
+	}
 
 	/*
 	 * Check if 'nokaslr' appears on the command line, and
