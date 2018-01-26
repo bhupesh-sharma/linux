@@ -1568,6 +1568,30 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Fri Jan 26 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-33.el7a]
+- [netdrv] ibmvnic: Fix IPv6 packet descriptors (Steve Best) [1536745]
+- [netdrv] ibmvnic: Fix IP offload control buffer (Steve Best) [1536745]
+- [misc] cxl: Rework the implementation of cxl_stop_trace_psl9() (Steve Best) [1534499]
+- [infiniband] IB/core: Verify that QP is security enabled in create and destroy (Kamal Heib) [1533578]
+- [net] Bluetooth: Prevent stack info leak from the EFS element (Gopal Tiwari) [1519629] {CVE-2017-1000410}
+- [infiniband] IB/mlx5: Fix mlx5_ib_alloc_mr error flow (Kamal Heib) [1536454]
+- [infiniband] IB/mlx5: Serialize access to the VMA list (Kamal Heib) [1536454]
+- [infiniband] IB/mlx5: Fix congestion counters in LAG mode (Kamal Heib) [1536454]
+- [netdrv] net/mlx5: Stay in polling mode when command EQ destroy fails (Kamal Heib) [1536454]
+- [netdrv] net/mlx5: Cleanup IRQs in case of unload failure (Kamal Heib) [1536454]
+- [netdrv] net/mlx5: Fix error flow in CREATE_QP command (Kamal Heib) [1536454]
+- [infiniband] IB/mlx5: Fix RoCE Address Path fields (Kamal Heib) [1536454]
+- [infiniband] IB/mlx5: Assign send CQ and recv CQ of UMR QP (Kamal Heib) [1536454]
+- [netdrv] net/mlx5: Avoid NULL pointer dereference on steering cleanup (Kamal Heib) [1536454]
+- [netdrv] net/mlx5: Fix creating a new FTE when an existing but full FTE exists (Kamal Heib) [1536454]
+- [netdrv] net/mlx5e: Prevent possible races in VXLAN control flow (Kamal Heib) [1535618]
+- [netdrv] net/mlx5e: Add refcount to VXLAN structure (Kamal Heib) [1535618]
+- [netdrv] net/mlx5e: Fix possible deadlock of VXLAN lock (Kamal Heib) [1535618]
+- [netdrv] net/mlx5e: Fix ETS BW check (Kamal Heib) [1535594]
+- [powerpc] powernv/kdump: Fix cases where the kdump kernel can get HMI's (Gustavo Duarte) [1521103]
+- [powerpc] powerpc/crash: Remove the test for cpu_online in the IPI callback (Gustavo Duarte) [1521103]
+- [fs] autofs: revert fix AT_NO_AUTOMOUNT not being honored (Justin Mitchell) [1517279]
+
 * Wed Jan 24 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-32.el7a]
 - [scsi] lpfc: fix kzalloc-simple.cocci warnings (Dick Kennedy) [1396074]
 - [scsi] lpfc: Fix hard lock up NMI in els timeout handling (Dick Kennedy) [1396074]
