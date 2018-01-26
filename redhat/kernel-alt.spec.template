@@ -355,7 +355,6 @@ Source1: Makefile.common
 Source10: sign-modules
 %define modsign_cmd %{SOURCE10}
 Source11: x509.genkey
-Source12: extra_certificates
 %if %{?released_kernel}
 Source13: securebootca.cer
 Source14: secureboot.cer
@@ -834,7 +833,6 @@ BuildKernel() {
     make %{?cross_opts} -s mrproper
 
     cp %{SOURCE11} ./certs	# x509.genkey
-    cp %{SOURCE12} ./certs	# extra_certificates
     cp %{SOURCE15} ./certs	# rheldup3.x509
     cp %{SOURCE16} ./certs	# rhelkpatch1.x509
 

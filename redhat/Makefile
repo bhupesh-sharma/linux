@@ -121,11 +121,7 @@ sources-rh: $(TARBALL)
 		echo "WARNING: There are uncommitted changes in your tree or the changes are not in sync with linux-kernel-test.patch.  Either commit the changes or run 'make rh-test-patch'"
 	@rm $(TESTPATCH).tmp
 	@cp $(TESTPATCH) $(SOURCES)/linux-kernel-test.patch
-	@# if the extra_certificates doesn't exist, create a empty one
-	@(if [ ! -f keys/extra_certificates ]; then \
-		touch keys/extra_certificates; \
-	fi)
-	@cp cpupower.* x509.genkey keys/rhel*.x509 keys/extra_certificates Makefile.common kabi/check-kabi configs/$(PACKAGE_NAME)-*.config rhpkg/Makefile scripts/sign-modules keys/*.cer $(SOURCES)/
+	@cp cpupower.* x509.genkey keys/rhel*.x509 Makefile.common kabi/check-kabi configs/$(PACKAGE_NAME)-*.config rhpkg/Makefile scripts/sign-modules keys/*.cer $(SOURCES)/
 	@for KABIARCH in $(ARCH_LIST); do \
 		cp kabi/Module.kabi_$$KABIARCH $(SOURCES)/; \
 	done

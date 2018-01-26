@@ -1,6 +1,5 @@
 kernel-alt.spec
 check-kabi
-extra_certificates
 x509.genkey
 rheldup3.x509
 rhelkpatch1.x509
