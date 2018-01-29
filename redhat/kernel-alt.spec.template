@@ -1568,6 +1568,26 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Jan 29 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-34.el7a]
+- [netdrv] ibmvnic: Allocate and request vpd in init_resources (Steve Best) [1537431]
+- [netdrv] ibmvnic: Revert to previous mtu when unsupported value requested (Steve Best) [1537431]
+- [netdrv] ibmvnic: Modify buffer size and number of queues on failover (Steve Best) [1537431]
+- [misc] cxl: Add support for ASB_Notify on POWER9 (Steve Best) [1537750]
+- [cpuidle] powerpc/pseries/cpuidle: add polling idle for shared processor guests (Steve Best) [1538249]
+- [scsi] lpfc: Removing bad lockdep_assert patch (Dick Kennedy) [1482600 1420592 1392037]
+- [powerpc] powerpc/spinlock: add gmb memory barrier (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/powernv: Check device-tree for RFI flush settings (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/pseries: Query hypervisor for RFI flush settings (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/64s: Support disabling RFI flush with no_rfi_flush and nopti (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/64s: Add support for RFI flush of L1-D cache (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/64s: Convert slb_miss_common to use RFI_TO_USER/KERNEL (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/64: Convert fast_exception_return to use RFI_TO_USER/KERNEL (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/64: Convert the syscall exit path to use RFI_TO_USER/KERNEL (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/64s: Simple RFI macro conversions (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/64: Add macros for annotating the destination of rfid/hrfid (Mauricio Oliveira) [1531718]
+- [powerpc] powerpc/pseries: Add H_GET_CPU_CHARACTERISTICS flags & wrapper (Mauricio Oliveira) [1531718]
+- [arm64] mm: Fix pte_mkclean, pte_mkdirty semantics (Steve Ulrich) [1512366]
+
 * Fri Jan 26 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-33.el7a]
 - [netdrv] ibmvnic: Fix IPv6 packet descriptors (Steve Best) [1536745]
 - [netdrv] ibmvnic: Fix IP offload control buffer (Steve Best) [1536745]
