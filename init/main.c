@@ -715,7 +715,8 @@ asmlinkage __visible void __init start_kernel(void)
 	/* Do the rest non-__init'ed, we're now alive */
 	rest_init();
 	
-	printk("BHUPESH inside %s, _text=%llx\n", __func__, _text);
+	printk("BHUPESH inside %s, _text=%llx \n",
+			__func__, __pa_symbol(_text));
 }
 
 /* Call all constructor functions linked into the kernel. */

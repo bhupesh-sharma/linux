@@ -83,6 +83,8 @@ u64 __init kaslr_early_init(u64 dt_phys)
 	const u8 *cmdline, *str;
 	int size;
 
+	printk("BHUPESH inside %s\n", __func__);
+
 	/*
 	 * Set a reasonable default for module_alloc_base in case
 	 * we end up running with module randomization disabled.
@@ -105,7 +107,8 @@ u64 __init kaslr_early_init(u64 dt_phys)
 	seed = get_kaslr_seed(fdt);
 	if (!seed) {
 		printk("BHUPESH inside %s, EFI doesn't support KASLR, "
-				"_text=%llx\n", __func__, _text);
+				"_text=%llx\n",
+				__func__, __pa_symbol(_text));
 		return 0;
 	}
 

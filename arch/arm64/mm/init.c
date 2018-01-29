@@ -616,6 +616,9 @@ void __init mem_init(void)
 		MLG(VMALLOC_START, VMALLOC_END));
 	pr_notice("      .text : 0x%p" " - 0x%p" "   (%6ld KB)\n",
 		MLK_ROUNDUP(_text, _etext));
+	pr_notice("BHUPESH, .text:%llx, .etext:%llx\n",
+			__pa_symbol(_text), __pa_symbol(_etext));
+
 	pr_notice("    .rodata : 0x%p" " - 0x%p" "   (%6ld KB)\n",
 		MLK_ROUNDUP(__start_rodata, __init_begin));
 	pr_notice("      .init : 0x%p" " - 0x%p" "   (%6ld KB)\n",
