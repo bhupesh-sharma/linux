@@ -1568,6 +1568,22 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Tue Jan 30 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-35.el7a]
+- [powerpc] powerpc/mm: Invalidate subpage_prot() system call on radix platforms (Steve Best) [1538328]
+- [arm64] Turn on KPTI only on CPUs that need it (Vadim Lomovtsev) [1537982]
+- [arm64] Branch predictor hardening for Cavium ThunderX2 (Vadim Lomovtsev) [1537982]
+- [arm64] cputype: Add MIDR values for Cavium ThunderX2 CPUs (Vadim Lomovtsev) [1537982]
+- [redhat] use recently created brew target for rhel-alt kernel signing ("Herton R. Krzesinski") [1492103]
+- [virt] KVM: arm/arm64: kvm_arch_destroy_vm cleanups (Auger Eric) [1536027]
+- [virt] KVM: arm/arm64: vgic: Move kvm_vgic_destroy call around (Auger Eric) [1536027]
+- [arm64] KVM: Fix SMCCC handling of unimplemented SMC/HVC calls (Auger Eric) [1536027]
+- [virt] KVM: arm64: Fix GICv4 init when called from vgic_its_create (Auger Eric) [1536027]
+- [virt] KVM: arm/arm64: Check pagesize when allocating a hugepage at Stage 2 (Auger Eric) [1536027]
+- [scsi] mpt3sas: Bump driver version (Julius Milan) [1524723]
+- [scsi] mpt3sas: Reduce memory footprint in kdump kernel (Julius Milan) [1524723]
+- [scsi] mpt3sas: Fixed memory leaks in driver (Julius Milan) [1524723]
+- [scsi] mpt3sas: remove redundant copy_from_user in _ctl_getiocinfo (Julius Milan) [1524723]
+
 * Mon Jan 29 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-34.el7a]
 - [netdrv] ibmvnic: Allocate and request vpd in init_resources (Steve Best) [1537431]
 - [netdrv] ibmvnic: Revert to previous mtu when unsupported value requested (Steve Best) [1537431]
