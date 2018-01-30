@@ -115,7 +115,7 @@ static bool __init efi_virtmap_init(void)
  * non-early mapping of the UEFI system table and virtual mappings for all
  * EFI_MEMORY_RUNTIME regions.
  */
-static int __init arm_enable_runtime_services(void)
+void __init efi_enter_virtual_mode(void)
 {
 	u64 mapsize;
 
@@ -154,7 +154,6 @@ static int __init arm_enable_runtime_services(void)
 
 	return 0;
 }
-early_initcall(arm_enable_runtime_services);
 
 void efi_virtmap_load(void)
 {

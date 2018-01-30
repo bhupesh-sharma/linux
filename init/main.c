@@ -674,10 +674,9 @@ asmlinkage __visible void __init start_kernel(void)
 	debug_objects_mem_init();
 	setup_per_cpu_pageset();
 	numa_policy_init();
-#if defined(CONFIG_ARM64) && defined(CONFIG_EFI)
-       efi_memmap_init_late(efi.memmap.phys_map,
-                       efi.memmap.nr_map * efi.memmap.desc_size);
-#endif
+	if (IS_ENABLED(CONFIG_EFI) &&
+			(IS_ENABLED(CONFIG_ARM64) || IS_ENABLED(CONFIG_ARM)))
+		efi_enter_virtual_mode();
 
 	acpi_early_init();
 	if (late_time_init)
