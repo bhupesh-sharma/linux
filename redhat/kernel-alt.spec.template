@@ -1568,6 +1568,11 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Wed Jan 31 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-36.el7a]
+- [powerpc] Don't preempt_disable() in show_cpuinfo() (Gustavo Duarte) [1517679]
+- [powerpc] powerpc/powernv/cpufreq: Fix the frequency read by /proc/cpuinfo (Gustavo Duarte) [1517679]
+- [drm] drm/ttm: add ttm_bo_io_mem_pfn to check io_mem_pfn (Zhou Wang) [1502558]
+
 * Tue Jan 30 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-35.el7a]
 - [powerpc] powerpc/mm: Invalidate subpage_prot() system call on radix platforms (Steve Best) [1538328]
 - [arm64] Turn on KPTI only on CPUs that need it (Vadim Lomovtsev) [1537982]
