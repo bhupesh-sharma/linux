@@ -374,8 +374,8 @@ static int xlp9xx_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
 
 static u32 xlp9xx_i2c_functionality(struct i2c_adapter *adapter)
 {
-	return I2C_FUNC_SMBUS_EMUL | I2C_FUNC_I2C |
-		I2C_FUNC_10BIT_ADDR;
+	return I2C_FUNC_SMBUS_EMUL | I2C_FUNC_SMBUS_READ_BLOCK_DATA |
+			I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR;
 }
 
 static const struct i2c_algorithm xlp9xx_i2c_algo = {
