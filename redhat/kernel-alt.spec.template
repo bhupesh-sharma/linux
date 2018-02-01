@@ -1568,6 +1568,14 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Thu Feb 01 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-37.el7a]
+- [md] dm mpath: remove annoying message of 'blk_get_request() returned -11' (Gustavo Duarte) [1539251]
+- [net] kernel: Missing namespace check in net/netlink/af_netlink.c allows for network monitors to observe systemwide activity (William Townsend) [1538736] {CVE-2017-17449}
+- [s390] KVM: s390: wire up bpb feature (David Hildenbrand) [1539637]
+- [iommu] iommu/arm-smmu-v3: Cope with duplicated Stream IDs (Robert Richter) [1529518]
+- [mm] mm/mprotect: add a cond_resched() inside change_pmd_range() (Desnes Augusto Nunes do Rosario) [1535916]
+- [s390] s390/mm: fix off-by-one bug in 5-level page table handling (Oleg Nesterov) [1517792]
+
 * Wed Jan 31 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-36.el7a]
 - [powerpc] Don't preempt_disable() in show_cpuinfo() (Gustavo Duarte) [1517679]
 - [powerpc] powerpc/powernv/cpufreq: Fix the frequency read by /proc/cpuinfo (Gustavo Duarte) [1517679]
