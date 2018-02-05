@@ -1568,6 +1568,17 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Feb 05 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-38.el7a]
+- [ata] fixes kernel crash while tracing ata_eh_link_autopsy event (David Milburn) [1540760]
+- [powerpc] KVM: PPC: Book3S: Provide information about hardware/firmware CVE workarounds (Serhii Popovych) [1532074]
+- [netdrv] ibmvnic: Wait for device response when changing MAC (Steve Best) [1540839]
+- [kernel] kdump: print kdump kernel loaded status in stack dump (Lianbo Jiang) [1535756]
+- [netdrv] i40e: restore promiscuous after reset (Stefan Assmann) [1517973]
+- [powerpc] KVM: PPC: Book3S HV: Allow HPT and radix on the same core for POWER9 v2.2 (Sam Bobroff) [1535753]
+- [powerpc] KVM: PPC: Book3S HV: Do SLB load/unload with guest LPCR value loaded (Sam Bobroff) [1535753]
+- [powerpc] KVM: PPC: Book3S HV: Make sure we don't re-enter guest without XIVE loaded (Sam Bobroff) [1535753]
+- [sound] ALSA: seq: Make ioctls race-free (CVE-2018-1000004) (Jaroslav Kysela) [1537204] {CVE-2018-1000004}
+
 * Thu Feb 01 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-37.el7a]
 - [md] dm mpath: remove annoying message of 'blk_get_request() returned -11' (Gustavo Duarte) [1539251]
 - [net] kernel: Missing namespace check in net/netlink/af_netlink.c allows for network monitors to observe systemwide activity (William Townsend) [1538736] {CVE-2017-17449}
