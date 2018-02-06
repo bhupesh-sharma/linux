@@ -511,6 +511,7 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
 			if (copy_to_user(buffer, buf, tsz))
 				return -EFAULT;
 		} else {
+			printk_ratelimited("BHUPESH 1 inside %s, calling kern_addr_valid, start=%llx\n", __func__, start);
 			if (kern_addr_valid(start)) {
 				/*
 				 * Using bounce buffer to bypass the
