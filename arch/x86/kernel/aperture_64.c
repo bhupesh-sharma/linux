@@ -388,8 +388,10 @@ int __init gart_iommu_hole_init(void)
 
 	pr_info("Checking aperture...\n");
 
-	if (!fallback_aper_force)
+	if (!fallback_aper_force) {
+		pr_info("BHUPESH 1st, inside %s, calling search_agp_bridge...\n", __func__);
 		agp_aper_base = search_agp_bridge(&agp_aper_order, &valid_agp);
+	}
 
 	fix = 0;
 	node = 0;
@@ -492,6 +494,7 @@ out:
 		pr_info("This costs you %dMB of RAM\n",
 			32 << fallback_aper_order);
 
+		pr_info("BHUPESH, inside %s, calling allocate_aperture\n", __func__);
 		aper_order = fallback_aper_order;
 		aper_alloc = allocate_aperture();
 		if (!aper_alloc) {
@@ -509,6 +512,7 @@ out:
 		return 0;
 	}
 
+	pr_info("BHUPESH 2nd, inside %s, calling exclude_from_vmcore...\n", __func__);
 	/*
 	 * If this is the kdump kernel _and_ the first kernel did not
 	 * configure the aperture in the northbridge, this range may
@@ -539,6 +543,7 @@ out:
 		}
 	}
 
+	pr_info("BHUPESH 3rd, inside %s, calling set_up_gart_resume...\n", __func__);
 	set_up_gart_resume(aper_order, aper_alloc);
 
 	return 1;
