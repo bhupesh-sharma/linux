@@ -68,14 +68,40 @@ static unsigned long aperture_pfn_start, aperture_page_count;
 
 static int gart_oldmem_pfn_is_ram(unsigned long pfn)
 {
-	return likely((pfn < aperture_pfn_start) ||
-		      (pfn >= aperture_pfn_start + aperture_page_count));
+	if (likely((pfn < aperture_pfn_start) ||
+		      (pfn >= aperture_pfn_start + aperture_page_count))) {
+		printk_ratelimited("BHUPESH inside %s, pfn is ram\n", __func__);
+		return 1;
+	} else {
+		printk_ratelimited("BHUPESH inside %s, pfn is not ram, pfn:%lx, start:%lx,\n"
+			"aperture_pfn_start:%lx, aperture_pfn_start + aperture_page_count:%lx\n",
+		__func__, pfn, pfn * PAGE_SIZE, aperture_pfn_start, (aperture_pfn_start + aperture_page_count));
+		return 0;
+	}
 }
+
+static int gart_oldmem_pfn_is_ram_kcore(unsigned long pfn)
+{
+	if (likely((pfn < aperture_pfn_start) ||
+		      (pfn >= aperture_pfn_start + aperture_page_count))) {
+		printk_ratelimited("BHUPESH inside %s, pfn is ram\n", __func__);
+		return 1;
+	} else {
+		printk_ratelimited("BHUPESH inside %s,  pfn is not ram, pfn:%lx, start:%lx,\n"
+			"aperture_pfn_start:%lx, aperture_pfn_start + aperture_page_count:%lx\n",
+		__func__, pfn, pfn * PAGE_SIZE, aperture_pfn_start, (aperture_pfn_start + aperture_page_count));
+		return 0;
+	}
+}
+
 
 static void exclude_from_vmcore(u64 aper_base, u32 aper_order)
 {
 	aperture_pfn_start = aper_base >> PAGE_SHIFT;
 	aperture_page_count = (32 * 1024 * 1024) << aper_order >> PAGE_SHIFT;
+	printk_ratelimited("BHUPESH inside %s, aperture_pfn_start:%lx, aperture_page_count:%lx,\n"
+			"aper_base:%lx, aper_order:%lx, PAGE_SHIFT:%lx\n",
+		__func__, aperture_pfn_start, aperture_page_count, aper_base, aper_order, PAGE_SHIFT);
 	WARN_ON(register_oldmem_pfn_is_ram(&gart_oldmem_pfn_is_ram));
 }
 #else
@@ -83,6 +109,16 @@ static void exclude_from_vmcore(u64 aper_base, u32 aper_order)
 {
 }
 #endif
+
+void exclude_from_kcore(u64 aper_base, u32 aper_order)
+{
+	aperture_pfn_start = aper_base >> PAGE_SHIFT;
+	aperture_page_count = (32 * 1024 * 1024) << aper_order >> PAGE_SHIFT;
+	printk_ratelimited("BHUPESH inside %s, aperture_pfn_start:%lx, aperture_page_count:%lx,\n"
+			"\taper_base:%lx, aper_order:%lx, __va(aper_base):%lx, PAGE_SHIFT:%lx\n",
+		__func__, aperture_pfn_start, aperture_page_count, aper_base, aper_order, __va(aper_base), PAGE_SHIFT);
+	WARN_ON(reg_oldmem_pfn_is_ram(&gart_oldmem_pfn_is_ram_kcore));
+}
 
 /* This code runs before the PCI subsystem is initialized, so just
    access the northbridge directly. */
@@ -472,6 +508,7 @@ out:
 			 * and fixed up the northbridge
 			 */
 			exclude_from_vmcore(last_aper_base, last_aper_order);
+			exclude_from_kcore(last_aper_base, last_aper_order);
 
 			return 1;
 		}
@@ -520,6 +557,8 @@ out:
 	 * range through vmcore even though it should be part of the dump.
 	 */
 	exclude_from_vmcore(aper_alloc, aper_order);
+
+	exclude_from_kcore(aper_alloc, aper_order);
 
 	/* Fix up the north bridges */
 	for (i = 0; i < amd_nb_bus_dev_ranges[i].dev_limit; i++) {

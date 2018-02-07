@@ -255,6 +255,7 @@ static ssize_t __read_vmcore(char *buffer, size_t buflen, loff_t *fpos,
 static ssize_t read_vmcore(struct file *file, char __user *buffer,
 			   size_t buflen, loff_t *fpos)
 {
+	printk("BHUPESH inside %s\n", __func__);
 	return __read_vmcore((__force char *) buffer, buflen, fpos, 1);
 }
 
@@ -412,6 +413,7 @@ static int mmap_vmcore(struct file *file, struct vm_area_struct *vma)
 	u64 start, end, len, tsz;
 	struct vmcore *m;
 
+	printk("BHUPESH inside %s\n", __func__);
 	start = (u64)vma->vm_pgoff << PAGE_SHIFT;
 	end = start + size;
 
@@ -466,6 +468,9 @@ static int mmap_vmcore(struct file *file, struct vm_area_struct *vma)
 			tsz = (size_t)min_t(unsigned long long,
 					    m->offset + m->size - start, size);
 			paddr = m->paddr + start - m->offset;
+			printk("BHUPESH inside %s, calling vmcore_remap_oldmem_pfn "
+				"paddr:%lx, m->paddr=%lx, start=%lx, m->offset=%lx, vma->vm_start + len:%llx, paddr >> PAGE_SHIFT:%llx, tsz:%llx, vma->vm_page_prot:%llx\n",
+				__func__, paddr, m->paddr, start, m->offset, vma->vm_start + len , paddr >> PAGE_SHIFT, tsz, vma->vm_page_prot);
 			if (vmcore_remap_oldmem_pfn(vma, vma->vm_start + len,
 						    paddr >> PAGE_SHIFT, tsz,
 						    vma->vm_page_prot))

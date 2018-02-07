@@ -120,14 +120,22 @@ static void __kcore_update_ram(struct list_head *list)
 
 	write_lock(&kclist_lock);
 	if (kcore_need_update) {
+		printk_ratelimited("BHUPESH inside %s, kcore_need_update is 1\n", __func__);
 		list_for_each_entry_safe(pos, tmp, &kclist_head, list) {
+			printk_ratelimited("BHUPESH inside %s, pos->type:%x, pos->addr:%lx\n",
+						__func__, pos->type, pos->addr);
 			if (pos->type == KCORE_RAM
-				|| pos->type == KCORE_VMEMMAP)
+				|| pos->type == KCORE_VMEMMAP) {
+				printk_ratelimited("BHUPESH inside %s, pos->type:%x, pos->addr:%lx\n",
+						__func__, pos->type, pos->addr);
 				list_move(&pos->list, &garbage);
+			}
 		}
 		list_splice_tail(list, &kclist_head);
-	} else
+	} else {
+		printk_ratelimited("BHUPESH inside %s, kcore_need_update is 0\n", __func__);
 		list_splice(list, &garbage);
+	}
 	kcore_need_update = 0;
 	proc_root_kcore->size = get_kcore_size(&nphdr, &size);
 	write_unlock(&kclist_lock);
@@ -135,6 +143,47 @@ static void __kcore_update_ram(struct list_head *list)
 	free_kclist_ents(&garbage);
 }
 
+/*
+ * Returns > 0 for RAM pages, 0 for non-RAM pages, < 0 on error
+ * The called function has to take care of module refcounting.
+ */
+static int (*oldmem_pfn_is_ram)(unsigned long pfn);
+
+int reg_oldmem_pfn_is_ram(int (*fn)(unsigned long pfn))
+{
+	if (oldmem_pfn_is_ram)
+		return -EBUSY;
+	oldmem_pfn_is_ram = fn;
+	return 0;
+}
+EXPORT_SYMBOL_GPL(reg_oldmem_pfn_is_ram);
+
+void unreg_oldmem_pfn_is_ram(void)
+{
+	oldmem_pfn_is_ram = NULL;
+	wmb();
+}
+EXPORT_SYMBOL_GPL(unreg_oldmem_pfn_is_ram);
+
+static int pfn_is_ram(unsigned long pfn)
+{
+	int (*fn)(unsigned long pfn);
+	/* pfn is ram unless fn() checks pagetype */
+	int ret = 1;
+
+	//printk_ratelimited("BHUPESH inside %s, pfn:%lx\n", __func__, pfn);
+
+	/*
+	 * Ask hypervisor if the pfn is really ram.
+	 * A ballooned page contains no data and reading from such a page
+	 * will cause high load in the hypervisor.
+	 */
+	fn = oldmem_pfn_is_ram;
+	if (fn)
+		ret = fn(pfn);
+
+	return ret;
+}
 
 #ifdef CONFIG_HIGHMEM
 /*
@@ -148,6 +197,7 @@ static int kcore_update_ram(void)
 	struct kcore_list *ent;
 	int ret = 0;
 
+	printk("BHUPESH inside %s\n", __func__);
 	ent = kmalloc(sizeof(*ent), GFP_KERNEL);
 	if (!ent)
 		return -ENOMEM;
@@ -170,13 +220,21 @@ get_sparsemem_vmemmap_info(struct kcore_list *ent, struct list_head *head)
 	unsigned long nr_pages = ent->size >> PAGE_SHIFT;
 	unsigned long start, end;
 	struct kcore_list *vmm, *tmp;
-
+	struct page *page;
 
 	start = ((unsigned long)pfn_to_page(pfn)) & PAGE_MASK;
+	page = pfn_to_page(pfn);
 	end = ((unsigned long)pfn_to_page(pfn + nr_pages)) - 1;
 	end = PAGE_ALIGN(end);
+
+	printk_ratelimited("BHUPESH inside %s, start:%lx, page:%p, pfn:%lx, pfn_to_page(pfn):%lx,"
+			" page_to_pfn(page):%lx, PAGE_MASK:%lx\n",
+			__func__, start, page, pfn,  pfn_to_page(pfn), page_to_pfn(page), PAGE_MASK);
 	/* overlap check (because we have to align page */
 	list_for_each_entry(tmp, head, list) {
+		printk_ratelimited("BHUPESH inside %s, tmp->addr:%lx, tmp->type:%d, tmp->size:%lx, __pa(tmp->addr):%lx\n",
+			__func__, tmp->addr, tmp->type, tmp->size, __pa(tmp->addr));
+
 		if (tmp->type != KCORE_VMEMMAP)
 			continue;
 		if (start < tmp->addr + tmp->size)
@@ -184,6 +242,7 @@ get_sparsemem_vmemmap_info(struct kcore_list *ent, struct list_head *head)
 				end = tmp->addr;
 	}
 	if (start < end) {
+		printk_ratelimited("BHUPESH inside %s, start < end\n", __func__);
 		vmm = kmalloc(sizeof(*vmm), GFP_KERNEL);
 		if (!vmm)
 			return 0;
@@ -235,6 +294,8 @@ kclist_add_private(unsigned long pfn, unsigned long nr_pages, void *arg)
 	ent->type = KCORE_RAM;
 	list_add_tail(&ent->list, head);
 
+	printk("BHUPESH inside %s, calling get_sparsemem_vmemmap_info ent->addr:%lx, ent->size:%lx, pfn:%lx, pfn << PAGE_SHIFT:%lx\n",
+			__func__, ent->addr, ent->size, pfn, pfn << PAGE_SHIFT);
 	if (!get_sparsemem_vmemmap_info(ent, head)) {
 		list_del(&ent->list);
 		goto free_out;
@@ -252,6 +313,7 @@ static int kcore_update_ram(void)
 	unsigned long end_pfn;
 	LIST_HEAD(head);
 
+	printk("BHUPESH inside %s, HIGHMEM is off\n", __func__);
 	/* Not inialized....update now */
 	/* find out "max pfn" */
 	end_pfn = 0;
@@ -261,6 +323,7 @@ static int kcore_update_ram(void)
 		if (end_pfn < node_end)
 			end_pfn = node_end;
 	}
+	printk("BHUPESH inside %s, HIGHMEM is off, end_pfn:%lx, calling walk_system_ram_range\n", __func__, end_pfn);
 	/* scan 0 to max_pfn */
 	ret = walk_system_ram_range(0, end_pfn, &head, kclist_add_private);
 	if (ret) {
@@ -381,6 +444,14 @@ static void elf_kcore_store_hdr(char *bufp, int nphdr, int dataoff)
 			phdr->p_paddr	= (elf_addr_t)-1;
 		phdr->p_filesz	= phdr->p_memsz	= m->size;
 		phdr->p_align	= PAGE_SIZE;
+		
+		printk_ratelimited("BHUPESH inside %s, phdr->p_type:%d, phdr->p_flags:%lx, \n"
+				"\tphdr->p_offset:%lx, phdr->p_vaddr:%lx, phdr->p_paddr:%lx, \n"
+				"\tm->type:%d, m->addr:%lx, __pa(m->addr):%lx, (elf_addr_t)-1:%lx\n",
+				__func__, phdr->p_type, phdr->p_flags,
+				phdr->p_offset, phdr->p_vaddr, phdr->p_paddr,
+				m->type, m->addr, __pa(m->addr), (elf_addr_t)-1);
+
 	}
 
 	/*
@@ -441,7 +512,9 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
 	size_t elf_buflen;
 	int nphdr;
 	unsigned long start;
+	unsigned long pfn;
 
+	//printk("BHUPESH inside %s\n", __func__);
 	read_lock(&kclist_lock);
 	size = get_kcore_size(&nphdr, &elf_buflen);
 
@@ -491,12 +564,17 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
 	start = kc_offset_to_vaddr(*fpos - elf_buflen);
 	if ((tsz = (PAGE_SIZE - (start & ~PAGE_MASK))) > buflen)
 		tsz = buflen;
-		
+	
+	printk_ratelimited("BHUPESH inside %s, start:%lx, *fpos:%lx, elf_buflen:%lx, tsz:%lx\n",
+				__func__, start, *fpos, elf_buflen, tsz);
+
 	while (buflen) {
 		struct kcore_list *m;
 
 		read_lock(&kclist_lock);
 		list_for_each_entry(m, &kclist_head, list) {
+			/*printk_ratelimited("BHUPESH inside %s, m->addr:%lx, m->type:%d, m->size:%lx, __pa(m->addr):%lx\n",
+					__func__, m->addr, m->type, m->size, __pa(m->addr));*/
 			if (start >= m->addr && start < (m->addr+m->size))
 				break;
 		}
@@ -511,22 +589,37 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
 			if (copy_to_user(buffer, buf, tsz))
 				return -EFAULT;
 		} else {
-			printk_ratelimited("BHUPESH 1 inside %s, calling kern_addr_valid, start=%llx\n", __func__, start);
-			if (kern_addr_valid(start)) {
-				/*
-				 * Using bounce buffer to bypass the
-				 * hardened user copy kernel text checks.
-				 */
-				if (probe_kernel_read(buf, (void *) start, tsz)) {
-					if (clear_user(buffer, tsz))
-						return -EFAULT;
+			printk_ratelimited("BHUPESH inside %s, start:%lx, __pa(start):%lx, m->addr:%lx, \n"
+					"\t__pa(m->addr):%lx, m->type:%d, __pa(m->addr) >> PAGE_SHIFT:%lx, \n"
+					"\t*fpos:%lx\n",
+					__func__, start, __pa(start), m->addr, __pa(m->addr),
+					m->type, __pa(m->addr) >> PAGE_SHIFT, *fpos);
+			pfn = __pa(m->addr - 0x9E4C000); // m->addr - 0x9E4C000 = __va(aper_base)
+			pfn &= 0x000fffff;
+			printk_ratelimited("BHUPESH if inside %s, m->addr:%lx \n"
+					"\tm->addr - 0x9E4C000:%lx, pfn:%lx\n",
+					__func__, m->addr, m->addr - 0x9E4C000, pfn);
+			if (pfn_is_ram(pfn)) {
+				if (kern_addr_valid(start)) {
+					/*
+					 * Using bounce buffer to bypass the
+					 * hardened user copy kernel text checks.
+					 */
+					if (probe_kernel_read(buf, (void *) start, tsz)) {
+						if (clear_user(buffer, tsz))
+							return -EFAULT;
+					} else {
+						if (copy_to_user(buffer, buf, tsz))
+							return -EFAULT;
+					}
 				} else {
-					if (copy_to_user(buffer, buf, tsz))
+					if (clear_user(buffer, tsz))
+					//if (copy_to_user(buffer, buf, tsz))
 						return -EFAULT;
 				}
 			} else {
 				if (clear_user(buffer, tsz))
-					return -EFAULT;
+						return -EFAULT;
 			}
 		}
 		buflen -= tsz;
@@ -543,6 +636,7 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
 
 static int open_kcore(struct inode *inode, struct file *filp)
 {
+	printk("BHUPESH inside %s\n", __func__);
 	if (!capable(CAP_SYS_RAWIO))
 		return -EPERM;
 
@@ -649,3 +743,5 @@ static int __init proc_kcore_init(void)
 	return 0;
 }
 fs_initcall(proc_kcore_init);
+
+
