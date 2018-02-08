@@ -1568,6 +1568,27 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Thu Feb 08 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-39.el7a]
+- [scsi] mpt3sas: fix an out of bound write (Desnes Augusto Nunes do Rosario) [1503961]
+- [netdrv] ibmvnic: fix firmware version when no firmware level has been provided by the VIOS server (Steve Best) [1541322]
+- [powerpc] powerpc/pseries: Add Initialization of VF Bars (Gustavo Duarte) [1539902]
+- [powerpc] powerpc/pseries/pci: Associate PEs to VFs in configure SR-IOV (Gustavo Duarte) [1539902]
+- [powerpc] powerpc/eeh: Add EEH notify resume sysfs (Gustavo Duarte) [1539902]
+- [powerpc] powerpc/eeh: Add EEH operations to notify resume (Gustavo Duarte) [1539902]
+- [powerpc] powerpc/pseries: Set eeh_pe of EEH_PE_VF type (Gustavo Duarte) [1539902]
+- [pci] PCI/AER: Add uevents in AER and EEH error/resume (Gustavo Duarte) [1539902]
+- [powerpc] powerpc/eeh: Update VF config space after EEH (Gustavo Duarte) [1539902]
+- [pci] PCI/IOV: Add pci_vf_drivers_autoprobe() interface (Gustavo Duarte) [1539902]
+- [powerpc] powerpc/pseries: Add pseries SR-IOV Machine dependent calls (Gustavo Duarte) [1539902]
+- [powerpc] powerpc/pci: Separate SR-IOV Calls (Gustavo Duarte) [1539902]
+- [edac] EDAC, sb_edac: Don't create a second memory controller if HA1 is not present (Aristeu Rozanski) [1513814]
+- [infiniband] iser-target: avoid reinitializing rdma contexts for isert commands (Jonathan Toppins) [1540435]
+- [netdrv] cxgb4: fix possible deadlock (Arjun Vynipadath) [1540018]
+- [fs] nfs: don't wait on commit in nfs_commit_inode() if there were no commit requests (Scott Mayhew) [1538083]
+- [tools] perf help: Fix a bug during strstart() conversion (Jiri Olsa) [1513107]
+- [s390] s390x, crash driver: verify RAM page with probe_kernel_read() (Dave Anderson) [1533712]
+- [kernel] lockdep: Increase MAX_STACK_TRACE_ENTRIES for debug kernel (Waiman Long) [1483161]
+
 * Mon Feb 05 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-38.el7a]
 - [ata] fixes kernel crash while tracing ata_eh_link_autopsy event (David Milburn) [1540760]
 - [powerpc] KVM: PPC: Book3S: Provide information about hardware/firmware CVE workarounds (Serhii Popovych) [1532074]
