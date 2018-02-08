@@ -81,7 +81,7 @@ crash_read(struct file *file, char *buf, size_t count, loff_t *poff)
 	*/
 	if (probe_kernel_read(buffer, vaddr, count)) {
 		unmap_virtual(page);
-		return EFAULT;
+		return -EFAULT;
 	} 
 	if (copy_to_user(buf, buffer, count)) {
 		unmap_virtual(page);
