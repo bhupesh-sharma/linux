@@ -21,6 +21,7 @@
 #include "modpost.h"
 #include "../../include/generated/autoconf.h"
 #include "../../include/linux/license.h"
+#include "../../include/generated/uapi/linux/version.h"
 #include "../../include/linux/export.h"
 
 /* Are we using CONFIG_MODVERSIONS? */
@@ -2276,6 +2277,12 @@ static void add_srcversion(struct buffer *b, struct module *mod)
 	}
 }
 
+static void add_rhelversion(struct buffer *b, struct module *mod)
+{
+	buf_printf(b, "MODULE_INFO(rhelversion, \"%d.%d\");\n", RHEL_MAJOR,
+		   RHEL_MINOR);
+}
+
 static void write_if_changed(struct buffer *b, const char *fname)
 {
 	char *tmp;
@@ -2511,6 +2518,7 @@ int main(int argc, char **argv)
 		add_depends(&buf, mod, modules);
 		add_moddevtable(&buf, mod);
 		add_srcversion(&buf, mod);
+		add_rhelversion(&buf, mod);
 
 		sprintf(fname, "%s.mod.c", mod->name);
 		write_if_changed(&buf, fname);
