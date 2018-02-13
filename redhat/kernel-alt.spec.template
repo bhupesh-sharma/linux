@@ -1568,6 +1568,25 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Feb 12 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-41.el7a]
+- [netdrv] ibmvnic: queue reset when CRQ gets closed during reset (Steve Best) [1543729]
+- [kernel] modules: add rhelversion MODULE_INFO tag (Prarit Bhargava) [1542796]
+- [kernel] put RHEL info into generated headers (Prarit Bhargava) [1542796]
+- [netdrv] ibmvnic: Ensure that buffers are NULL after free (Steve Best) [1543713]
+- [netdrv] ibmvnic: fix empty firmware version and errors cleanup (Steve Best) [1543713]
+- [powerpc] powerpc/64s: Allow control of RFI flush via debugfs (Mauricio Oliveira) [1543083]
+- [powerpc] powerpc/64s: Improve RFI L1-D cache flush fallback (Mauricio Oliveira) [1543083]
+- [powerpc] powerpc/xmon: Add RFI flush related fields to paca dump (Mauricio Oliveira) [1543083]
+- [powerpc] powerpc/64s: Wire up cpu_show_meltdown() (Mauricio Oliveira) [1543083]
+- [base] sysfs/cpu: Add vulnerability folder (Mauricio Oliveira) [1543083]
+- [scsi] aacraid: Fix udev inquiry race condition (Gustavo Duarte) [1541141]
+- [scsi] aacraid: Do not attempt abort when Fw panicked (Gustavo Duarte) [1541141]
+- [scsi] aacraid: Fix hang in kdump (Gustavo Duarte) [1541141]
+- [scsi] aacraid: Do not remove offlined devices (Gustavo Duarte) [1541141]
+- [scsi] aacraid: Fix ioctl reset hang (Gustavo Duarte) [1541141]
+- [redhat] configs: enable CONFIG_USERFAULTFD on s390x (David Hildenbrand) [1540679]
+- [pci] PCI/AER: Skip recovery callbacks for correctable errors from ACPI APEI (Steve Ulrich) [1495258]
+
 * Sun Feb 11 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-40.el7a]
 - [char] crash driver: fix probe_kernel_read() failure to return -EFAULT (Dave Anderson) [1533712]
 - [netdrv] ibmvnic: Fix rx queue cleanup for non-fatal resets (Steve Best) [1543315]
