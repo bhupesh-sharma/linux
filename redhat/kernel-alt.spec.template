@@ -752,6 +752,17 @@ do
 done
 %endif
 
+# Setup CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem" for module signing. And make
+# sure we create the file with certificates and copy key generation configuration
+for i in *.config
+do
+  sed -i 's@CONFIG_SYSTEM_TRUSTED_KEYS=.*@CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem"@' $i
+done
+cp %{SOURCE11} ./certs # x509.genkey
+openssl x509 -inform der -in %{_sourcedir}/rheldup3.x509 -out rheldup3.pem
+openssl x509 -inform der -in %{_sourcedir}/rhelkpatch1.x509 -out rhelkpatch1.pem
+cat rheldup3.pem rhelkpatch1.pem > ./certs/rhel.pem
+
 # now run oldconfig over all the config files
 for i in *.config
 do
@@ -831,10 +842,6 @@ BuildKernel() {
     # and now to start the build process
 
     make %{?cross_opts} -s mrproper
-
-    cp %{SOURCE11} ./certs	# x509.genkey
-    cp %{SOURCE15} ./certs	# rheldup3.x509
-    cp %{SOURCE16} ./certs	# rhelkpatch1.x509
 
     cp configs/$Config .config
 
