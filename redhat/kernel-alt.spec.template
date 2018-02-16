@@ -1568,6 +1568,12 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Fri Feb 16 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-42.el7a]
+- [net] sched: cbq: create block for q->link.block (Davide Caratti) [1544314]
+- [net] cls_u32: fix use after free in u32_destroy_key() (Paolo Abeni) [1516696]
+- [net] netfilter: xt_osf: Add missing permission checks (Florian Westphal) [1539229] {CVE-2017-17448}
+- [net] netfilter: nfnetlink_cthelper: Add missing permission checks (Florian Westphal) [1539229] {CVE-2017-17448}
+
 * Mon Feb 12 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-41.el7a]
 - [netdrv] ibmvnic: queue reset when CRQ gets closed during reset (Steve Best) [1543729]
 - [kernel] modules: add rhelversion MODULE_INFO tag (Prarit Bhargava) [1542796]
