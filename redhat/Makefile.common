@@ -9,7 +9,7 @@ RPMVERSION:=4.14.0
 # marker is git tag which we base off of for exporting patches
 MARKER:=rebase-kernel-alt-4.11.0-44.el7a_to_v4.14
 PREBUILD:=
-BUILD:=42
+BUILD:=43
 DIST:=.el7a
 PACKAGE_NAME:=kernel-alt
 SPECFILE:=$(PACKAGE_NAME).spec

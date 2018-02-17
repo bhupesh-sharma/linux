@@ -6,7 +6,7 @@ EXTRAVERSION =
 NAME = Fearless Coyote
 RHEL_MAJOR = 7
 RHEL_MINOR = 5
-RHEL_RELEASE = 42
+RHEL_RELEASE = 43
 
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"

@@ -1568,6 +1568,25 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Sat Feb 17 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-43.el7a]
+- [netdrv] sfc: don't warn on successful change of MAC (Jarod Wilson) [1448760]
+- [netdrv] ibmvnic: Remove skb->protocol checks in ibmvnic_xmit (Steve Best) [1544017]
+- [netdrv] ibmvnic: Reset long term map ID counter (Steve Best) [1544017]
+- [scsi] qla2xxx: Update driver version to 10.00.00.01.07.5a-k1 (Himanshu Madhani) [1542778]
+- [scsi] qla2xxx: Fix memory corruption during hba reset test (Himanshu Madhani) [1542778]
+- [scsi] qla2xxx: Fix logo flag for qlt_free_session_done() (Himanshu Madhani) [1542778]
+- [scsi] qla2xxx: Fix NULL pointer crash due to probe failure (Himanshu Madhani) [1542778]
+- [scsi] qla2xxx: Defer processing of GS IOCB calls (Himanshu Madhani) [1542778]
+- [nvme] nvme-pci: allocate device queues storage space at probe (Ming Lei) [1523270]
+- [kernel] include/linux/slab.h: add kmalloc_array_node() and kcalloc_node() (Ming Lei) [1523270]
+- [nvme] nvme-pci: serialize pci resets (Ming Lei) [1523494]
+- [block] blk-mq: fix race between updating nr_hw_queues and switching io sched (Ming Lei) [1523270]
+- [block] blk-mq: avoid to map CPU into stale hw queue (Ming Lei) [1523270]
+- [block] blk-mq: quiesce queue during switching io sched and updating nr_requests (Ming Lei) [1523270]
+- [block] blk-mq: quiesce queue before freeing queue (Ming Lei) [1523270]
+- [block] blk-mq: only run the hardware queue if IO is pending (Ming Lei) [1523270]
+- [block] Fix a race between blk_cleanup_queue() and timeout handling (Ming Lei) [1538482]
+
 * Fri Feb 16 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-42.el7a]
 - [net] sched: cbq: create block for q->link.block (Davide Caratti) [1544314]
 - [net] cls_u32: fix use after free in u32_destroy_key() (Paolo Abeni) [1516696]
