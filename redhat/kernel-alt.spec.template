@@ -1573,6 +1573,26 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Feb 19 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-44.el7a]
+- [powerpc] powerpc/mm: Flush radix process translations when setting MMU type (Laurent Vivier) [1533718]
+- [powerpc] powerpc/mm/radix: Split linear mapping on hot-unplug (Suraj Jitindar Singh) [1516201]
+- [powerpc] KVM: PPC: Book3S: Add MMIO emulation for VMX instructions (Laurent Vivier) [1537935]
+- [powerpc] KVM: PPC: Book3S HV: Make HPT resizing work on POWER9 (Laurent Vivier) [1535789]
+- [powerpc] KVM: PPC: Book3S HV: Fix handling of secondary HPTEG in HPT resizing code (Laurent Vivier) [1535789]
+- [powerpc] KVM: PPC: Book3S HV: Drop locks before reading guest memory (Laurent Vivier) [1540077]
+- [powerpc] powerpc/64s/radix: Boot-time NULL pointer protection using a guard-PID (Mauricio Oliveira) [1539109]
+- [block] blk-mq-debugfs: don't allow write on attributes with seq_operations set (Ming Lei) [1543463]
+- [fs] dcache: Revert manually unpoison dname after allocation to shut up kasan's reports (Joe Lawrence) [1539609]
+- [fs] fs/dcache: Use read_word_at_a_time() in dentry_string_cmp() (Joe Lawrence) [1539609]
+- [lib] lib/strscpy: Shut up KASAN false-positives in strscpy() (Joe Lawrence) [1539609]
+- [kernel] compiler.h: Add read_word_at_a_time() function (Joe Lawrence) [1539609]
+- [kernel] compiler.h, kasan: Avoid duplicating __read_once_size_nocheck() (Joe Lawrence) [1539609]
+- [redhat] update handling for our additional certificates ("Herton R. Krzesinski") [1539015]
+- [redhat] make CONFIG_MODULE_SIG_SHA* common through all architectures ("Herton R. Krzesinski") [1539015]
+- [redhat] remove extra_certificates file ("Herton R. Krzesinski") [1539015]
+- [fs] xfs: truncate pagecache before writeback in xfs_setattr_size() (Bill O'Donnell) [1518553]
+- [fs] autofs: revert autofs: take more care to not update last_used on path walk (Ian Kent) [1535760]
+
 * Sat Feb 17 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-43.el7a]
 - [netdrv] sfc: don't warn on successful change of MAC (Jarod Wilson) [1448760]
 - [netdrv] ibmvnic: Remove skb->protocol checks in ibmvnic_xmit (Steve Best) [1544017]
