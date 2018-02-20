@@ -1573,6 +1573,11 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Tue Feb 20 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-45.el7a]
+- [netdrv] tg3: APE heartbeat changes (Jonathan Toppins) [1545870]
+- [redhat] fix rh_get_maintainer.pl (Andrew Jones)
+- [scsi] lpfc Fix SCSI io host reset causing kernel crash (Dick Kennedy) [1540693]
+
 * Mon Feb 19 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-44.el7a]
 - [powerpc] powerpc/mm: Flush radix process translations when setting MMU type (Laurent Vivier) [1533718]
 - [powerpc] powerpc/mm/radix: Split linear mapping on hot-unplug (Suraj Jitindar Singh) [1516201]
