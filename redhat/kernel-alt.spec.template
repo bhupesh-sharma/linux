@@ -1573,6 +1573,32 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Mon Feb 26 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-46.el7a]
+- [powerpc] ppc needs macro for spectre v1 mitigation (Christoph von Recklinghausen) [1538186]
+- [arm64] Add missing Falkor part number for branch predictor hardening (Spectre/Meltdown) (Steve Ulrich) [1545916]
+- [s390] kernel: fix rwlock implementation (Hendrik Brueckner) [1547423]
+- [redhat] s390/configs: enable KERNEL_NOBP for s390 (Hendrik Brueckner) [1532726]
+- [s390] spinlock: add __nospec_barrier memory barrier (Hendrik Brueckner) [1532726]
+- [s390] Replace IS_ENABLED(EXPOLINE_*) with IS_ENABLED(CONFIG_EXPOLINE_*) (Hendrik Brueckner) [1532726]
+- [s390] introduce execute-trampolines for branches (Hendrik Brueckner) [1532726]
+- [s390] run user space and KVM guests with modified branch prediction (Hendrik Brueckner) [1532726]
+- [s390] add options to change branch prediction behaviour for the kernel (Hendrik Brueckner) [1532726]
+- [s390] s390/alternative: use a copy of the facility bit mask (Hendrik Brueckner) [1532726]
+- [s390] add optimized array_index_mask_nospec (Hendrik Brueckner) [1532726]
+- [s390] scrub registers on kernel entry and KVM exit (Hendrik Brueckner) [1532726]
+- [s390] enable CPU alternatives unconditionally (Hendrik Brueckner) [1532726]
+- [s390] introduce CPU alternatives (Hendrik Brueckner) [1532726]
+- [security] KEYS: Use individual pages in big_key for crypto buffers (David Howells) [1510601]
+- [powerpc] powerpc/eeh: Fix crashes in eeh_report_resume() (Gustavo Duarte) [1546028]
+- [redhat] switch secureboot kernel image signing to release keys ("Herton R. Krzesinski")
+- [redhat] RHMAINTAINERS: update power management sections (Al Stone)
+- [fs] xfs: validate sb_logsunit is a multiple of the fs blocksize (Bill O'Donnell) [1538496]
+- [kernel] bpf: prevent out-of-bounds speculation (Mark Langsdorf) [1536036]
+- [arm64] kpti: Fix the interaction between ASID switching and software PAN (Mark Langsdorf) [1536036]
+- [arm64] SW PAN: Point saved ttbr0 at the zero page when switching to init_mm (Mark Langsdorf) [1536036]
+- [arm64] Re-order reserved_ttbr0 in linker script (Mark Langsdorf) [1536036]
+- [arm64] capabilities: Handle duplicate entries for a capability (Mark Langsdorf) [1536036]
+
 * Tue Feb 20 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-45.el7a]
 - [netdrv] tg3: APE heartbeat changes (Jonathan Toppins) [1545870]
 - [redhat] fix rh_get_maintainer.pl (Andrew Jones)
