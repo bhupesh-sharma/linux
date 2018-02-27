@@ -1319,15 +1319,19 @@ void __scsi_remove_device(struct scsi_device *sdev)
 	struct device *dev = &sdev->sdev_gendev;
 	int res;
 
+	printk("BHUPESH a inside %s\n", __func__);
 	/*
 	 * This cleanup path is not reentrant and while it is impossible
 	 * to get a new reference with scsi_device_get() someone can still
 	 * hold a previously acquired one.
 	 */
-	if (sdev->sdev_state == SDEV_DEL)
+	if (sdev->sdev_state == SDEV_DEL) {
+		printk("BHUPESH b inside %s\n", __func__);
 		return;
+	}
 
 	if (sdev->is_visible) {
+		printk("BHUPESH c inside %s\n", __func__);
 		/*
 		 * If scsi_internal_target_block() is running concurrently,
 		 * wait until it has finished before changing the device state.
@@ -1338,16 +1342,23 @@ void __scsi_remove_device(struct scsi_device *sdev)
 		 * any commands issued during driver shutdown (like sync
 		 * cache) are errored immediately.
 		 */
+		printk("BHUPESH d inside %s\n", __func__);
 		res = scsi_device_set_state(sdev, SDEV_CANCEL);
+		printk("BHUPESH e inside %s, res=%d\n", __func__, res);
 		if (res != 0) {
+			printk("BHUPESH f inside %s, res=%d\n", __func__, res);
 			res = scsi_device_set_state(sdev, SDEV_DEL);
-			if (res == 0)
+			if (res == 0) {
+				printk("BHUPESH g inside %s, res=%d\n", __func__, res);
 				scsi_start_queue(sdev);
+			}
 		}
 		mutex_unlock(&sdev->state_mutex);
 
-		if (res != 0)
+		if (res != 0) {
+			printk("BHUPESH h inside %s, res=%d\n", __func__, res);
 			return;
+		}
 
 		bsg_unregister_queue(sdev->request_queue);
 		device_unregister(&sdev->sdev_dev);
@@ -1361,10 +1372,12 @@ void __scsi_remove_device(struct scsi_device *sdev)
 	 * scsi_run_queue() invocations have finished before tearing down the
 	 * device.
 	 */
+	printk("BHUPESH i inside %s\n", __func__);
 	mutex_lock(&sdev->state_mutex);
 	scsi_device_set_state(sdev, SDEV_DEL);
 	mutex_unlock(&sdev->state_mutex);
 
+	printk("BHUPESH j inside %s\n", __func__);
 	blk_cleanup_queue(sdev->request_queue);
 	cancel_work_sync(&sdev->requeue_work);
 

@@ -1611,28 +1611,36 @@ static int sd_sync_cache(struct scsi_disk *sdkp, struct scsi_sense_hdr *sshdr)
 		* SD_FLUSH_TIMEOUT_MULTIPLIER;
 	struct scsi_sense_hdr my_sshdr;
 
+	printk("BHUPESH A inside %s\n", __func__);
 	if (!scsi_device_online(sdp))
 		return -ENODEV;
 
+	printk("BHUPESH B inside %s\n", __func__);
 	/* caller might not be interested in sense, but we need it */
 	if (!sshdr)
 		sshdr = &my_sshdr;
 
+	printk("BHUPESH C inside %s\n", __func__);
 	for (retries = 3; retries > 0; --retries) {
 		unsigned char cmd[10] = { 0 };
 
+		printk("BHUPESH D inside %s, count=%d\n", __func__, retries);
 		cmd[0] = SYNCHRONIZE_CACHE;
 		/*
 		 * Leave the rest of the command zero to indicate
 		 * flush everything.
 		 */
+		printk("BHUPESH E inside %s, count=%d\n", __func__, retries);
 		res = scsi_execute(sdp, cmd, DMA_NONE, NULL, 0, NULL, sshdr,
 				timeout, SD_MAX_RETRIES, 0, RQF_PM, NULL);
+		printk("BHUPESH F inside %s, count=%d, res=%d\n", __func__, retries, res);
 		if (res == 0)
 			break;
 	}
 
+	printk("BHUPESH G inside %s, res=%d\n", __func__, res);
 	if (res) {
+		printk("BHUPESH inside %s, Synchronize Cache(10) failed with %d\n", __func__, res);
 		sd_print_result(sdkp, "Synchronize Cache(10) failed", res);
 
 		if (driver_byte(res) & DRIVER_SENSE)
@@ -1660,6 +1668,7 @@ static int sd_sync_cache(struct scsi_disk *sdkp, struct scsi_sense_hdr *sshdr)
 			return -EIO;
 		}
 	}
+	printk("BHUPESH H inside %s, return 0\n", __func__);
 	return 0;
 }
 
@@ -3509,17 +3518,22 @@ static void sd_shutdown(struct device *dev)
 {
 	struct scsi_disk *sdkp = dev_get_drvdata(dev);
 
+	printk("BHUPESH 1 inside %s\n", __func__);
 	if (!sdkp)
 		return;         /* this can happen */
 
+	printk("BHUPESH 2 inside %s\n", __func__);
 	if (pm_runtime_suspended(dev))
 		return;
 
+	printk("BHUPESH 3 inside %s\n", __func__);
 	if (sdkp->WCE && sdkp->media_present) {
 		sd_printk(KERN_NOTICE, sdkp, "Synchronizing SCSI cache\n");
+		printk("BHUPESH 3a inside %s\n", __func__);
 		sd_sync_cache(sdkp, NULL);
 	}
 
+	printk("BHUPESH 4 inside %s\n", __func__);
 	if (system_state != SYSTEM_RESTART && sdkp->device->manage_start_stop) {
 		sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
 		sd_start_stop_device(sdkp, 0);

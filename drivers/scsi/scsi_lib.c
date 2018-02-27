@@ -1672,6 +1672,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
 	struct Scsi_Host *host = cmd->device->host;
 	int rtn = 0;
 
+	//printk_ratelimited("BHUPESH ALPHA inside %s\n", __func__);
 	atomic_inc(&cmd->device->iorequest_cnt);
 
 	/* check if the device is still usable */
@@ -1679,6 +1680,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
 		/* in SDEV_DEL we error all commands. DID_NO_CONNECT
 		 * returns an immediate error upwards, and signals
 		 * that the device is no longer present */
+		//printk("BHUPESH BETA inside %s, cmd->device->sdev_state == SDEV_DEL\n", __func__);
 		cmd->result = DID_NO_CONNECT << 16;
 		goto done;
 	}
@@ -1692,6 +1694,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
 		 * occur until the device transitions out of the
 		 * suspend state.
 		 */
+		//printk("BHUPESH GAMMA inside %s, scsi_device_blocked(cmd->device)\n", __func__);
 		SCSI_LOG_MLQUEUE(3, scmd_printk(KERN_INFO, cmd,
 			"queuecommand : device blocked\n"));
 		return SCSI_MLQUEUE_DEVICE_BUSY;
@@ -1701,6 +1704,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
 	if (cmd->device->lun_in_cdb)
 		cmd->cmnd[1] = (cmd->cmnd[1] & 0x1f) |
 			       (cmd->device->lun << 5 & 0xe0);
+	//printk_ratelimited("BHUPESH THETHA inside %s, cmd->cmnd[1]:%x\n", __func__, cmd->cmnd[1]);
 
 	scsi_log_send(cmd);
 
