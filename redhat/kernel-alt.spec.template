@@ -1573,6 +1573,11 @@ fi\
 
 %changelog
 %%CHANGELOG%%
+* Wed Mar 14 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-49.el7a]
+- [netdrv] tg3: prevent scheduling while atomic splat (Jonathan Toppins) [1555032]
+- [powerpc] KVM: PPC: Book3S HV: Fix guest time accounting with VIRT_CPU_ACCOUNTING_GEN (Laurent Vivier) [1541614]
+- [powerpc] KVM: PPC: Book3S HV: Improve handling of debug-trigger HMIs on POWER9 (Gustavo Duarte) [1548423]
+
 * Tue Mar 06 2018 Herton R. Krzesinski <herton@redhat.com> [4.14.0-48.el7a]
 - [s390] s390/entry.S: fix spurious zeroing of r0 (Hendrik Brueckner) [1551586]
 
