@@ -38,6 +38,7 @@ static __init u64 get_kaslr_seed(void *fdt)
 	if (!prop || len != sizeof(u64))
 		return 0;
 
+	printk("BHUPESH inside %s, *prop=%llx\n", __func__, *prop);
 	ret = fdt64_to_cpu(*prop);
 	*prop = 0;
 	return ret;
@@ -102,6 +103,7 @@ u64 __init kaslr_early_init(u64 dt_phys)
 	 * Retrieve (and wipe) the seed from the FDT
 	 */
 	seed = get_kaslr_seed(fdt);
+	printk("BHUPESH inside %s, seed=%llx\n", __func__, seed);
 	if (!seed)
 		return 0;
 
