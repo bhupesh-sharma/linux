@@ -382,6 +382,10 @@ void __init arm64_memblock_init(void)
 	memstart_addr = round_down(memblock_start_of_DRAM(),
 				   ARM64_MEMSTART_ALIGN);
 
+	if (!memstart_addr &&
+	    memblock_start_of_DRAM() < ARM64_MEMSTART_ALIGN)
+		memstart_addr = memblock_start_of_DRAM();
+
 	/*
 	 * Remove the memory that we will not be able to cover with the
 	 * linear mapping. Take care not to clip the kernel which may be
