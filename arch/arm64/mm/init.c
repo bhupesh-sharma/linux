@@ -60,6 +60,7 @@
  * that cannot be mistaken for a real physical address.
  */
 s64 memstart_addr __ro_after_init = -1;
+s64 linear_reg_start_addr __ro_after_init = -1;
 phys_addr_t arm64_dma_phys_limit __ro_after_init;
 
 #ifdef CONFIG_BLK_DEV_INITRD
@@ -455,6 +456,8 @@ void __init arm64_memblock_init(void)
 					 ((range * memstart_offset_seed) >> 16);
 		}
 	}
+
+	linear_reg_start_addr = __phys_to_virt(memblock_start_of_DRAM());
 
 	/*
 	 * Register the kernel text, kernel data, initrd, and initial

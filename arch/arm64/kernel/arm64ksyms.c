@@ -42,6 +42,7 @@ EXPORT_SYMBOL(__arch_copy_in_user);
 
 	/* physical memory */
 EXPORT_SYMBOL(memstart_addr);
+EXPORT_SYMBOL(linear_reg_start_addr);
 
 	/* string / mem functions */
 EXPORT_SYMBOL(strchr);
