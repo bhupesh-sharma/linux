@@ -730,7 +730,8 @@ asmlinkage __visible void __init start_kernel(void)
 	arch_post_acpi_subsys_init();
 	sfi_init_late();
 
-	if (efi_enabled(EFI_RUNTIME_SERVICES)) {
+	if (efi_enabled(EFI_RUNTIME_SERVICES) &&
+	    !IS_ENABLED(CONFIG_EFI_WARN_ON_ILLEGAL_ACCESSES)) {
 		efi_free_boot_services();
 	}
 
