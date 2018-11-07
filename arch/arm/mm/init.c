@@ -304,7 +304,6 @@ void __init bootmem_init(void)
 {
 	unsigned long min, max_low, max_high;
 
-	memblock_allow_resize();
 	max_low = max_high = 0;
 
 	find_limits(&min, &max_low, &max_high);
