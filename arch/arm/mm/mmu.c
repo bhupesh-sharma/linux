@@ -9,6 +9,7 @@
  */
 #include <linux/module.h>
 #include <linux/kernel.h>
+#include <linux/efi.h>
 #include <linux/errno.h>
 #include <linux/init.h>
 #include <linux/mman.h>
@@ -1629,6 +1630,7 @@ void __init paging_init(const struct machine_desc *mdesc)
 	memblock_set_current_limit(arm_lowmem_limit);
 	memblock_allow_resize();
 	dma_contiguous_remap();
+	efi_apply_persistent_mem_reservations();
 	early_ioremap_reset();
 	early_fixmap_shutdown();
 	devicemaps_init(mdesc);
