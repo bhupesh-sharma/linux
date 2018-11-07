@@ -978,22 +978,35 @@ static DEFINE_SPINLOCK(efi_mem_reserve_persistent_lock);
 int efi_mem_reserve_persistent(phys_addr_t addr, u64 size)
 {
 	struct linux_efi_memreserve *rsv, *parent;
-	int rsvsize = EFI_MEMRESERVE_SIZE(1);
+	unsigned long prsv;
+	int index;
 
 	if (efi.mem_reserve == EFI_INVALID_TABLE_ADDR)
 		return -ENODEV;
 
-	rsv = kmalloc(rsvsize, GFP_KERNEL);
+	parent = memremap(efi.mem_reserve, sizeof(*rsv), MEMREMAP_WB);
+	if (!parent)
+		return -ENOMEM;
+
+	/* first try to find a slot in an existing linked list entry */
+	for (prsv = parent->next; prsv; prsv = rsv->next) {
+		rsv = __va(prsv);
+		index = atomic_fetch_add_unless(&rsv->count, 1, rsv->size);
+		if (index < rsv->size) {
+			rsv->entry[index].base = addr;
+			rsv->entry[index].size = size;
+
+			memunmap(parent);
+			return 0;
+		}
+	}
+
+	/* no slot found - allocate a new linked list entry */
+	rsv = (struct linux_efi_memreserve *)__get_free_page(GFP_KERNEL);
 	if (!rsv)
 		return -ENOMEM;
 
-	parent = memremap(efi.mem_reserve, sizeof(*rsv), MEMREMAP_WB);
-	if (!parent) {
-		kfree(rsv);
-		return -ENOMEM;
-	}
-
-	rsv->size = 1;
+	rsv->size = EFI_MEMRESERVE_COUNT(PAGE_SIZE);
 	atomic_set(&rsv->count, 1);
 	rsv->entry[0].base = addr;
 	rsv->entry[0].size = size;
