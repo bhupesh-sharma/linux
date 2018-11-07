@@ -22,6 +22,7 @@
 #include <asm/cputype.h>
 #include <asm/sections.h>
 #include <asm/cachetype.h>
+#include <asm/early_ioremap.h>
 #include <asm/fixmap.h>
 #include <asm/sections.h>
 #include <asm/setup.h>
@@ -1628,6 +1629,7 @@ void __init paging_init(const struct machine_desc *mdesc)
 	memblock_set_current_limit(arm_lowmem_limit);
 	memblock_allow_resize();
 	dma_contiguous_remap();
+	early_ioremap_reset();
 	early_fixmap_shutdown();
 	devicemaps_init(mdesc);
 	kmap_init();

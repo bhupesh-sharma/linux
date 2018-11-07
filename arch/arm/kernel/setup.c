@@ -1114,8 +1114,6 @@ void __init setup_arch(char **cmdline_p)
 	/* Memory may have been removed so recalculate the bounds. */
 	adjust_lowmem_bounds();
 
-	early_ioremap_reset();
-
 	paging_init(mdesc);
 	request_standard_resources(mdesc);
 
