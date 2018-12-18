@@ -152,6 +152,7 @@ static int psci_to_linux_errno(int errno)
 
 static u32 psci_get_version(void)
 {
+	printk("BHUPESH, inside %s, calling psci_get_version\n", __func__);
 	return invoke_psci_fn(PSCI_0_2_FN_PSCI_VERSION, 0, 0, 0);
 }
 
@@ -161,7 +162,10 @@ static int psci_cpu_suspend(u32 state, unsigned long entry_point)
 	u32 fn;
 
 	fn = psci_function_id[PSCI_FN_CPU_SUSPEND];
+	//printk_ratelimited("BHUPESH, inside %s, calling psci_cpu_suspend\n", __func__);
 	err = invoke_psci_fn(fn, state, entry_point, 0);
+	/*printk_ratelimited("BHUPESH, inside %s, psci_cpu_suspend returned %d\n",
+			__func__, err);*/
 	return psci_to_linux_errno(err);
 }
 
@@ -171,7 +175,10 @@ static int psci_cpu_off(u32 state)
 	u32 fn;
 
 	fn = psci_function_id[PSCI_FN_CPU_OFF];
+	printk("BHUPESH, inside %s, calling psci_cpu_off\n", __func__);
 	err = invoke_psci_fn(fn, state, 0, 0);
+	printk("BHUPESH, inside %s, psci_cpu_off returned %d\n",
+			__func__, err);
 	return psci_to_linux_errno(err);
 }
 
@@ -181,7 +188,10 @@ static int psci_cpu_on(unsigned long cpuid, unsigned long entry_point)
 	u32 fn;
 
 	fn = psci_function_id[PSCI_FN_CPU_ON];
+	printk("BHUPESH, inside %s, calling psci_cpu_on\n", __func__);
 	err = invoke_psci_fn(fn, cpuid, entry_point, 0);
+	printk("BHUPESH, inside %s, psci_cpu_on returned %d\n",
+			__func__, err);
 	return psci_to_linux_errno(err);
 }
 
@@ -191,7 +201,10 @@ static int psci_migrate(unsigned long cpuid)
 	u32 fn;
 
 	fn = psci_function_id[PSCI_FN_MIGRATE];
+	printk("BHUPESH, inside %s, calling psci_migrate\n", __func__);
 	err = invoke_psci_fn(fn, cpuid, 0, 0);
+	printk("BHUPESH, inside %s, psci_migrate returned %d\n",
+			__func__, err);
 	return psci_to_linux_errno(err);
 }
 
@@ -242,7 +255,9 @@ static int get_set_conduit_method(struct device_node *np)
 
 	if (!strcmp("hvc", method)) {
 		set_conduit(PSCI_CONDUIT_HVC);
+		printk("BHUPESH, inside %s, set_conduit set to hvc\n", __func__);
 	} else if (!strcmp("smc", method)) {
+		printk("BHUPESH, inside %s, set_conduit set to smc\n", __func__);
 		set_conduit(PSCI_CONDUIT_SMC);
 	} else {
 		pr_warn("invalid \"method\" property: %s\n", method);
@@ -253,16 +268,19 @@ static int get_set_conduit_method(struct device_node *np)
 
 static void psci_sys_reset(enum reboot_mode reboot_mode, const char *cmd)
 {
+	printk("BHUPESH, inside %s, calling psci_sys_reset\n", __func__);
 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_RESET, 0, 0, 0);
 }
 
 static void psci_sys_poweroff(void)
 {
+	printk("BHUPESH, inside %s, calling psci_sys_poweroff\n", __func__);
 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
 }
 
 static int __init psci_features(u32 psci_func_id)
 {
+	printk("BHUPESH, inside %s, calling psci_features\n", __func__);
 	return invoke_psci_fn(PSCI_1_0_FN_PSCI_FEATURES,
 			      psci_func_id, 0, 0);
 }
