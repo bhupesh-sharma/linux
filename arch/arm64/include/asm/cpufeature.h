@@ -522,6 +522,45 @@ static inline bool system_supports_32bit_el0(void)
 	return cpus_have_const_cap(ARM64_HAS_32BIT_EL0);
 }
 
+static inline u32 id_aa64mmfr0_parange_to_phys_shift(int parange)
+{
+	switch (parange) {
+	case ID_AA64MMFR0_PARANGE_32: return PARANGE_32;
+	case ID_AA64MMFR0_PARANGE_36: return PARANGE_36;
+	case ID_AA64MMFR0_PARANGE_40: return PARANGE_40;
+	case ID_AA64MMFR0_PARANGE_44: return PARANGE_44;
+	case ID_AA64MMFR0_PARANGE_48: return PARANGE_48;
+	case ID_AA64MMFR0_PARANGE_52: return PARANGE_52;
+	/*
+	 * A future PE could use a value unknown to the kernel.
+	 * However, by the "D10.1.4 Principles of the ID scheme
+	 * for fields in ID registers", ARM DDI 0487C.a, any new
+	 * value is guaranteed to be higher than what we know already.
+	 * As a safe limit, we return the limit supported by the kernel.
+	 */
+	default: return CONFIG_ARM64_PA_BITS;
+	}
+}
+
+static inline u32 id_aa64mmfr0_pa_range_bits(void)
+{
+	u64 mmfr0;
+
+	mmfr0 =	read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
+	return id_aa64mmfr0_parange_to_phys_shift(mmfr0 & 0x7);
+}
+
+static inline u32 id_aa64mmfr2_va_range_bits(void)
+{
+	u64 mmfr2;
+	u32 val;
+
+	mmfr2 =	read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
+	val = cpuid_feature_extract_unsigned_field(mmfr2,
+						ID_AA64MMFR2_LVA_SHIFT);
+	return ((val == ID_AA64MMFR2_VARANGE_52) ? VARANGE_52 : VARANGE_48);
+}
+
 static inline bool system_supports_4kb_granule(void)
 {
 	u64 mmfr0;
@@ -636,26 +675,6 @@ static inline void arm64_set_ssbd_mitigation(bool state) {}
 
 extern int do_emulate_mrs(struct pt_regs *regs, u32 sys_reg, u32 rt);
 
-static inline u32 id_aa64mmfr0_parange_to_phys_shift(int parange)
-{
-	switch (parange) {
-	case 0: return 32;
-	case 1: return 36;
-	case 2: return 40;
-	case 3: return 42;
-	case 4: return 44;
-	case 5: return 48;
-	case 6: return 52;
-	/*
-	 * A future PE could use a value unknown to the kernel.
-	 * However, by the "D10.1.4 Principles of the ID scheme
-	 * for fields in ID registers", ARM DDI 0487C.a, any new
-	 * value is guaranteed to be higher than what we know already.
-	 * As a safe limit, we return the limit supported by the kernel.
-	 */
-	default: return CONFIG_ARM64_PA_BITS;
-	}
-}
 #endif /* __ASSEMBLY__ */
 
 #endif
