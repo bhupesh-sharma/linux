@@ -545,6 +545,14 @@ USER(\label, ic	ivau, \tmp2)			// invalidate I line PoU
 #ifdef CONFIG_ARM64_USER_VA_BITS_52
 	orr	\ttbr, \ttbr, #TTBR1_BADDR_4852_OFFSET
 #endif
+
+#ifdef CONFIG_ARM64_USER_KERNEL_VA_BITS_52
+alternative_if_not ARM64_HAS_52BIT_VA
+	orr	\ttbr, \ttbr, #TTBR1_BADDR_4852_OFFSET
+alternative_else
+	nop
+alternative_endif
+#endif
 	.endm
 
 /*
@@ -553,7 +561,7 @@ USER(\label, ic	ivau, \tmp2)			// invalidate I line PoU
  * to be nop'ed out when dealing with 52-bit kernel VAs.
  */
 	.macro	restore_ttbr1, ttbr
-#ifdef CONFIG_ARM64_USER_VA_BITS_52
+#if defined(CONFIG_ARM64_USER_VA_BITS_52) || defined(CONFIG_ARM64_KERNEL_VA_BITS_52)
 	bic	\ttbr, \ttbr, #TTBR1_BADDR_4852_OFFSET
 #endif
 	.endm

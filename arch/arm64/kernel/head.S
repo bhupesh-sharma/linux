@@ -788,7 +788,19 @@ ENTRY(__enable_mmu)
 	phys_to_ttbr x1, x1
 	phys_to_ttbr x2, x2
 	msr	ttbr0_el1, x2			// load TTBR0
-	offset_ttbr1 x1
+
+#if defined(CONFIG_ARM64_USER_VA_BITS_52)
+	orr     x1, x1, #TTBR1_BADDR_4852_OFFSET
+#endif
+
+#if defined(CONFIG_ARM64_USER_KERNEL_VA_BITS_52)
+	ldr_l	x3, vabits_actual
+	cmp	x3, #52
+	b.eq	1f
+	orr     x1, x1, #TTBR1_BADDR_4852_OFFSET
+1:
+#endif
+
 	msr	ttbr1_el1, x1			// load TTBR1
 	isb
 	msr	sctlr_el1, x0

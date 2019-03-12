@@ -947,6 +947,16 @@ has_useable_cnp(const struct arm64_cpu_capabilities *entry, int scope)
 	return has_cpuid_feature(entry, scope);
 }
 
+#ifdef CONFIG_ARM64_USER_KERNEL_VA_BITS_52
+extern u64 vabits_actual;
+static bool __maybe_unused
+has_52bit_kernel_va(const struct arm64_cpu_capabilities *entry, int scope)
+{
+	return vabits_actual == 52;
+}
+
+#endif /* CONFIG_ARM64_USER_KERNEL_VA_BITS_52 */
+
 #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
 static int __kpti_forced; /* 0: not forced, >0: forced on, <0: forced off */
 
@@ -1514,6 +1524,14 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
 		.min_field_value = 1,
 	},
 #endif
+#ifdef CONFIG_ARM64_USER_KERNEL_VA_BITS_52
+	{
+		.desc = "52-bit kernel VA",
+		.capability = ARM64_HAS_52BIT_VA,
+		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
+		.matches = has_52bit_kernel_va,
+	},
+#endif /* CONFIG_ARM64_USER_KERNEL_VA_BITS_52 */
 	{},
 };
 
