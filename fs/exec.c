@@ -900,14 +900,19 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
 	ssize_t bytes = 0;
 	int ret;
 
+	pr_info("BHUPESH, Inside %s, Step 1alpha\n", __func__);
 	if (!S_ISREG(file_inode(file)->i_mode) || max_size < 0)
 		return -EINVAL;
 
+	pr_info("BHUPESH, Inside %s, Step 2alpha\n", __func__);
 	ret = deny_write_access(file);
+	pr_info("BHUPESH, Inside %s, Step 2alpha, ret=%d\n", __func__, ret);
 	if (ret)
 		return ret;
 
+	pr_info("BHUPESH, Inside %s, Step 3alpha\n", __func__);
 	ret = security_kernel_read_file(file, id);
+	pr_info("BHUPESH, Inside %s, Step 3alpha, ret=%d\n", __func__, ret);
 	if (ret)
 		goto out;
 
@@ -945,7 +950,9 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
 		goto out_free;
 	}
 
+	pr_info("BHUPESH, Inside %s, Step 4alpha\n", __func__);
 	ret = security_kernel_post_read_file(file, *buf, i_size, id);
+	pr_info("BHUPESH, Inside %s, Step 4alpha, ret=%d\n", __func__, ret);
 	if (!ret)
 		*size = pos;
 
@@ -959,6 +966,7 @@ out_free:
 
 out:
 	allow_write_access(file);
+	pr_info("BHUPESH, Inside %s, Step 5alpha\n", __func__);
 	return ret;
 }
 EXPORT_SYMBOL_GPL(kernel_read_file);
@@ -988,10 +996,13 @@ int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
 	struct fd f = fdget(fd);
 	int ret = -EBADF;
 
+	pr_info("BHUPESH, Inside %s, Step 1z\n", __func__);
 	if (!f.file)
 		goto out;
 
+	pr_info("BHUPESH, Inside %s, Step 2z\n", __func__);
 	ret = kernel_read_file(f.file, buf, size, max_size, id);
+	pr_info("BHUPESH, Inside %s, Step 2z, ret=%d\n", __func__, ret);
 out:
 	fdput(f);
 	return ret;

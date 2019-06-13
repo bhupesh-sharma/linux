@@ -192,8 +192,10 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
 	void *ldata;
 	loff_t size;
 
+	pr_info("BHUPESH, Inside %s, Step 1y\n", __func__);
 	ret = kernel_read_file_from_fd(kernel_fd, &image->kernel_buf,
 				       &size, INT_MAX, READING_KEXEC_IMAGE);
+	pr_info("BHUPESH, Inside %s, Step 1y, ret=%d\n", __func__, ret);
 	if (ret)
 		return ret;
 	image->kernel_buf_len = size;
@@ -201,9 +203,11 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
 	/* IMA needs to pass the measurement list to the next kernel. */
 	ima_add_kexec_buffer(image);
 
+	pr_info("BHUPESH, Inside %s, Step 2y\n", __func__);
 	/* Call arch image probe handlers */
 	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
 					    image->kernel_buf_len);
+	pr_info("BHUPESH, Inside %s, Step 2y, ret=%d\n", __func__, ret);
 	if (ret)
 		goto out;
 
@@ -243,8 +247,10 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
 		}
 	}
 
+	pr_info("BHUPESH, Inside %s, Step 3y\n", __func__);
 	/* Call arch image load handlers */
 	ldata = arch_kexec_kernel_image_load(image);
+	pr_info("BHUPESH, Inside %s, Step 3y, ret=%d\n", __func__, ret);
 
 	if (IS_ERR(ldata)) {
 		ret = PTR_ERR(ldata);
@@ -253,9 +259,11 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
 
 	image->image_loader_data = ldata;
 out:
+	pr_info("BHUPESH, Inside %s, Step 5y\n", __func__);
 	/* In case of error, free up all allocated memory in this function */
 	if (ret)
 		kimage_file_post_load_cleanup(image);
+	pr_info("BHUPESH, Inside %s, Step 6y\n", __func__);
 	return ret;
 }
 
@@ -268,7 +276,9 @@ kimage_file_alloc_init(struct kimage **rimage, int kernel_fd,
 	struct kimage *image;
 	bool kexec_on_panic = flags & KEXEC_FILE_ON_CRASH;
 
+	pr_info("BHUPESH, Inside %s, Step 1x\n", __func__);
 	image = do_kimage_alloc_init();
+	pr_info("BHUPESH, Inside %s, Step 1x, ret=%d\n", __func__, ret);
 	if (!image)
 		return -ENOMEM;
 
@@ -280,12 +290,16 @@ kimage_file_alloc_init(struct kimage **rimage, int kernel_fd,
 		image->type = KEXEC_TYPE_CRASH;
 	}
 
+	pr_info("BHUPESH, Inside %s, Step 2x\n", __func__);
 	ret = kimage_file_prepare_segments(image, kernel_fd, initrd_fd,
 					   cmdline_ptr, cmdline_len, flags);
+	pr_info("BHUPESH, Inside %s, Step 2x, ret=%d\n", __func__, ret);
 	if (ret)
 		goto out_free_image;
 
+	pr_info("BHUPESH, Inside %s, Step 3x\n", __func__);
 	ret = sanity_check_segment_list(image);
+	pr_info("BHUPESH, Inside %s, Step 3x, ret=%d\n", __func__, ret);
 	if (ret)
 		goto out_free_post_load_bufs;
 
@@ -305,6 +319,7 @@ kimage_file_alloc_init(struct kimage **rimage, int kernel_fd,
 		}
 	}
 
+	pr_info("BHUPESH, Inside %s, Step 4x\n", __func__);
 	*rimage = image;
 	return 0;
 out_free_control_pages:
@@ -327,15 +342,21 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
 	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
 		return -EPERM;
 
+	
+	pr_info("BHUPESH, Inside %s, Step 0\n", __func__);
 	/* Make sure we have a legal set of flags */
 	if (flags != (flags & KEXEC_FILE_FLAGS))
 		return -EINVAL;
 
 	image = NULL;
 
-	if (!mutex_trylock(&kexec_mutex))
+	pr_info("BHUPESH, Inside %s, Step 1\n", __func__);
+	if (!mutex_trylock(&kexec_mutex)) {
+		pr_info("BHUPESH, Inside %s, Step 1a, returning EBUSY\n", __func__);
 		return -EBUSY;
+	}
 
+	pr_info("BHUPESH, Inside %s, Step 2\n", __func__);
 	dest_image = &kexec_image;
 	if (flags & KEXEC_FILE_ON_CRASH) {
 		dest_image = &kexec_crash_image;
@@ -354,12 +375,16 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
 	if (flags & KEXEC_FILE_ON_CRASH)
 		kimage_free(xchg(&kexec_crash_image, NULL));
 
+	pr_info("BHUPESH, Inside %s, Step 3a\n", __func__);
 	ret = kimage_file_alloc_init(&image, kernel_fd, initrd_fd, cmdline_ptr,
 				     cmdline_len, flags);
+	pr_info("BHUPESH, Inside %s, Step 3b, ret=%d\n", __func__, ret);
 	if (ret)
 		goto out;
 
+	pr_info("BHUPESH, Inside %s, Step 4a\n", __func__);
 	ret = machine_kexec_prepare(image);
+	pr_info("BHUPESH, Inside %s, Step 4b, ret=%d\n", __func__, ret);
 	if (ret)
 		goto out;
 
@@ -367,11 +392,15 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
 	 * Some architecture(like S390) may touch the crash memory before
 	 * machine_kexec_prepare(), we must copy vmcoreinfo data after it.
 	 */
+	pr_info("BHUPESH, Inside %s, Step 5a\n", __func__);
 	ret = kimage_crash_copy_vmcoreinfo(image);
+	pr_info("BHUPESH, Inside %s, Step 5b, ret=%d\n", __func__, ret);
 	if (ret)
 		goto out;
 
+	pr_info("BHUPESH, Inside %s, Step 6a\n", __func__);
 	ret = kexec_calculate_store_digests(image);
+	pr_info("BHUPESH, Inside %s, Step 6b, ret=%d\n", __func__, ret);
 	if (ret)
 		goto out;
 
@@ -379,11 +408,13 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
 		struct kexec_segment *ksegment;
 
 		ksegment = &image->segment[i];
-		pr_debug("Loading segment %d: buf=0x%p bufsz=0x%zx mem=0x%lx memsz=0x%zx\n",
+		pr_info("Loading segment %d: buf=0x%p bufsz=0x%zx mem=0x%lx memsz=0x%zx\n",
 			 i, ksegment->buf, ksegment->bufsz, ksegment->mem,
 			 ksegment->memsz);
 
+		pr_info("BHUPESH, Inside %s, Step 7a\n", __func__);
 		ret = kimage_load_segment(image, &image->segment[i]);
+		pr_info("BHUPESH, Inside %s, Step 7b, ret=%d\n", __func__, ret);
 		if (ret)
 			goto out;
 	}

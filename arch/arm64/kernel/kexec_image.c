@@ -25,11 +25,17 @@ static int image_probe(const char *kernel_buf, unsigned long kernel_len)
 	const struct arm64_image_header *h =
 		(const struct arm64_image_header *)(kernel_buf);
 
-	if (!h || (kernel_len < sizeof(*h)))
+	pr_info("BHUPESH, 0, Inside %s\n", __func__);
+	if (!h || (kernel_len < sizeof(*h))) {
+		pr_info("BHUPESH, 0a, Inside %s, ret=-EINVAL\n", __func__);
 		return -EINVAL;
+	}
+	pr_info("BHUPESH, 0b, Inside %s, &h->magic=0x%x\n", __func__, *(&h->magic));
 
-	if (memcmp(&h->magic, ARM64_IMAGE_MAGIC, sizeof(h->magic)))
+	if (memcmp(&h->magic, ARM64_IMAGE_MAGIC, sizeof(h->magic))) {
+		pr_info("BHUPESH, 0c, Inside %s, ret=-EINVAL, &h->magic=0x%x\n", __func__, *(&h->magic));
 		return -EINVAL;
+	}
 
 	return 0;
 }
@@ -47,9 +53,13 @@ static void *image_load(struct kimage *image,
 	struct kexec_segment *kernel_segment;
 	int ret;
 
+	pr_info("BHUPESH, 1, Inside %s\n", __func__);
+
 	/* We don't support crash kernels yet. */
-	if (image->type == KEXEC_TYPE_CRASH)
+	if (image->type == KEXEC_TYPE_CRASH) {
+		pr_info("BHUPESH, 1a, Inside %s\n", __func__);
 		return ERR_PTR(-EOPNOTSUPP);
+	}
 
 	/*
 	 * We require a kernel with an unambiguous Image header. Per
@@ -57,15 +67,19 @@ static void *image_load(struct kimage *image,
 	 * is non-zero (practically speaking, since v3.17).
 	 */
 	h = (struct arm64_image_header *)kernel;
-	if (!h->image_size)
+	if (!h->image_size) {
+	pr_info("BHUPESH, 1b, Inside %s\n", __func__);
 		return ERR_PTR(-EINVAL);
+	}
 
 	/* Check cpu features */
 	flags = le64_to_cpu(h->flags);
 	be_image = arm64_image_flag_field(flags, ARM64_IMAGE_FLAG_BE);
 	be_kernel = IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
-	if ((be_image != be_kernel) && !system_supports_mixed_endian())
+	if ((be_image != be_kernel) && !system_supports_mixed_endian()) {
+		pr_info("BHUPESH, 1c, Inside %s\n", __func__);
 		return ERR_PTR(-EINVAL);
+	}
 
 	value = arm64_image_flag_field(flags, ARM64_IMAGE_FLAG_PAGE_SIZE);
 	if (((value == ARM64_IMAGE_FLAG_PAGE_SIZE_4K) &&
@@ -73,8 +87,10 @@ static void *image_load(struct kimage *image,
 	    ((value == ARM64_IMAGE_FLAG_PAGE_SIZE_64K) &&
 			!system_supports_64kb_granule()) ||
 	    ((value == ARM64_IMAGE_FLAG_PAGE_SIZE_16K) &&
-			!system_supports_16kb_granule()))
+			!system_supports_16kb_granule())) {
+		pr_info("BHUPESH, 1d, Inside %s\n", __func__);
 		return ERR_PTR(-EINVAL);
+	}
 
 	/* Load the kernel */
 	kbuf.image = image;
@@ -93,15 +109,18 @@ static void *image_load(struct kimage *image,
 	kbuf.memsz += text_offset;
 
 	ret = kexec_add_buffer(&kbuf);
-	if (ret)
+	if (ret) {
+		pr_info("BHUPESH, 1e, Inside %s, ret=%d\n", __func__,
+			ret);
 		return ERR_PTR(ret);
+	}
 
 	kernel_segment = &image->segment[image->nr_segments - 1];
 	kernel_segment->mem += text_offset;
 	kernel_segment->memsz -= text_offset;
 	image->start = kernel_segment->mem;
 
-	pr_debug("Loaded kernel at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
+	pr_info("Loaded kernel at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
 				kernel_segment->mem, kbuf.bufsz,
 				kernel_segment->memsz);
 
@@ -110,6 +129,7 @@ static void *image_load(struct kimage *image,
 				kernel_segment->mem, kernel_segment->memsz,
 				initrd, initrd_len, cmdline);
 
+	pr_info("BHUPESH, 1f, Inside %s, ret=%d\n", __func__, ret);
 	return ERR_PTR(ret);
 }
 

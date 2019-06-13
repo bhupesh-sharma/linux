@@ -186,11 +186,14 @@ int load_other_segments(struct kimage *image,
 		kbuf.top_down = false;
 
 		ret = kexec_add_buffer(&kbuf);
-		if (ret)
+		if (ret) {
+			pr_err("BHUPESH, 1, Inside %s, ret=%d\n", __func__,
+			ret);
 			goto out_err;
+		}
 		initrd_load_addr = kbuf.mem;
 
-		pr_debug("Loaded initrd at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
+		pr_info("Loaded initrd at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
 				initrd_load_addr, initrd_len, initrd_len);
 	}
 
@@ -212,17 +215,22 @@ int load_other_segments(struct kimage *image,
 	kbuf.top_down = true;
 
 	ret = kexec_add_buffer(&kbuf);
-	if (ret)
+	if (ret) {
+		pr_err("BHUPESH, 2, Inside %s, ret=%d\n", __func__,
+			ret);
 		goto out_err;
+	}
 	image->arch.dtb = dtb;
 	image->arch.dtb_mem = kbuf.mem;
 
-	pr_debug("Loaded dtb at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
+	pr_info("Loaded dtb at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
 			kbuf.mem, dtb_len, dtb_len);
 
 	return 0;
 
 out_err:
+	pr_err("BHUPESH, 3, Inside %s, ret=%d\n", __func__,
+			ret);
 	vfree(dtb);
 	return ret;
 }
