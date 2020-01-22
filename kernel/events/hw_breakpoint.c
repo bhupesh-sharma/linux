@@ -393,21 +393,29 @@ static int hw_breakpoint_parse(struct perf_event *bp,
 {
 	int err;
 
+	printk("BHUPESH, inside %s 1\n", __func__);
 	err = hw_breakpoint_arch_parse(bp, attr, hw);
-	if (err)
+	if (err) {
+		printk("BHUPESH, inside %s 2\n", __func__);
 		return err;
+	}
 
 	if (arch_check_bp_in_kernelspace(hw)) {
-		if (attr->exclude_kernel)
+		if (attr->exclude_kernel) {
+			printk("BHUPESH, inside %s 3\n", __func__);
 			return -EINVAL;
+		}
 		/*
 		 * Don't let unprivileged users set a breakpoint in the trap
 		 * path to avoid trap recursion attacks.
 		 */
-		if (!capable(CAP_SYS_ADMIN))
+		if (!capable(CAP_SYS_ADMIN)) {
+			printk("BHUPESH, inside %s 4\n", __func__);
 			return -EPERM;
+		}
 	}
 
+	printk("BHUPESH, inside %s 5\n", __func__);
 	return 0;
 }
 
@@ -416,17 +424,22 @@ int register_perf_hw_breakpoint(struct perf_event *bp)
 	struct arch_hw_breakpoint hw = { };
 	int err;
 
+	printk("BHUPESH, inside %s 1\n", __func__);
 	err = reserve_bp_slot(bp);
-	if (err)
+	if (err) {
+		printk("BHUPESH, inside %s 2\n", __func__);
 		return err;
+	}
 
 	err = hw_breakpoint_parse(bp, &bp->attr, &hw);
 	if (err) {
+		printk("BHUPESH, inside %s 3\n", __func__);
 		release_bp_slot(bp);
 		return err;
 	}
 
 	bp->hw.info = hw;
+	printk("BHUPESH, inside %s 4\n", __func__);
 
 	return 0;
 }

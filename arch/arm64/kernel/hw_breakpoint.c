@@ -141,10 +141,13 @@ static enum dbg_active_el debug_exception_level(int privilege)
 {
 	switch (privilege) {
 	case AARCH64_BREAKPOINT_EL0:
+		printk("BHUPESH, inside %s X\n", __func__);
 		return DBG_ACTIVE_EL0;
 	case AARCH64_BREAKPOINT_EL1:
+		printk("BHUPESH, inside %s Y\n", __func__);
 		return DBG_ACTIVE_EL1;
 	default:
+		printk("BHUPESH, inside %s Z\n", __func__);
 		pr_warn("invalid breakpoint privilege level %d\n", privilege);
 		return -EINVAL;
 	}
@@ -192,30 +195,36 @@ static int hw_breakpoint_slot_setup(struct perf_event **slots, int max_slots,
 	int i;
 	struct perf_event **slot;
 
+	printk("BHUPESH, inside %s 1\n", __func__);
 	for (i = 0; i < max_slots; ++i) {
 		slot = &slots[i];
 		switch (ops) {
 		case HW_BREAKPOINT_INSTALL:
 			if (!*slot) {
+				printk("BHUPESH, inside %s 2\n", __func__);
 				*slot = bp;
 				return i;
 			}
 			break;
 		case HW_BREAKPOINT_UNINSTALL:
 			if (*slot == bp) {
+				printk("BHUPESH, inside %s 3\n", __func__);
 				*slot = NULL;
 				return i;
 			}
 			break;
 		case HW_BREAKPOINT_RESTORE:
-			if (*slot == bp)
+			if (*slot == bp) {
+				printk("BHUPESH, inside %s 4\n", __func__);
 				return i;
+			}
 			break;
 		default:
 			pr_warn_once("Unhandled hw breakpoint ops %d\n", ops);
 			return -EINVAL;
 		}
 	}
+	printk("BHUPESH, inside %s 5\n", __func__);
 	return -ENOSPC;
 }
 
@@ -229,8 +238,11 @@ static int hw_breakpoint_control(struct perf_event *bp,
 	enum dbg_active_el dbg_el = debug_exception_level(info->ctrl.privilege);
 	u32 ctrl;
 
+	printk("BHUPESH, inside %s A\n", __func__);
+
 	if (info->ctrl.type == ARM_BREAKPOINT_EXECUTE) {
 		/* Breakpoint */
+		printk("BHUPESH, inside %s B\n", __func__);
 		ctrl_reg = AARCH64_DBG_REG_BCR;
 		val_reg = AARCH64_DBG_REG_BVR;
 		slots = this_cpu_ptr(bp_on_reg);
@@ -238,6 +250,7 @@ static int hw_breakpoint_control(struct perf_event *bp,
 		reg_enable = !debug_info->bps_disabled;
 	} else {
 		/* Watchpoint */
+		printk("BHUPESH, inside %s C\n", __func__);
 		ctrl_reg = AARCH64_DBG_REG_WCR;
 		val_reg = AARCH64_DBG_REG_WVR;
 		slots = this_cpu_ptr(wp_on_reg);
@@ -256,10 +269,12 @@ static int hw_breakpoint_control(struct perf_event *bp,
 		 * Ensure debug monitors are enabled at the correct exception
 		 * level.
 		 */
+		printk("BHUPESH, inside %s D\n", __func__);
 		enable_debug_monitors(dbg_el);
 		/* Fall through */
 	case HW_BREAKPOINT_RESTORE:
 		/* Setup the address register. */
+		printk("BHUPESH, inside %s E\n", __func__);
 		write_wb_reg(val_reg, i, info->address);
 
 		/* Setup the control register. */
@@ -269,6 +284,7 @@ static int hw_breakpoint_control(struct perf_event *bp,
 		break;
 	case HW_BREAKPOINT_UNINSTALL:
 		/* Reset the control register. */
+		printk("BHUPESH, inside %s F\n", __func__);
 		write_wb_reg(ctrl_reg, i, 0);
 
 		/*
@@ -279,6 +295,7 @@ static int hw_breakpoint_control(struct perf_event *bp,
 		break;
 	}
 
+	printk("BHUPESH, inside %s G\n", __func__);
 	return 0;
 }
 
@@ -299,6 +316,7 @@ static int get_hbp_len(u8 hbp_len)
 {
 	unsigned int len_in_bytes = 0;
 
+	printk("BHUPESH, inside %s Alpha\n", __func__);
 	switch (hbp_len) {
 	case ARM_BREAKPOINT_LEN_1:
 		len_in_bytes = 1;
@@ -326,6 +344,7 @@ static int get_hbp_len(u8 hbp_len)
 		break;
 	}
 
+	printk("BHUPESH, inside %s, len_in_bytes=%d Beta\n", __func__, len_in_bytes);
 	return len_in_bytes;
 }
 
@@ -413,6 +432,7 @@ static int arch_build_bp_info(struct perf_event *bp,
 			      const struct perf_event_attr *attr,
 			      struct arch_hw_breakpoint *hw)
 {
+	printk("BHUPESH, inside %s 1\n", __func__);
 	/* Type */
 	switch (attr->bp_type) {
 	case HW_BREAKPOINT_X:
@@ -461,6 +481,7 @@ static int arch_build_bp_info(struct perf_event *bp,
 		return -EINVAL;
 	}
 
+	printk("BHUPESH, inside %s, hw->ctrl.len = %d, hw->ctrl.type = %d, 2\n", __func__, hw->ctrl.len, hw->ctrl.type);
 	/*
 	 * On AArch64, we only permit breakpoints of length 4, whereas
 	 * AArch32 also requires breakpoints of length 2 for Thumb.
@@ -469,8 +490,10 @@ static int arch_build_bp_info(struct perf_event *bp,
 	if (hw->ctrl.type == ARM_BREAKPOINT_EXECUTE) {
 		if (is_compat_bp(bp)) {
 			if (hw->ctrl.len != ARM_BREAKPOINT_LEN_2 &&
-			    hw->ctrl.len != ARM_BREAKPOINT_LEN_4)
+			    hw->ctrl.len != ARM_BREAKPOINT_LEN_4) {
+				printk("BHUPESH, inside %s, hw->ctrl.len = %d, hw->ctrl.type = %d, 3a\n", __func__, hw->ctrl.len, hw->ctrl.type);
 				return -EINVAL;
+			}
 		} else if (hw->ctrl.len != ARM_BREAKPOINT_LEN_4) {
 			/*
 			 * FIXME: Some tools (I'm looking at you perf) assume
@@ -479,6 +502,7 @@ static int arch_build_bp_info(struct perf_event *bp,
 			 *	  but we should probably return -EINVAL instead.
 			 */
 			hw->ctrl.len = ARM_BREAKPOINT_LEN_4;
+			printk("BHUPESH, inside %s, hw->ctrl.len = %d, hw->ctrl.type = %d, 3b\n", __func__, hw->ctrl.len, hw->ctrl.type);
 		}
 	}
 
@@ -497,6 +521,8 @@ static int arch_build_bp_info(struct perf_event *bp,
 
 	/* Enabled? */
 	hw->ctrl.enabled = !attr->disabled;
+	printk("BHUPESH, inside %s, hw->ctrl.len = %d, hw->ctrl.type = %d, hw->ctrl.enabled = %d, hw->ctrl.privilege = %d, 4\n",
+			__func__, hw->ctrl.len, hw->ctrl.type, hw->ctrl.enabled, hw->ctrl.privilege);
 
 	return 0;
 }
@@ -566,8 +592,10 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
 	 * Disallow per-task kernel breakpoints since these would
 	 * complicate the stepping code.
 	 */
-	if (hw->ctrl.privilege == AARCH64_BREAKPOINT_EL1 && bp->hw.target)
+	if (hw->ctrl.privilege == AARCH64_BREAKPOINT_EL1 && bp->hw.target) {
+		printk("BHUPESH, inside %s 1\n", __func__);
 		return -EINVAL;
+	}
 
 	return 0;
 }
