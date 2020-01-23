@@ -566,8 +566,10 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
 	 * Disallow per-task kernel breakpoints since these would
 	 * complicate the stepping code.
 	 */
+#if 0
 	if (hw->ctrl.privilege == AARCH64_BREAKPOINT_EL1 && bp->hw.target)
 		return -EINVAL;
+#endif
 
 	return 0;
 }
