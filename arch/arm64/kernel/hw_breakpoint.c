@@ -562,13 +562,6 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
 	hw->address &= ~alignment_mask;
 	hw->ctrl.len <<= offset;
 
-	/*
-	 * Disallow per-task kernel breakpoints since these would
-	 * complicate the stepping code.
-	 */
-	if (hw->ctrl.privilege == AARCH64_BREAKPOINT_EL1 && bp->hw.target)
-		return -EINVAL;
-
 	return 0;
 }
 
