@@ -666,6 +666,7 @@ static int __init populate_rootfs(void)
 	else
 		printk(KERN_INFO "Unpacking initramfs...\n");
 
+	print_hex_dump(KERN_ERR, "header", DUMP_PREFIX_OFFSET, 16, 1, (char*)initrd_start, 4096, true);
 	err = unpack_to_rootfs((char *)initrd_start, initrd_end - initrd_start);
 	if (err) {
 		clean_rootfs();
