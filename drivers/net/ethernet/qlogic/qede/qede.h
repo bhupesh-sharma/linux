@@ -32,6 +32,7 @@
 #ifndef _QEDE_H_
 #define _QEDE_H_
 #include <linux/compiler.h>
+#include <linux/crash_dump.h>
 #include <linux/version.h>
 #include <linux/workqueue.h>
 #include <linux/netdevice.h>
@@ -574,13 +575,13 @@ int qede_add_tc_flower_fltr(struct qede_dev *edev, __be16 proto,
 #define RX_RING_SIZE		((u16)BIT(RX_RING_SIZE_POW))
 #define NUM_RX_BDS_MAX		(RX_RING_SIZE - 1)
 #define NUM_RX_BDS_MIN		128
-#define NUM_RX_BDS_DEF		((u16)BIT(10) - 1)
+#define NUM_RX_BDS_DEF		((is_kdump_kernel()) ? ((u16)BIT(6) - 1) : ((u16)BIT(10) - 1))
 
 #define TX_RING_SIZE_POW	13
 #define TX_RING_SIZE		((u16)BIT(TX_RING_SIZE_POW))
 #define NUM_TX_BDS_MAX		(TX_RING_SIZE - 1)
 #define NUM_TX_BDS_MIN		128
-#define NUM_TX_BDS_DEF		NUM_TX_BDS_MAX
+#define NUM_TX_BDS_DEF		((is_kdump_kernel()) ? ((u16)BIT(6) - 1) : NUM_TX_BDS_MAX)
 
 #define QEDE_MIN_PKT_LEN		64
 #define QEDE_RX_HDR_SIZE		256
