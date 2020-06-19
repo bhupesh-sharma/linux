@@ -94,12 +94,16 @@ static void __init reserve_crashkernel(void)
 		/* Current arm64 boot protocol requires 2MB alignment */
 		crash_base = memblock_find_in_range(0, arm64_dma32_phys_limit,
 				crash_size, SZ_2M);
+		pr_info("BHUPESH 1, crash_base:0x%llx, crash_size:0x%llx, "
+				"arm64_dma32_phys_limit:0x%llx, arm64_dma_phys_limit::0x%llx\n",
+			crash_base, crash_size, arm64_dma32_phys_limit, arm64_dma_phys_limit);
 		if (crash_base == 0) {
 			pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
 				crash_size);
 			return;
 		}
 	} else {
+		pr_info("BHUPESH 2 \n");
 		/* User specifies base address explicitly. */
 		if (!memblock_is_region_memory(crash_base, crash_size)) {
 			pr_warn("cannot reserve crashkernel: region is not memory\n");
@@ -116,6 +120,9 @@ static void __init reserve_crashkernel(void)
 			return;
 		}
 	}
+	pr_info("BHUPESH 3, crash_base:0x%llx, crash_size:0x%llx, "
+				"arm64_dma32_phys_limit:0x%llx, arm64_dma_phys_limit::0x%llx\n",
+			crash_base, crash_size, arm64_dma32_phys_limit, arm64_dma_phys_limit);
 	memblock_reserve(crash_base, crash_size);
 
 	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
