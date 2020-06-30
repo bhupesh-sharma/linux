@@ -92,11 +92,12 @@ static void __init reserve_crashkernel(void)
 
 	if (crash_base == 0) {
 		/* Current arm64 boot protocol requires 2MB alignment */
-		crash_base = memblock_find_in_range(0, arm64_dma_phys_limit,
+		crash_base = memblock_find_in_range(0, arm64_dma32_phys_limit,
 				crash_size, SZ_2M);
 		pr_info("BHUPESH 1, crash_base:0x%llx, crash_size:0x%llx, "
 				"arm64_dma32_phys_limit:0x%llx, arm64_dma_phys_limit::0x%llx\n",
 				crash_base, crash_size, arm64_dma32_phys_limit, arm64_dma_phys_limit);
+#if 0
 		if (crash_base == 0) {
 			crash_base = memblock_find_in_range(arm64_dma_phys_limit, arm64_dma32_phys_limit,
 					crash_size, SZ_2M);
@@ -104,6 +105,7 @@ static void __init reserve_crashkernel(void)
 				"arm64_dma32_phys_limit:0x%llx, arm64_dma_phys_limit::0x%llx\n",
 				crash_base, crash_size, arm64_dma32_phys_limit, arm64_dma_phys_limit);
 		}
+#endif
 		
 		if (crash_base == 0) {
 			pr_warn("cannot allocate crashkernel (size:0x%llx)\n",

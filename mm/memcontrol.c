@@ -7009,14 +7009,26 @@ void mem_cgroup_uncharge_swap(swp_entry_t entry, unsigned int nr_pages)
 
 long mem_cgroup_get_nr_swap_pages(struct mem_cgroup *memcg)
 {
-	long nr_swap_pages = get_nr_swap_pages();
+	long nr_swap_pages;
+	
+	printk("Bhupesh 1a, inside %s cgroup_memory_noswap=%d\n,",
+			__func__, cgroup_memory_noswap);
+	nr_swap_pages = get_nr_swap_pages();
 
-	if (cgroup_memory_noswap || !cgroup_subsys_on_dfl(memory_cgrp_subsys))
+	printk("Bhupesh 1b, inside %s cgroup_memory_noswap=%d, nr_swap_pages=%ld\n",
+			__func__, cgroup_memory_noswap, nr_swap_pages);
+	if (mem_cgroup_disabled() || cgroup_memory_noswap || !cgroup_subsys_on_dfl(memory_cgrp_subsys)) {
+		printk("Bhupesh 2, inside %s cgroup_memory_noswap=%d, returning nr_swap_pages=%ld now\n,",
+			__func__, cgroup_memory_noswap, nr_swap_pages);
 		return nr_swap_pages;
-	for (; memcg != root_mem_cgroup; memcg = parent_mem_cgroup(memcg))
+	}
+	for (; memcg != root_mem_cgroup; memcg = parent_mem_cgroup(memcg)) {
 		nr_swap_pages = min_t(long, nr_swap_pages,
 				      READ_ONCE(memcg->swap.max) -
 				      page_counter_read(&memcg->swap));
+		printk("Bhupesh 3, inside %s cgroup_memory_noswap=%d, returning nr_swap_pages=%ld now\n,",
+			__func__, cgroup_memory_noswap, nr_swap_pages);
+}
 	return nr_swap_pages;
 }
 
@@ -7180,10 +7192,14 @@ static struct cftype memsw_files[] = {
 
 static int __init mem_cgroup_swap_init(void)
 {
+	printk("Bhupesh Xa, inside %s, mem_cgroup_disabled()=%d, cgroup_memory_noswap=%d\n",
+			__func__, mem_cgroup_disabled(), cgroup_memory_noswap);
 	/* No memory control -> no swap control */
 	if (mem_cgroup_disabled())
 		cgroup_memory_noswap = true;
 
+	printk("Bhupesh Xb, inside %s, mem_cgroup_disabled()=%d, cgroup_memory_noswap=%d\n",
+			__func__, mem_cgroup_disabled(), cgroup_memory_noswap);
 	if (cgroup_memory_noswap)
 		return 0;
 
