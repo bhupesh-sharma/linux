@@ -91,8 +91,14 @@ static void __init reserve_crashkernel(void)
 	crash_size = PAGE_ALIGN(crash_size);
 
 	if (crash_base == 0) {
-		/* Current arm64 boot protocol requires 2MB alignment */
-		crash_base = memblock_find_in_range(0, arm64_dma32_phys_limit,
+		/* Current arm64 boot protocol requires 2MB alignment.
+		 * Also limit the crashkernel allocation to the first
+		 * 1GB of the RAM accessible (ZONE_DMA), as otherwise we
+		 * might run into OOM issues when crashkernel executed as
+		 * it is allocated from ZONE_DMA32 memory or memory
+		 * chunks belonging to both ZONE_DMA and ZONE_DMA32.
+		 */
+		crash_base = memblock_find_in_range(0, arm64_dma_phys_limit,
 				crash_size, SZ_2M);
 		if (crash_base == 0) {
 			pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
