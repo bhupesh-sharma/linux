@@ -722,6 +722,9 @@
 			[KNL, x86_64] select a region under 4G first, and
 			fall back to reserve region above 4G when '@offset'
 			hasn't been specified.
+			[KNL, arm64] If crashkernel=X,low is specified, reserve
+			spcified size low memory firstly, and then reserve memory
+			above 4G.
 			See Documentation/admin-guide/kdump/kdump.rst for further details.
 
 	crashkernel=range1:size1[,range2:size2,...][@offset]
@@ -746,13 +749,23 @@
 			requires at least 64M+32K low memory, also enough extra
 			low memory is needed to make sure DMA buffers for 32-bit
 			devices won't run out. Kernel would try to allocate at
-			at least 256M below 4G automatically.
+			least 256M below 4G automatically.
 			This one let user to specify own low range under 4G
 			for second kernel instead.
 			0: to disable low allocation.
 			It will be ignored when crashkernel=X,high is not used
 			or memory reserved is below 4G.
-
+			[KNL, arm64] range under 4G.
+			This one let user to specify own low range under 4G
+			for crash dump kernel instead.
+			Be different from x86_64, kernel reserves specified size
+			physical memory region only when this parameter is specified
+			instead of trying to reserve at least 256M below 4G
+			automatically.
+			Use this parameter along with crashkernel=X when we want
+			to reserve crashkernel above 4G. If there are devices
+			need to use ZONE_DMA in crash dump kernel, it is also
+			a good choice.
 	cryptomgr.notests
 			[KNL] Disable crypto self-tests
 
