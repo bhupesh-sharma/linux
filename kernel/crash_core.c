@@ -320,6 +320,7 @@ int __init reserve_crashkernel_low(void)
 	unsigned long long base, low_base = 0, low_size = 0;
 	unsigned long total_low_mem;
 	int ret;
+	phys_addr_t crash_max = 1ULL << 32;
 
 	total_low_mem = memblock_mem_size(1UL << (32 - PAGE_SHIFT));
 
@@ -352,7 +353,11 @@ int __init reserve_crashkernel_low(void)
 			return 0;
 	}
 
-	low_base = memblock_find_in_range(0, 1ULL << 32, low_size, CRASH_ALIGN);
+#ifdef CONFIG_ARM64
+	if (IS_ENABLED(CONFIG_ZONE_DMA))
+		crash_max = arm64_dma_phys_limit;
+#endif
+	low_base = memblock_find_in_range(0, crash_max, low_size, CRASH_ALIGN);
 	if (!low_base) {
 		pr_err("Cannot reserve %ldMB crashkernel low memory, please try smaller size.\n",
 		       (unsigned long)(low_size >> 20));
