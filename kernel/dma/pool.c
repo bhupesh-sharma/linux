@@ -3,6 +3,7 @@
  * Copyright (C) 2012 ARM Ltd.
  * Copyright (C) 2020 Google LLC
  */
+#include <linux/crash_dump.h>
 #include <linux/debugfs.h>
 #include <linux/dma-direct.h>
 #include <linux/dma-noncoherent.h>
@@ -175,11 +176,19 @@ static int __init dma_atomic_pool_init(void)
 	 * sizes to 128KB per 1GB of memory, min 128KB, max MAX_ORDER-1.
 	 */
 	if (!atomic_pool_size) {
-		unsigned long pages = totalram_pages() / (SZ_1G / SZ_128K);
-		pages = min_t(unsigned long, pages, MAX_ORDER_NR_PAGES);
-		atomic_pool_size = max_t(size_t, pages << PAGE_SHIFT, SZ_128K);
-		printk("Bhupesh, inside %s, pages=%lu, atomic_pool_size=%lu, totalram_pages()=%lu, (SZ_1G / SZ_128K)=%d, MAX_ORDER_NR_PAGES=%d\n",
-				__func__, pages, atomic_pool_size, totalram_pages(), (SZ_1G / SZ_128K), MAX_ORDER_NR_PAGES);
+		if (!is_kdump_kernel()) {
+			unsigned long pages = totalram_pages() / (SZ_1G / SZ_128K);
+			pages = min_t(unsigned long, pages, MAX_ORDER_NR_PAGES);
+			atomic_pool_size = max_t(size_t, pages << PAGE_SHIFT, SZ_128K);
+			printk("Bhupesh, inside %s, pages=%lu, atomic_pool_size=%lu, totalram_pages()=%lu, (SZ_1G / SZ_128K)=%d, MAX_ORDER_NR_PAGES=%d\n",
+					__func__, pages, atomic_pool_size, totalram_pages(), (SZ_1G / SZ_128K), MAX_ORDER_NR_PAGES);
+		} else {
+			unsigned long pages = totalram_pages() / (SZ_1G / SZ_64K);
+			pages = min_t(unsigned long, pages, MAX_ORDER_NR_PAGES);
+			atomic_pool_size = max_t(size_t, pages << PAGE_SHIFT, SZ_64K);
+			printk("Bhupesh, inside %s, pages=%lu, atomic_pool_size=%lu, totalram_pages()=%lu, (SZ_1G / SZ_64K)=%d, MAX_ORDER_NR_PAGES=%d\n",
+					__func__, pages, atomic_pool_size, totalram_pages(), (SZ_1G / SZ_64K), MAX_ORDER_NR_PAGES);
+		}
 	}
 	INIT_WORK(&atomic_pool_work, atomic_pool_work_fn);
 
