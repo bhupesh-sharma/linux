@@ -1323,7 +1323,7 @@ static void cpu_hyp_reinit(void)
 static void _kvm_arch_hardware_enable(void *discard)
 {
 	if (!__this_cpu_read(kvm_arm_hardware_enabled)) {
-		cpu_hyp_reinit();
+		//cpu_hyp_reinit();
 		__this_cpu_write(kvm_arm_hardware_enabled, 1);
 	}
 }
