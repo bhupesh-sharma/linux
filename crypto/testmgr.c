@@ -1155,6 +1155,7 @@ static int check_hash_result(const char *type,
 		       type, driver, vec_name, cfg->name);
 		return -EOVERFLOW;
 	}
+	pr_info("Test Passed\n");
 	return 0;
 }
 
@@ -1185,6 +1186,9 @@ static int test_shash_vec_cfg(const struct hash_testvec *vec,
 	unsigned int i;
 	u8 result[HASH_MAX_DIGESTSIZE + TESTMGR_POISON_LEN];
 	int err;
+
+	pr_info("alg: shash: %s Testing test vector %s, cfg=\"%s\"\n",
+		 tfm->base.__crt_alg->cra_driver_name, vec_name, cfg->name);
 
 	/* Set the key, if specified */
 	if (vec->ksize) {
@@ -1373,6 +1377,9 @@ static int test_ahash_vec_cfg(const struct hash_testvec *vec,
 	unsigned int pending_len;
 	u8 result[HASH_MAX_DIGESTSIZE + TESTMGR_POISON_LEN];
 	int err;
+
+	pr_info("alg: ahash: %s Testing test vector %s, cfg=\"%s\"\n",
+		 tfm->base.__crt_alg->cra_driver_name, vec_name, cfg->name);
 
 	/* Set the key, if specified */
 	if (vec->ksize) {
@@ -2703,6 +2710,9 @@ static int test_skcipher_vec_cfg(int enc, const struct cipher_testvec *vec,
 	struct kvec input;
 	int err;
 
+	pr_info("alg: skcipher: %s Testing(%s) test vector %s, cfg=\"%s\"\n",
+		 tfm->base.__crt_alg->cra_driver_name, op, vec_name, cfg->name);
+
 	/* Set the key */
 	if (vec->wk)
 		crypto_skcipher_set_flags(tfm, CRYPTO_TFM_REQ_FORBID_WEAK_KEYS);
@@ -2844,6 +2854,7 @@ static int test_skcipher_vec_cfg(int enc, const struct cipher_testvec *vec,
 		return -EINVAL;
 	}
 
+	pr_info("Test Passed\n");
 	return 0;
 }
 
