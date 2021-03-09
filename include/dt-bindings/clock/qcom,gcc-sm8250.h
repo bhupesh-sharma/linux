@@ -207,6 +207,9 @@
 #define GCC_VIDEO_AXI0_CLK					197
 #define GCC_VIDEO_AXI1_CLK					198
 #define GCC_VIDEO_XO_CLK					199
+#define GCC_CE1_AHB_CLK						200
+#define GCC_CE1_AXI_CLK						201
+#define GCC_CE1_CLK						202
 
 /* GCC resets */
 #define GCC_GPU_BCR						0
