@@ -277,6 +277,8 @@ err_mem_path_disable:
 	icc_set_bw(qce->mem_path, 0, 0);
 err_mem_path_put:
 	icc_put(qce->mem_path);
+
+	dev_err(dev, "qce_crypto_probe() failed %d\n", ret);
 	return ret;
 }
 
