@@ -556,6 +556,7 @@ static void sirf_remove(struct serdev_device *serdev)
 #ifdef CONFIG_OF
 static const struct of_device_id sirf_of_match[] = {
 	{ .compatible = "fastrax,uc430" },
+	{ .compatible = "qcom,sirfstarV" },
 	{ .compatible = "linx,r4" },
 	{ .compatible = "wi2wi,w2sg0004" },
 	{ .compatible = "wi2wi,w2sg0008i" },
