@@ -28,6 +28,7 @@ properties:
       - csr,gsd4t
       - csr,csrg05ta03-icje-r
       - fastrax,uc430
+      - qcom,sirfstarV
       - linx,r4
       - wi2wi,w2sg0004
       - wi2wi,w2sg0008i
