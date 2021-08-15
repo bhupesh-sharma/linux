@@ -11,6 +11,7 @@ Required properties:
 - compatible	: Must be one of
 
 			"fastrax,uc430"
+			"qcom,sirfstarV"
 			"linx,r4"
 			"wi2wi,w2sg0004"
 			"wi2wi,w2sg0008i"
