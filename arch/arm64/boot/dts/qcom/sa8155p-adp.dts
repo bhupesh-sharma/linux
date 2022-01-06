@@ -426,74 +426,50 @@
 		};
 	};
 	
-	ss5_pwr_ctrl_pins: ss5_pwr_ctrl_pins {
-		ss5_pwr_ctrl_rst_on: ss5_pwr_ctrl_rst_on {
-			mux {
-				pins = "gpio11", "gpio39";
-				function = "gpio";
-			};
-
-			config {
-				pins = "gpio11", "gpio39";
-				drive-strength = <2>; /* 2 mA */
-				bias-pull-up;
-				output-high;
-			};
-		};
-
-		ss5_pwr_ctrl_rst_off: ss5_pwr_ctrl_off {
-			mux {
-				pins = "gpio11", "gpio39";
-				function = "gpio";
-			};
-
-			config {
-				pins = "gpio11", "gpio39";
-				drive-strength = <2>; /* 2 mA */
-				bias-pull-down;
-				output-low;
-			};
+	ss5_pwr_ctrl_rst_on: ss5_pwr_ctrl_rst_on {
+		mux {
+			pins = "gpio11", "gpio39";
+			function = "gpio";
+			drive-strength = <2>; /* 2 mA */
+			bias-pull-up;
+			output-high;
 		};
 	};
 
-	qupv3_se4_2uart_pins: qupv3_se4_2uart_pins {
-		qupv3_se4_2uart_default: qupv3_se4_2uart_default {
-			mux {
-				pins = "gpio41", "gpio42";
-				function = "gpio";
-			};
-
-			config {
-				pins = "gpio41", "gpio42";
-				drive-strength = <2>;
-				bias-disable;
-			};
+	ss5_pwr_ctrl_rst_off: ss5_pwr_ctrl_off {
+		mux {
+			pins = "gpio11", "gpio39";
+			function = "gpio";
+			drive-strength = <2>; /* 2 mA */
+			bias-pull-down;
+			output-low;
 		};
+	};
 
-		qupv3_se4_2uart_active: qupv3_se4_2uart_active {
-			mux {
-				pins = "gpio41", "gpio42";
-				function = "qup9";
-			};
-
-			config {
-				pins = "gpio41", "gpio42";
-				drive-strength = <2>;
-				bias-disable;
-			};
+	qupv3_se4_2uart_default: qupv3_se4_2uart_default {
+		mux {
+			pins = "gpio41", "gpio42";
+			function = "gpio";
+			drive-strength = <2>;
+			bias-disable;
 		};
+	};
 
-		qupv3_se4_2uart_sleep: qupv3_se4_2uart_sleep {
-			mux {
-				pins = "gpio41", "gpio42";
-				function = "gpio";
-			};
+	qupv3_se4_2uart_active: qupv3_se4_2uart_active {
+		mux {
+			pins = "gpio41", "gpio42";
+			function = "qup9";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
 
-			config {
-				pins = "gpio41", "gpio42";
-				drive-strength = <2>;
-				bias-disable;
-			};
+	qupv3_se4_2uart_sleep: qupv3_se4_2uart_sleep {
+		mux {
+			pins = "gpio41", "gpio42";
+			function = "gpio";
+			drive-strength = <2>;
+			bias-disable;
 		};
 	};
 };
