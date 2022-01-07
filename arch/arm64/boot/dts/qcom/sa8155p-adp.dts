@@ -335,6 +335,7 @@
 		pinctrl-names = "default";
 		pinctrl-0 = <&ss5_pwr_ctrl_rst_on>;
 		sirf,onoff-gpios = <&tlmm 39 1>;  /* ON_OFF */
+		sirf,reset-gpios = <&tlmm 11 1>;  /* Reset */
 		timepulse-gpios = <&tlmm 77 1>; /* 1PPS */
 	};
 };
