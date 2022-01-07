@@ -42,6 +42,7 @@ struct sirf_data {
 	struct regulator *vcc;
 	struct regulator *lna;
 	struct gpio_desc *on_off;
+	struct gpio_desc *reset;
 	struct gpio_desc *wakeup;
 	int irq;
 	bool active;
@@ -445,6 +446,15 @@ static int sirf_probe(struct serdev_device *serdev)
 	}
 
 	if (data->on_off) {
+		data->reset = devm_gpiod_get_optional(dev, "sirf,reset",
+				GPIOD_OUT_LOW);
+		if (IS_ERR(data->reset)) {
+			ret = PTR_ERR(data->reset);
+			goto err_put_device;
+		}
+	}
+
+	if (data->reset) {
 		data->wakeup = devm_gpiod_get_optional(dev, "sirf,wakeup",
 				GPIOD_IN);
 		if (IS_ERR(data->wakeup)) {
@@ -459,6 +469,7 @@ static int sirf_probe(struct serdev_device *serdev)
 		/* Wait for chip to boot into hibernate mode. */
 		msleep(SIRF_BOOT_DELAY);
 	}
+
 
 	if (data->wakeup) {
 		ret = gpiod_get_value_cansleep(data->wakeup);
