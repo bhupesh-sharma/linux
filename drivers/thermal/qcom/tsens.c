@@ -7,6 +7,7 @@
 #include <linux/debugfs.h>
 #include <linux/err.h>
 #include <linux/io.h>
+#include <linux/qcom_scm.h>
 #include <linux/module.h>
 #include <linux/nvmem-consumer.h>
 #include <linux/of.h>
@@ -601,12 +602,99 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
 	u32 temp_idx = LAST_TEMP_0 + hw_id;
 	u32 valid_idx = VALID_0 + hw_id;
 	u32 valid;
-	int ret;
+	int ret, trdy, first_round, tsens_ret;
+	unsigned long timeout;
+	static atomic_t in_tsens_reinit;
 
 	/* VER_0 doesn't have VALID bit */
 	if (tsens_version(priv) == VER_0)
 		goto get_temp;
 
+	/* For some tsens controllers, its suggested to
+	 * monitor the controller health periodically
+	 * and in case an issue is detected to reinit
+	 * tsens controller via trustzone.
+	 */
+	if (priv->needs_reinit_wa) {
+		timeout = jiffies + usecs_to_jiffies(TIMEOUT_US);
+		do {
+			ret = regmap_field_read(priv->rf[TRDY], &trdy);
+			if (ret)
+				return ret;
+			if (!trdy)
+				continue;
+		} while (time_before(jiffies, timeout));
+
+		ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
+		if (ret)
+			return ret;
+
+		if (!first_round) {
+			if (atomic_read(&in_tsens_reinit)) {
+				dev_err(priv->dev, "tsens re-init is in progress\n");
+				return -EAGAIN;
+			}
+
+			/* Wait for 2 ms for tsens controller to recover */
+			timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
+			do {
+				ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
+				if (ret)
+					return ret;
+
+				if (first_round) {
+					dev_err(priv->dev, "tsens controller recovered\n");
+					goto sensor_read;
+				}
+			} while (time_before(jiffies, timeout));
+
+			/*
+			 * tsens controller did not recover,
+			 * proceed with SCM call to re-init it
+			 */
+			if (atomic_read(&in_tsens_reinit)) {
+				dev_err(priv->dev, "tsens re-init is in progress\n");
+				return -EAGAIN;
+			}
+
+			atomic_set(&in_tsens_reinit, 1);
+
+			dev_err(priv->dev, "calling qcom_scm_tsens_reinit (%d : %d)\n",
+						trdy, first_round);
+			ret = qcom_scm_tsens_reinit(&tsens_ret);
+			if (ret || tsens_ret) {
+				dev_err(priv->dev, "tsens reinit scm call failed (%d : %d)\n",
+						ret, tsens_ret);
+				atomic_set(&in_tsens_reinit, 0);
+				if (ret)
+					return ret;
+				if (tsens_ret)
+					return -ENOTRECOVERABLE;
+			}
+
+			atomic_set(&in_tsens_reinit, 0);
+
+			/* Wait for 2 ms for tsens controller to recover */
+			timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
+			do {
+				ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
+				if (ret)
+					return ret;
+
+				if (first_round) {
+					dev_err(priv->dev, "tsens controller recovered\n");
+					goto sensor_read;
+				}
+			} while (time_before(jiffies, timeout));
+
+			if (!first_round) {
+				dev_err(priv->dev, "tsens controller could not recover\n");
+				return -ENOTRECOVERABLE;
+			}
+		}
+	}
+
+sensor_read:
 	/* Valid bit is 0 for 6 AHB clock cycles.
 	 * At 19.2MHz, 1 AHB clock is ~60ns.
 	 * We should enter this loop very, very rarely.
@@ -857,6 +945,12 @@ int __init init_common(struct tsens_priv *priv)
 	priv->rf[TRDY] = devm_regmap_field_alloc(dev, priv->tm_map, priv->fields[TRDY]);
 	if (IS_ERR(priv->rf[TRDY])) {
 		ret = PTR_ERR(priv->rf[TRDY]);
+		goto err_put_device;
+	}
+	
+	priv->rf[FIRST_ROUND_COMPLETE] = devm_regmap_field_alloc(dev, priv->tm_map, priv->fields[FIRST_ROUND_COMPLETE]);
+	if (IS_ERR(priv->rf[FIRST_ROUND_COMPLETE])) {
+		ret = PTR_ERR(priv->rf[FIRST_ROUND_COMPLETE]);
 		goto err_put_device;
 	}
 
@@ -1139,6 +1233,10 @@ static int tsens_probe(struct platform_device *pdev)
 	priv->dev = dev;
 	priv->num_sensors = num_sensors;
 	priv->needs_reinit_wa = data->needs_reinit_wa;
+	
+	if (priv->needs_reinit_wa && !qcom_scm_is_available())
+		return -EPROBE_DEFER;
+
 	priv->ops = data->ops;
 	for (i = 0;  i < priv->num_sensors; i++) {
 		if (data->hw_ids)
