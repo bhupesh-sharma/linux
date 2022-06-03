@@ -616,6 +616,7 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
 	 * tsens controller via trustzone.
 	 */
 	if (priv->needs_reinit_wa) {
+		/* First check if TRDY is SET */
 		timeout = jiffies + usecs_to_jiffies(TIMEOUT_US);
 		do {
 			ret = regmap_field_read(priv->rf[TRDY], &trdy);
@@ -625,72 +626,78 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
 				continue;
 		} while (time_before(jiffies, timeout));
 
-		ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
-		if (ret)
-			return ret;
+		if (!trdy) {
+			dev_dbg(priv->dev, "tsens TRDY is still not set\n");
 
-		if (!first_round) {
-			if (atomic_read(&in_tsens_reinit)) {
-				dev_err(priv->dev, "tsens re-init is in progress\n");
-				return -EAGAIN;
-			}
-
-			/* Wait for 2 ms for tsens controller to recover */
-			timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
-			do {
-				ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
-				if (ret)
-					return ret;
-
-				if (first_round) {
-					dev_err(priv->dev, "tsens controller recovered\n");
-					goto sensor_read;
-				}
-			} while (time_before(jiffies, timeout));
-
-			/*
-			 * tsens controller did not recover,
-			 * proceed with SCM call to re-init it
-			 */
-			if (atomic_read(&in_tsens_reinit)) {
-				dev_err(priv->dev, "tsens re-init is in progress\n");
-				return -EAGAIN;
-			}
-
-			atomic_set(&in_tsens_reinit, 1);
-
-			dev_err(priv->dev, "calling qcom_scm_tsens_reinit (%d : %d)\n",
-						trdy, first_round);
-			ret = qcom_scm_tsens_reinit(&tsens_ret);
-			if (ret || tsens_ret) {
-				dev_err(priv->dev, "tsens reinit scm call failed (%d : %d)\n",
-						ret, tsens_ret);
-				atomic_set(&in_tsens_reinit, 0);
-				if (ret)
-					return ret;
-				if (tsens_ret)
-					return -ENOTRECOVERABLE;
-			}
-
-			atomic_set(&in_tsens_reinit, 0);
-
-			/* Wait for 2 ms for tsens controller to recover */
-			timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
-			do {
-				ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
-				if (ret)
-					return ret;
-
-				if (first_round) {
-					dev_err(priv->dev, "tsens controller recovered\n");
-					goto sensor_read;
-				}
-			} while (time_before(jiffies, timeout));
+			ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
+			if (ret)
+				return ret;
 
 			if (!first_round) {
-				dev_err(priv->dev, "tsens controller could not recover\n");
-				return -ENOTRECOVERABLE;
+				if (atomic_read(&in_tsens_reinit)) {
+					dev_dbg(priv->dev, "tsens re-init is in progress\n");
+					return -EAGAIN;
+				}
+
+				/* Wait for 2 ms for tsens controller to recover */
+				timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
+				do {
+					ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
+					if (ret)
+						return ret;
+
+					if (first_round) {
+						dev_dbg(priv->dev, "tsens controller recovered\n");
+						goto sensor_read;
+					}
+				} while (time_before(jiffies, timeout));
+
+				/*
+				 * tsens controller did not recover,
+				 * proceed with SCM call to re-init it
+				 */
+				if (atomic_read(&in_tsens_reinit)) {
+					dev_dbg(priv->dev, "tsens re-init is in progress\n");
+					return -EAGAIN;
+				}
+
+				atomic_set(&in_tsens_reinit, 1);
+
+				dev_dbg(priv->dev, "calling qcom_scm_tsens_reinit (%d : %d)\n",
+						trdy, first_round);
+				ret = qcom_scm_tsens_reinit(&tsens_ret);
+				if (ret || tsens_ret) {
+					dev_err(priv->dev, "tsens reinit scm call failed (%d : %d)\n",
+							ret, tsens_ret);
+					atomic_set(&in_tsens_reinit, 0);
+					if (ret)
+						return ret;
+					if (tsens_ret)
+						return -ENOTRECOVERABLE;
+				}
+
+				atomic_set(&in_tsens_reinit, 0);
+
+				/* Wait for 2 ms for tsens controller to recover */
+				timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
+				do {
+					ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
+					if (ret)
+						return ret;
+
+					if (first_round) {
+						dev_dbg(priv->dev, "tsens controller recovered\n");
+						goto sensor_read;
+					}
+				} while (time_before(jiffies, timeout));
+
+				if (!first_round) {
+					dev_err(priv->dev, "tsens controller could not recover\n");
+					return -ENOTRECOVERABLE;
+				}
 			}
+		} else {
+			dev_dbg(priv->dev, "tsens TRDY is set\n");
 		}
 	}
 
