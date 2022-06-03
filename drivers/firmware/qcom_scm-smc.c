@@ -148,6 +148,7 @@ int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
 		res->result[2] = smc_res.a3;
 	}
 
+	printk("Inside function:%s, at line: %d, smc_res.a0=%ld\n", __func__, __LINE__, smc_res.a0);
 	return (long)smc_res.a0 ? qcom_scm_remap_error(smc_res.a0) : 0;
 
 }
