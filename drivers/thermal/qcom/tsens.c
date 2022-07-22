@@ -1083,6 +1083,16 @@ int __init init_common(struct tsens_priv *priv)
 	if (tsens_version(priv) >= VER_0_1)
 		tsens_enable_irq(priv);
 
+	/*
+	 * For some tsens controllers, which start in
+	 * an unknown state or start with TSENS_EN indicating
+	 * a 'disabled' state, its useful to try and reinit
+	 * them via trustzone, at the very start.
+	 */
+	if (priv->needs_reinit_wa &&
+	    (of_device_is_compatible(dev->of_node, "qcom,sm6375-tsens")))
+		__tsens_reinit_worker(priv);
+
 	tsens_debug_init(op);
 
 err_put_device:
@@ -1145,6 +1155,9 @@ static const struct of_device_id tsens_table[] = {
 	}, {
 		.compatible = "qcom,msm8996-tsens",
 		.data = &data_8996,
+	}, {
+		.compatible = "qcom,sm6375-tsens",
+		.data = &data_tsens_v2_reinit,
 	}, {
 		.compatible = "qcom,sm8150-tsens",
 		.data = &data_tsens_v2_reinit,
