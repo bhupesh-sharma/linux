@@ -682,8 +682,8 @@
 			reg = <0x0 0x01b3a000 0x0 0x6000>;
 			dmas = <&cryptobam 4>, <&cryptobam 5>;
 			dma-names = "rx", "tx";
-			interconnects = <&system_noc MASTER_CRYPTO_CORE_0 &bimc SLAVE_EBI_CH0>;
-			interconnect-names = "memory";
+			//interconnects = <&system_noc MASTER_CRYPTO_CORE_0 &bimc SLAVE_EBI_CH0>;
+			//interconnect-names = "memory";
 			iommus = <&apps_smmu 0x84 0x11>,
 				 <&apps_smmu 0x94 0x11>;
 		};
