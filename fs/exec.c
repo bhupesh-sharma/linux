@@ -1208,6 +1208,9 @@ int begin_new_exec(struct linux_binprm * bprm)
 {
 	struct task_struct *me = current;
 	int retval;
+	va_list args;
+	char *name;
+	const char *fmt;
 
 	/* Once we are committed compute the creds */
 	retval = bprm_creds_from_file(bprm);
@@ -1347,11 +1350,22 @@ int begin_new_exec(struct linux_binprm * bprm)
 		 * detecting a concurrent rename and just want a terminated name.
 		 */
 		rcu_read_lock();
-		__set_task_comm(me, smp_load_acquire(&bprm->file->f_path.dentry->d_name.name),
-				true);
+		fmt = smp_load_acquire(&bprm->file->f_path.dentry->d_name.name);
+		name = kvasprintf(GFP_KERNEL, fmt, args);
+		if (!name)
+			return -ENOMEM;
+
+		me->full_name = name;
+		__set_task_comm(me, fmt, true);
 		rcu_read_unlock();
 	} else {
-		__set_task_comm(me, kbasename(bprm->filename), true);
+		fmt = kbasename(bprm->filename);
+		name = kvasprintf(GFP_KERNEL, fmt, args);
+		if (!name)
+			return -ENOMEM;
+
+		me->full_name = name;
+		__set_task_comm(me, fmt, true);
 	}
 
 	/* An exec changes our domain. We are no longer part of the thread
@@ -1398,6 +1412,7 @@ int begin_new_exec(struct linux_binprm * bprm)
 	return 0;
 
 out_unlock:
+	kfree(me->full_name);
 	up_write(&me->signal->exec_update_lock);
 	if (!bprm->cred)
 		mutex_unlock(&me->signal->cred_guard_mutex);

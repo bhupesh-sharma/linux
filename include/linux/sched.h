@@ -1166,6 +1166,9 @@ struct task_struct {
 	 */
 	char				comm[TASK_COMM_LEN];
 
+	/* To store the full name if task comm is truncated. */
+	char				*full_name;
+
 	struct nameidata		*nameidata;
 
 #ifdef CONFIG_SYSVIPC
@@ -2008,6 +2011,12 @@ extern void __set_task_comm(struct task_struct *tsk, const char *from, bool exec
 #define get_task_comm(buf, tsk) ({			\
 	BUILD_BUG_ON(sizeof(buf) < TASK_COMM_LEN);	\
 	strscpy_pad(buf, (tsk)->comm);			\
+	buf;						\
+})
+
+#define get_task_full_name(buf, buf_size, tsk) ({	\
+	BUILD_BUG_ON(sizeof(buf) < TASK_COMM_LEN);	\
+	strscpy_pad(buf, (tsk)->full_name, buf_size);	\
 	buf;						\
 })
 
