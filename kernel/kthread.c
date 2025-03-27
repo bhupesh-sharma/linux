@@ -66,8 +66,6 @@ struct kthread {
 #ifdef CONFIG_BLK_CGROUP
 	struct cgroup_subsys_state *blkcg_css;
 #endif
-	/* To store the full name if task comm is truncated. */
-	char *full_name;
 	struct task_struct *task;
 	struct list_head hotplug_node;
 	struct cpumask *preferred_affinity;
@@ -108,12 +106,12 @@ void get_kthread_comm(char *buf, size_t buf_size, struct task_struct *tsk)
 {
 	struct kthread *kthread = to_kthread(tsk);
 
-	if (!kthread || !kthread->full_name) {
+	if (!kthread || !tsk->full_name) {
 		strscpy(buf, tsk->comm, buf_size);
 		return;
 	}
 
-	strscpy_pad(buf, kthread->full_name, buf_size);
+	strscpy_pad(buf, tsk->full_name, buf_size);
 }
 
 bool set_kthread_struct(struct task_struct *p)
@@ -153,7 +151,6 @@ void free_kthread_struct(struct task_struct *k)
 	WARN_ON_ONCE(kthread->blkcg_css);
 #endif
 	k->worker_private = NULL;
-	kfree(kthread->full_name);
 	kfree(kthread);
 }
 
@@ -430,7 +427,7 @@ static int kthread(void *_create)
 		kthread_exit(-EINTR);
 	}
 
-	self->full_name = create->full_name;
+	self->task->full_name = create->full_name;
 	self->threadfn = threadfn;
 	self->data = data;
 
