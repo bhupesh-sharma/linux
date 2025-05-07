@@ -26,6 +26,7 @@ TRACE_EVENT(sched_kthread_stop,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, t->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid	= t->pid;
 	),
 
@@ -153,6 +154,7 @@ DECLARE_EVENT_CLASS(sched_wakeup_template,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid		= p->pid;
 		__entry->prio		= p->prio; /* XXX SCHED_DEADLINE */
 		__entry->target_cpu	= task_cpu(p);
@@ -238,10 +240,12 @@ TRACE_EVENT(sched_switch,
 
 	TP_fast_assign(
 		memcpy(__entry->prev_comm, prev->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->prev_pid	= prev->pid;
 		__entry->prev_prio	= prev->prio;
 		__entry->prev_state	= __trace_sched_switch_state(preempt, prev_state, prev);
 		memcpy(__entry->next_comm, next->comm, TASK_COMM_LEN);
+		__entry->next_comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->next_pid	= next->pid;
 		__entry->next_prio	= next->prio;
 		/* XXX SCHED_DEADLINE */
@@ -285,6 +289,7 @@ TRACE_EVENT(sched_migrate_task,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid		= p->pid;
 		__entry->prio		= p->prio; /* XXX SCHED_DEADLINE */
 		__entry->orig_cpu	= task_cpu(p);
@@ -310,6 +315,7 @@ DECLARE_EVENT_CLASS(sched_process_template,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid		= p->pid;
 		__entry->prio		= p->prio; /* XXX SCHED_DEADLINE */
 	),
@@ -356,6 +362,7 @@ TRACE_EVENT(sched_process_wait,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, current->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid		= pid_nr(pid);
 		__entry->prio		= current->prio; /* XXX SCHED_DEADLINE */
 	),
@@ -382,8 +389,10 @@ TRACE_EVENT(sched_process_fork,
 
 	TP_fast_assign(
 		memcpy(__entry->parent_comm, parent->comm, TASK_COMM_LEN);
+		__entry->parent_comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->parent_pid	= parent->pid;
 		memcpy(__entry->child_comm, child->comm, TASK_COMM_LEN);
+		__entry->child_comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->child_pid	= child->pid;
 	),
 
@@ -480,6 +489,7 @@ DECLARE_EVENT_CLASS_SCHEDSTAT(sched_stat_template,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, tsk->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid	= tsk->pid;
 		__entry->delay	= delay;
 	),
@@ -538,6 +548,7 @@ DECLARE_EVENT_CLASS(sched_stat_runtime,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, tsk->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid		= tsk->pid;
 		__entry->runtime	= runtime;
 	),
@@ -570,6 +581,7 @@ TRACE_EVENT(sched_pi_setprio,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, tsk->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid		= tsk->pid;
 		__entry->oldprio	= tsk->prio;
 		__entry->newprio	= pi_task ?
@@ -595,6 +607,7 @@ TRACE_EVENT(sched_process_hang,
 
 	TP_fast_assign(
 		memcpy(__entry->comm, tsk->comm, TASK_COMM_LEN);
+		__entry->comm[TASK_COMM_LEN - 1] = '\0';
 		__entry->pid = tsk->pid;
 	),
 
