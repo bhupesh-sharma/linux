@@ -1301,7 +1301,7 @@ static int resize_is_valid(struct vma_remap_struct *vrm)
 	 */
 	if (!old_len && !(vma->vm_flags & (VM_SHARED | VM_MAYSHARE))) {
 		pr_warn_once("%s (%d): attempted to duplicate a private mapping with mremap.  This is not supported.\n",
-			     current->comm, current->pid);
+			     current->comm_str, current->pid);
 		return -EINVAL;
 	}
 
